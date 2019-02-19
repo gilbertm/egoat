@@ -1,0 +1,74 @@
+﻿@model IEnumerable<eGoatDDD.Domain.Entities.LoanDetail>
+
+@if (Model != null)
+{
+    @foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col col-sm-3 col-xs-12">
+                @item.LenderId
+            </div>
+            <div class="col col-sm-3 col-xs-12">
+                @item.LoanId
+            </div>
+            <div class="col col-sm-3 col-xs-12">
+                @item.ProductId
+            </div>
+            <div class="col col-sm-3 col-xs-12">
+
+                @if (item.Status <= 0)
+                {
+                    @using (Html.BeginForm("Broadcast", "Loan", FormMethod.Post, new { @class = "broadcast" }))
+                    {
+                        <div>
+                            <input type="submit" value="Broadcast" />
+                            <input type="hidden" name="ProductId" value="@item.ProductId" />
+                            <input type="hidden" name="LoanId" value="@item.LoanId" />
+                            <input type="hidden" name="LenderId" value="@item.LenderId" />
+                        </div>
+                    }
+                } else
+                {
+                    @if (item.Status == 1)
+                    {
+                        <span>1 - applications</span>
+                        // show: all applying for this loan
+
+                        // if nobody applied yet
+                        // - lessee can recall for edit
+
+                        // if lessee or the system needs to forcefully remove
+                        // lessees who applied must be notified
+
+                    } else if (item.Loan.LesseeId != null && item.Status >= 2)
+                    {
+                        switch (item.Status)
+                        {
+                            
+                            case 2:
+                                <span>2 - lessee chosen, awaiting confirmation</span>
+                                // show: lessee
+                                break;
+                            
+                            case 3:
+                                <span>3 - lessee confirmed with terms</span>
+                                // form: button finalize
+                                break;
+
+                            case 4:
+                                <span>4 - finalized</span>
+                                // form: selfie submission
+                                break;
+
+                            case 5:
+                                <span>5 - selfie submitted</span>
+                                // create: tabular payment data
+                                break;
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+    }
+}

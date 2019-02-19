@@ -1,0 +1,48 @@
+﻿@using eGoatDDD.Application.Categories.Models
+@model eGoatDDD.Application.Products.Commands.CreateProductCommand
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <h4>Category</h4>
+                <select class="form-control" data-val-required="The field is required." data-val="true" name="CategoryId" id="CategoryId">
+                    <option value="0" selected="selected">
+                        Please select the category
+                    </option>
+
+                    @foreach (CategoryDto item in (List<CategoryDto>)ViewData["categories"])
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input asp-for="Amount" required type="number" class="form-control" placeholder="Amount" asp-format="{0:#,#.00}" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="ProductName" required class="form-control" placeholder="Product Name" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <textarea asp-for="Description" required class="form-control" placeholder="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" name="Save" class="btn btn-default" />
+                <input type="submit" value="Save and Broadcast" name="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+

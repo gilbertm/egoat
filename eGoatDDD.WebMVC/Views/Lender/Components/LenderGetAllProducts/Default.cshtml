@@ -1,0 +1,31 @@
+﻿@model eGoatDDD.Application.Products.Models.ProductsListViewModel
+
+@if (Model != null)
+{
+    // @Model.Products.Count()
+
+    @foreach (var item in Model.Products)
+    {
+        <div class="col col-sm-3 col-xs-12">
+            @item.ProductId: @item.ProductName
+        </div>
+        <div class="col col-sm-3 col-xs-12">
+            @item.Name
+        </div>
+        <div class="col col-sm-3 col-xs-12">
+            @item.Amount
+        </div>
+        <div class="col col-sm-3 col-xs-12">
+
+            @using (Html.BeginForm("Broadcast", "Product", FormMethod.Post, new { @class = "broadcast" }))
+            {
+            <div>
+                <input type="submit" value="Broadcast" />
+                <input type="hidden" name="ProductId" value="@item.ProductId" />
+                <input type="hidden" name="LenderId" value="@item.LenderId" />
+            </div>
+            }
+        </div>
+    }
+
+}
