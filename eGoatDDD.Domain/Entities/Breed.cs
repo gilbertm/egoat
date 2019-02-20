@@ -2,15 +2,18 @@
 
 namespace eGoatDDD.Domain.Entities
 {
-    public class Color
+    public class Breed
     {
-        public Color()
+        public Breed()
         {
             Goats = new HashSet<Goat>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public string Picture { get; set; }
+
         public string Description { get; set; }
 
         public virtual ICollection<Goat> Goats { get; private set; }

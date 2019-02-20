@@ -1,4 +1,4 @@
-﻿using eGoatDDD.Application.Products.Commands;
+﻿using eGoatDDD.Application.Goats.Commands;
 using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
 using MediatR;
@@ -40,7 +40,7 @@ namespace eGoatDDD.WebMVC
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
-            services.AddMediatR(typeof(CreateProductCommandHandler).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(CreateGoatCommandHandler).GetTypeInfo().Assembly);
 
             // Add DbContext using SQL Server Provider
             services.AddDbContext<eGoatDDDDbContext>(options =>
@@ -59,8 +59,8 @@ namespace eGoatDDD.WebMVC
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Administrators", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
-                options.AddPolicy("Lessees", policy => policy.RequireClaim(ClaimTypes.Role, "Lessee"));
-                options.AddPolicy("Lenders", policy => policy.RequireClaim(ClaimTypes.Role, "Lender"));
+                options.AddPolicy("Supervisors", policy => policy.RequireClaim(ClaimTypes.Role, "Supervisor"));
+                options.AddPolicy("Attendants", policy => policy.RequireClaim(ClaimTypes.Role, "Attendant"));
             });
             #endregion
 
