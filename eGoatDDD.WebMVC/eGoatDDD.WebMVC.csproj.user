@@ -13,5 +13,6 @@
     <_SelectedScaffolderCategoryPath>root/Identity</_SelectedScaffolderCategoryPath>
     <ShowAllFiles>false</ShowAllFiles>
     <WebStackScaffolding_LayoutPageFile />
+    <WebStackScaffolding_DbContextTypeFullName>eGoatDDD.Persistence.eGoatDDDDbContext</WebStackScaffolding_DbContextTypeFullName>
   </PropertyGroup>
 </Project>

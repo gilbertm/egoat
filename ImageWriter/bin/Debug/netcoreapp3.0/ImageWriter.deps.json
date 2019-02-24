@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.0",
+    "signature": "91de4c6bb62bbb9d1cc242966cccad15fd83f576"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.0": {
+      "ImageWriter/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Features": "3.0.0-preview-19075-0444"
+        },
+        "runtime": {
+          "ImageWriter.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/3.0.0-preview-19075-0444": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.19025"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ImageWriter/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.Http.Features/3.0.0-preview-19075-0444": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HXLxJ6jwTJZ0P+uB9PBXz5uCjenpExh+dG+NsvitZNlrYz7uIOHq+ETzUn7tkd3GurlWtWfcyIx4Qd4SwiWTuA==",
+      "path": "microsoft.aspnetcore.http.features/3.0.0-preview-19075-0444",
+      "hashPath": "microsoft.aspnetcore.http.features.3.0.0-preview-19075-0444.nupkg.sha512"
+    }
+  }
+}

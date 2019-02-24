@@ -1,6 +1,7 @@
 ﻿using eGoatDDD.Application.Goats.Commands;
 using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
+using eGoatDDD.WebMVC.Handler;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
@@ -66,6 +67,10 @@ namespace eGoatDDD.WebMVC
 
             services.AddMvc();
             // .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddTransient<IImageHandler, ImageHandler>();
+            services.AddTransient<ImageWriter.Interface.IImageWriter,
+                                  ImageWriter.Classes.ImageWriter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -96,7 +101,7 @@ namespace eGoatDDD.WebMVC
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Goat}/{action=Index}/{id?}");
             });
         }
     }

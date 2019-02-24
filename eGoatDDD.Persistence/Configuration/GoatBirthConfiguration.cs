@@ -9,8 +9,6 @@ namespace eGoatDDD.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<GoatBirth> builder)
         {
-            builder.HasKey(e => e.Id);
-
             builder.Property(e => e.Id).HasColumnName("Id");
             builder.Property(e => e.Id).HasColumnType("bigint");
 

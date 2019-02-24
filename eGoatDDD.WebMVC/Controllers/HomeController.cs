@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using eGoatDDD.WebMVC.Models;
+using eGoatDDD.WebMVC.Infrastructure;
 
 namespace eGoatDDD.WebMVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {

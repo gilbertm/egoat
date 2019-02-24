@@ -1,0 +1,9 @@
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\bin\Debug\netcoreapp3.0\ImageWriter.deps.json
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\bin\Debug\netcoreapp3.0\ImageWriter.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\bin\Debug\netcoreapp3.0\ImageWriter.pdb
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.csproj.CoreCompileInputs.cache
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.AssemblyInfoInputs.cache
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.AssemblyInfo.cs
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.pdb
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\ImageWriter\obj\Debug\netcoreapp3.0\ImageWriter.csprojAssemblyReference.cache

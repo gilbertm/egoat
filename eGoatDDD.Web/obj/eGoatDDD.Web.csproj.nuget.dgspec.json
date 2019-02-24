@@ -1,0 +1,386 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Web\\eGoatDDD.Web.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\eGoatDDD.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\eGoatDDD.Application.csproj",
+        "projectName": "eGoatDDD.Application",
+        "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\eGoatDDD.Application.csproj",
+        "packagesPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\eGoatDDD.Persistence.csproj": {
+                "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\eGoatDDD.Persistence.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Microsoft.NETCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19073.11, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\eGoatDDD.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\eGoatDDD.Domain.csproj",
+        "projectName": "eGoatDDD.Domain",
+        "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\eGoatDDD.Domain.csproj",
+        "packagesPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19074.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19074.3, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[3.0.0-preview-18579-0056, )"
+            },
+            "Microsoft.NETCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19073.11, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\eGoatDDD.Persistence.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\eGoatDDD.Persistence.csproj",
+        "projectName": "eGoatDDD.Persistence",
+        "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\eGoatDDD.Persistence.csproj",
+        "packagesPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Persistence\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\eGoatDDD.Domain.csproj": {
+                "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Domain\\eGoatDDD.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19073.11, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Web\\eGoatDDD.Web.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Web\\eGoatDDD.Web.csproj",
+        "projectName": "eGoatDDD.Web",
+        "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Web\\eGoatDDD.Web.csproj",
+        "packagesPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Web\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\eGoatDDD.Application.csproj": {
+                "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\eGoatDDD.Application\\eGoatDDD.Application.csproj"
+              },
+              "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\ImageWriter.csproj": {
+                "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\ImageWriter.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.AspNetCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )"
+            },
+            "Microsoft.NETCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19073.11, )",
+              "autoReferenced": true
+            },
+            "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    },
+    "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\ImageWriter.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\ImageWriter.csproj",
+        "projectName": "ImageWriter",
+        "projectPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\ImageWriter.csproj",
+        "packagesPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\source\\repos\\eGoatDDD\\ImageWriter\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gilbert.DESKTOP-6VG6UIQ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json": {},
+          "https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[3.0.0-preview-19075-0444, )"
+            },
+            "Microsoft.NETCore.App": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
+            },
+            "Microsoft.NETCore.Platforms": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19073.11, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ namespace eGoatDDD.Domain.Entities
     public class GoatBirth
     {
 
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public long GoatId { get; set; }
 
