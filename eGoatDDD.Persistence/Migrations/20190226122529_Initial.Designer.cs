@@ -10,7 +10,7 @@ using eGoatDDD.Persistence;
 namespace eGoatDDD.Persistence.Migrations
 {
     [DbContext(typeof(eGoatDDDDbContext))]
-    [Migration("20190226075004_Initial")]
+    [Migration("20190226122529_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
