@@ -42,18 +42,25 @@ namespace eGoatDDD.Application.Goats.Commands
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                _context.Parents.Add(new Parent
+                if (request.MaternalId.Value > 0)
                 {
-                    Id = 0,
-                    GoatId = goat.Id,
-                    ParentId = request.MaternalId.Value
-                });
-                _context.Parents.Add(new Parent
+                    _context.Parents.Add(new Parent
+                    {
+                        Id = 0,
+                        GoatId = goat.Id,
+                        ParentId = request.MaternalId.Value
+                    });
+                }
+
+                if (request.SireId.Value > 0)
                 {
-                    Id = 0,
-                    GoatId = goat.Id,
-                    ParentId = request.SireId.Value
-                });
+                    _context.Parents.Add(new Parent
+                    {
+                        Id = 0,
+                        GoatId = goat.Id,
+                        ParentId = request.SireId.Value
+                    });
+                }
 
                 await _context.SaveChangesAsync(cancellationToken);
 

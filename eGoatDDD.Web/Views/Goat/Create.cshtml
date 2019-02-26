@@ -17,7 +17,6 @@
     <div class="row">
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
             <h4>Details</h4>
-
             <div class="row">
                 <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
                 <div class="col col-6">
@@ -27,17 +26,19 @@
                             <option value="0" selected="selected">
                                 Tag color
                             </option>
-                            @foreach (ColorDto item in (List<ColorDto>)ViewData["Colors"])
-                            {
+                            @foreach (ColorDto item in (List
+                            <ColorDto>
+                                )ViewData["Colors"])
+                                {
                                 <option value="@item.Id"> @item.Name</option>
-                            }
+                                }
                         </select>
                     </div>
                 </div>
                 <div class="col col-6">
                     <div class="form-group">
                         <label class="small" asp-for="Code">Code</label>
-                        <input asp-for="Code" required class="form-control" placeholder="Code"  id="Code" />
+                        <input asp-for="Code" required class="form-control" placeholder="Code" id="Code" />
                         <span asp-validation-for="Code" class="text-danger"></span>
                     </div>
                 </div>
@@ -84,21 +85,21 @@
 
         </div>
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+            <h4>Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
             <div class="row">
-
                 <div class="col col-12">
-                    <h4>Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
-
                     <div class="form-group">
                         <label class="small">Maternal</label>
                         <select class="form-control" name="MaternalId" id="MaternalId">
                             <option value="0" selected="selected">
                                 Maternal
                             </option>
-                            @foreach (GoatDto item in (List<GoatDto>)ViewData["Maternals"])
-                            {
+                            @foreach (GoatDto item in (List
+                            <GoatDto>
+                                )ViewData["Maternals"])
+                                {
                                 <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                            }
+                                }
                         </select>
                     </div>
 
@@ -108,15 +109,21 @@
                             <option value="0" selected="selected">
                                 Sire
                             </option>
-                            @foreach (GoatDto item in (List<GoatDto>)ViewData["Sires"])
-                            {
+                            @foreach (GoatDto item in (List
+                            <GoatDto>
+                                )ViewData["Sires"])
+                                {
                                 <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                            }
+                                }
                         </select>
                     </div>
-                    <h4 class="mt-5">Siblings</h4>
-                    <div class="small">
-                        from added parents show siblings
+
+                    <div class="form-group siblings">
+                        <h4 class="mt-5">Siblings</h4>
+                        <div class="list">
+                            <span class="info font-italic small">None</span>
+                            <div class="siblings-table"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="col col-12">
@@ -132,7 +139,7 @@
                 <div class="col col-12 goatImageWrapper">
                     <div class="form-group">
                         <span class="wrapper">
-                            <input type="file" id="goatImage" data-action="/api/image" />
+                            <input required type="file" id="goatImage" data-action="/api/image" />
                         </span>
                     </div>
                 </div>
@@ -160,63 +167,93 @@
 *@
 
 @section scripts{
-    <script type="text/javascript">
-        (function ($) {
+<script type="text/javascript">
+    (function ($) {
 
-            $(document).ready(function () {
+        $(document).ready(function () {
 
-                $('#ColorId, #Code').on('change', function (event) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/goat',
-                        data:  {colorId:$("#ColorId").val(),code:$("#Code").val()},
-                    }).done(function (response) {
-                        if (response.error == 0) {
-                            $(".code .error").addClass('d-none').removeClass('d-inline-block');
-                            $("#Submit").removeAttr("disabled");
-                        } else {
-                            $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
-                            $("#Submit").attr("disabled", "disabled");
-                        }
-                    });
-
-                   
-                });
-
-                $('#goatImage').on('change', function (event) {
-                    event.preventDefault();
-
-                    var $file = $("#goatImage")[0].files[0];
-
-                    var $action = $("#goatImage").data("action");
-
-                    var $formdata = new FormData();
-
-                    $formdata.append("file", $file);
-
-                    $.ajax({
-                        type: "POST",
-                        url: $action,
-                        data: $formdata, // serializes the form's elements.
-                        processData: false,
-                        contentType: false
-                    }).done(function (result) {
-
-                        var img = $('<img />',
-                            {
-                                width: '100%',
-                                id: 'goatImg',
-                                src: '/images/uploads/' + result
-                            });
-
-                        $("#Picture").val(result);
-                        $(".goatImageWrapper .wrapper").html(img);
-                    });
-
-                    return false; // avoid to execute the actual submit of the form.
+            $('#ColorId, #Code').on('change', function (event) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/code',
+                    data: { colorId: $("#ColorId").val(), code: $("#Code").val() },
+                }).done(function (response) {
+                    if (response.error == 0) {
+                        $(".code .error").addClass('d-none').removeClass('d-inline-block');
+                        $("#Submit").removeAttr("disabled");
+                    } else {
+                        $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
+                        $("#Submit").attr("disabled", "disabled");
+                    }
                 });
             });
-        })(jQuery);
-    </script>
+
+            $('#MaternalId, #SireId').on('change', function (event) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/siblings',
+                    data: { maternalId: $("#MaternalId").val(), sireId: $("#SireId").val() },
+                }).done(function (response) {
+                    if (response.error == 0) {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").addClass("d-none");
+
+                        var table = $('<table  class="table small" />');
+                        var row = $('<tr/>')
+                        row.append('<th class="w-25">Picture</th>');
+                        row.append('<th>Tag Code</th>');
+                        table.append(row);
+                        $(response.goats).each(function () {
+                            row = $('<tr/>');
+                            row.append('<td><img width="100%" src="/images/uploads/' + this.picture + '"/></td>');
+                            row.append('<td>' + this.id + '. ' + this.color.name + ' ' + this.code + '</td>');
+                            
+                            table.append(row);
+                        
+                        });
+                        $('.siblings .list .siblings-table').html(table);
+
+                    } else {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").removeClass("d-none");
+                    }
+                });
+            });
+
+            $('#goatImage').on('change', function (event) {
+                event.preventDefault();
+
+                var $file = $("#goatImage")[0].files[0];
+
+                var $action = $("#goatImage").data("action");
+
+                var $formdata = new FormData();
+
+                $formdata.append("file", $file);
+
+                $.ajax({
+                    type: "POST",
+                    url: $action,
+                    data: $formdata, // serializes the form's elements.
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+
+                    var img = $('<img />',
+                        {
+                            width: '100%',
+                            id: 'goatImg',
+                            src: '/images/uploads/' + result
+                        });
+
+                    $("#Picture").val(result);
+                    $(".goatImageWrapper .wrapper").html(img);
+                });
+
+                return false; // avoid to execute the actual submit of the form.
+            });
+        });
+    })(jQuery);
+</script>
 }
 
