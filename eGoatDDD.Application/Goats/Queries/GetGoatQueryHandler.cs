@@ -21,25 +21,31 @@ namespace eGoatDDD.Application.Goats.Queries
 
         public async Task<GoatViewModel> Handle(GetGoatQuery request, CancellationToken cancellationToken)
         {
-            var goat = await _context.Goats
-                .Select(GoatDto.Projection)
-                .Where(g => g.Id == request.Id)
-                .SingleOrDefaultAsync(cancellationToken);
-
-            if (goat == null)
+            if (request.Id > 0)
             {
-                throw new NotFoundException(nameof(Goat), request.Id);
+                var goat = await _context.Goats
+                    .Select(GoatDto.Projection)
+                    .Where(g => g.Id == request.Id)
+                    .Include(c => c.Color)
+                    .SingleOrDefaultAsync(cancellationToken);
+
+                if (goat == null)
+                {
+                    throw new NotFoundException(nameof(Goat), request.Id);
+                }
+
+                // TODO: Set view model state based on user permissions.
+                var model = new GoatViewModel
+                {
+                    Goat = goat,
+                    EditEnabled = true,
+                    DeleteEnabled = false
+                };
+
+                return model;
             }
 
-            // TODO: Set view model state based on user permissions.
-            var model = new GoatViewModel
-            {
-                Goat = goat,
-                EditEnabled = true,
-                DeleteEnabled = false
-            };
-
-            return model;
+            return null;
         }
     }
 }

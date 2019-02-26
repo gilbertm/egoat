@@ -9,6 +9,24 @@ namespace eGoatDDD.Web.Controllers
 {
     public class ApiGoatController : BaseController
     {
+        [Route("api/goat")]
+        [HttpPost]
+        public async Task<JsonResult> Goat(long Id)
+        {
+            GoatViewModel goat = await _mediator.Send(new GetGoatQuery(Id));
+
+            if (goat != null)
+            {
+                if (goat.Goat.Id > 0)
+                {
+                    return Json(new { error = 0, response = goat.Goat });
+                }
+            } 
+            
+            return Json(new { error = 1, response = "Goat does not exists." });
+        }
+
+
         [Route("api/goat/code")]
         [HttpPost]
         public async Task<JsonResult> CodeIsValid(int colorId, string code)
