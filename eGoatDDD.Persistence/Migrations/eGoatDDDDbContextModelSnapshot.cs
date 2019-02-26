@@ -184,81 +184,10 @@ namespace eGoatDDD.Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Breed", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
-                    b.Property<string>("Picture");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Breeds");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Color", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("ntext");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(15);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Colors");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Goat", b =>
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Birth", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("BirthDate");
-
-                    b.Property<int>("BreedId");
-
-                    b.Property<string>("Code");
-
-                    b.Property<int>("ColorId");
-
-                    b.Property<string>("Picture");
-
-                    b.Property<DateTime>("SlaughterDate");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BreedId");
-
-                    b.HasIndex("ColorId");
-
-                    b.ToTable("Goats");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBirth", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Alive");
@@ -273,52 +202,110 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("GoatBirth");
+                    b.ToTable("Birth");
                 });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatParent", b =>
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Breed", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("GoatId");
+                    b.Property<string>("Description");
 
-                    b.Property<bool>("isMom");
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Picture");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GoatId");
-
-                    b.ToTable("GoatParent");
+                    b.ToTable("Breeds");
                 });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatService", b =>
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Disposal", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Category")
-                        .HasColumnType("ntext");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DisposedOn");
 
                     b.Property<long?>("GoatId");
 
-                    b.Property<string>("Service")
-                        .HasColumnType("ntext");
+                    b.Property<string>("Reason");
 
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("date");
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("GoatService");
+                    b.ToTable("Disposal");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Goat", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("BirthDate");
+
+                    b.Property<string>("Code");
+
+                    b.Property<int>("ColorId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<long?>("DisposalId");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
+
+                    b.Property<string>("Picture");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisposalId")
+                        .IsUnique()
+                        .HasFilter("[DisposalId] IS NOT NULL");
+
+                    b.HasIndex("ColorId", "Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("Goats");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBreed", b =>
+                {
+                    b.Property<long>("GoatId");
+
+                    b.Property<int>("BreedId");
+
+                    b.Property<float>("Percentage");
+
+                    b.HasKey("GoatId", "BreedId");
+
+                    b.HasIndex("BreedId");
+
+                    b.ToTable("GoatBreeds");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.History", b =>
@@ -373,6 +360,48 @@ namespace eGoatDDD.Persistence.Migrations
                     b.ToTable("HistoryResource");
                 });
 
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("GoatId");
+
+                    b.Property<long>("ParentId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoatId");
+
+                    b.ToTable("Parents");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Service", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category");
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("End");
+
+                    b.Property<long?>("GoatId");
+
+                    b.Property<DateTime>("Start");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoatId");
+
+                    b.ToTable("Service");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -418,44 +447,44 @@ namespace eGoatDDD.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Birth", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("Births")
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Disposal", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany()
+                        .HasForeignKey("GoatId");
+                });
+
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Goat", b =>
                 {
-                    b.HasOne("eGoatDDD.Domain.Entities.Breed", "Breed")
-                        .WithMany("Goats")
-                        .HasForeignKey("BreedId")
-                        .HasConstraintName("FK_Goat_Breeds")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("eGoatDDD.Domain.Entities.Color", "Color")
                         .WithMany("Goats")
                         .HasForeignKey("ColorId")
-                        .HasConstraintName("FK_Goat_Colors")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("eGoatDDD.Domain.Entities.Disposal", "Disposal")
+                        .WithOne()
+                        .HasForeignKey("eGoatDDD.Domain.Entities.Goat", "DisposalId");
                 });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBirth", b =>
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBreed", b =>
                 {
-                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany("GoatBirths")
-                        .HasForeignKey("GoatId")
-                        .HasConstraintName("FK_Goat_Births")
+                    b.HasOne("eGoatDDD.Domain.Entities.Breed", "Breed")
+                        .WithMany("GoatBreeds")
+                        .HasForeignKey("BreedId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatParent", b =>
-                {
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany("GoatParents")
+                        .WithMany("GoatBreeds")
                         .HasForeignKey("GoatId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatService", b =>
-                {
-                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany("GoatServices")
-                        .HasForeignKey("GoatId")
-                        .HasConstraintName("FK_Goat_Services");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.History", b =>
@@ -473,6 +502,21 @@ namespace eGoatDDD.Persistence.Migrations
                         .HasForeignKey("HistoryId")
                         .HasConstraintName("FK_History_HistoryResources")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("Parents")
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Service", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("Services")
+                        .HasForeignKey("GoatId");
                 });
 #pragma warning restore 612, 618
         }

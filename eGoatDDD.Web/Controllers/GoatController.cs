@@ -29,9 +29,17 @@ namespace eGoatDDD.Web.Controllers
 
             ColorsListViewModel colorsListViewModel = await _mediator.Send(new GetAllColorsQuery());
 
+            GoatsListViewModel goatListForPotentialParentMaternal = await _mediator.Send(new GetAllGoatsPotentialParentQuery(false));
+
+            GoatsListViewModel goatListForPotentialParentSire = await _mediator.Send(new GetAllGoatsPotentialParentQuery(true));
+
             ViewData["Colors"] = colorsListViewModel.Colors;
 
             ViewData["Breeds"] = breedsListViewModel.Breeds;
+
+            ViewData["Maternals"] = goatListForPotentialParentMaternal.Goats;
+
+            ViewData["Sires"] = goatListForPotentialParentSire.Goats;
 
             return View();
         }
@@ -39,14 +47,14 @@ namespace eGoatDDD.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CreateGoatCommand command)
         {
+            bool response = false;
+
             if (ModelState.IsValid)
             {
-                GoatViewModel goatViewModel = await _mediator.Send(command);
+                response = await _mediator.Send(command);
             }
-
-            GoatsListViewModel goatsListViewModel = await _mediator.Send(new GetAllGoatsQuery());
-
-            return View();
+            
+            return RedirectToAction("Index");
         }
 
     }

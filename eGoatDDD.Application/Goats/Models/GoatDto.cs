@@ -1,5 +1,6 @@
 ﻿using eGoatDDD.Domain.Entities;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace eGoatDDD.Application.Goats.Models
@@ -10,16 +11,22 @@ namespace eGoatDDD.Application.Goats.Models
 
         public int ColorId { get; set; }
 
-        public int BreedId { get; set; }
+        public long? DisposalId { get; set; }
 
         public string Code { get; set; }
 
+        public char Gender { get; set; }
+
         public string Picture { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
-        public DateTime SlaughterDate { get; set; }
-                
+        public string Description { get; set; }
+
+        public ICollection<Parent> Parents { get; private set; }
+
+        public Color Color { get; private set; }
+
         public static Expression<Func<Goat, GoatDto>> Projection
         {
             get
@@ -28,12 +35,15 @@ namespace eGoatDDD.Application.Goats.Models
                 return p => new GoatDto
                 {
                     Id = p.Id,
+                    DisposalId = p.DisposalId,
                     ColorId = p.ColorId,
-                    BreedId = p.BreedId,
+                    Gender = p.Gender,
                     Code = p.Code,
                     Picture = p.Picture,
                     BirthDate = p.BirthDate,
-                    SlaughterDate = p.SlaughterDate
+                    Description = p.Description,
+                    Parents = p.Parents,
+                    Color = p.Color
                 };
             }
         }

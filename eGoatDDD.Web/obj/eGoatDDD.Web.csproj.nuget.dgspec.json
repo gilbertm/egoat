@@ -289,6 +289,16 @@
               "target": "Package",
               "version": "[3.0.0-preview-19075-0444, )"
             },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview.19074.3, )"
+            },
+            "Microsoft.Extensions.Logging.Debug": {
+              "target": "Package",
+              "version": "[3.0.0-preview.19074.2, )"
+            },
             "Microsoft.NETCore.App": {
               "include": "None",
               "suppressParent": "All",
@@ -300,6 +310,10 @@
               "target": "Package",
               "version": "[3.0.0-preview.19073.11, )",
               "autoReferenced": true
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "runtime.win-x64.Microsoft.NETCore.DotNetAppHost": {
               "include": "None",

@@ -1,6 +1,7 @@
-﻿@model eGoatDDD.Application.Goats.Models.GoatDto
+﻿@model eGoatDDD.Application.Goats.Commands.CreateGoatCommand
 @using eGoatDDD.Application.Breeds.Models
 @using eGoatDDD.Application.Colors.Models
+@using eGoatDDD.Application.Goats.Models
 
 
 @{
@@ -11,82 +12,147 @@
 <hr />
 <form asp-action="Create">
     <div class="row">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="row">
+        <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+            <h4>Details</h4>
 
-        <div class="col col-lg-4 col-md-4 col-sm-6 col-xs-12">
-
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <h4>Color</h4>
-                <select class="form-control" data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
-                    <option value="0" selected="selected">
-                        Please select the color
-                    </option>
-                    @foreach (ColorDto item in (List<ColorDto>)ViewData["Colors"])
-                    {
-                        <option value="@item.Id"> @item.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <h4>Breed</h4>
-                <select class="form-control" data-val-required="The field is required." data-val="true" name="BreedId" id="BreedId">
-                    <option value="0" selected="selected">
-                        Please select the Breed
-                    </option>
-                    @foreach (BreedDto item in (List<BreedDto>)ViewData["Breeds"])
-                    {
-                        <option value="@item.Id"> @item.Name</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <h4>Details</h4>
-                <div class="form-group">
-                    <input asp-for="Code" required type="number" class="form-control" placeholder="Code" />
-                    <span asp-validation-for="Code" class="text-danger"></span>
-                </div>
-                <div class="form-group hidden">
-                    <input asp-for="Picture" required class="form-control" placeholder="Picture" id="Picture" />
-                    <span asp-validation-for="Picture" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <div class='input-group'>
-                        <input asp-for="BirthDate" id='birthdate' class="form-control" />
-                        <span asp-validation-for="BirthDate" class="text-danger"></span>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+            <div class="row">
+                <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small">Color</label>
+                        <select class="form-control" data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
+                            <option value="0" selected="selected">
+                                Tag color
+                            </option>
+                            @foreach (ColorDto item in (List<ColorDto>)ViewData["Colors"])
+                            {
+                                <option value="@item.Id"> @item.Name</option>
+                            }
+                        </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class='input-group'>
-                        <input asp-for="SlaughterDate" id='slaughterdate' class="form-control" />
-                        <span asp-validation-for="SlaughterDate" class="text-danger"></span>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small" asp-for="Code">Code</label>
+                        <input asp-for="Code" required class="form-control" placeholder="Code"  id="Code" />
+                        <span asp-validation-for="Code" class="text-danger"></span>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small d-block" asp-for="Gender">Gender</label>
+                        <label>
+                            <input asp-for="Gender" type="radio" value="M" /> Male
+                        </label>
+                        <label>
+                            <input asp-for="Gender" type="radio" value="F" /> Female
+                        </label>
+                    </div>
+                </div>
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small" asp-for="BirthDate">Birth of Date</label>
+                        <div class='input-group'>
+                            <input asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" type="date" class="form-control" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group d-none">
+                <input asp-for="Picture" required class="form-control" placeholder="Picture" id="Picture" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="small" asp-for="Description">Description</label>
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <textarea class="form-control"
+                          asp-for="Description"
+                          rows="3"
+                          cols="20"></textarea>
             </div>
 
 
         </div>
-        <div class="col col-lg-4 col-md-4 col-sm-6 col-xs-12 goatImageWrapper">
-            <span class="wrapper">
-                <input type="file" id="goatImage" data-action="/api/image" />
-            </span>
+        <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="row">
+
+                <div class="col col-12">
+                    <h4>Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
+
+                    <div class="form-group">
+                        <label class="small">Maternal</label>
+                        <select class="form-control" name="MaternalId" id="MaternalId">
+                            <option value="0" selected="selected">
+                                Maternal
+                            </option>
+                            @foreach (GoatDto item in (List<GoatDto>)ViewData["Maternals"])
+                            {
+                                <option value="@item.Id">@item.Color.Name - @item.Code </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="small">Sire</label>
+                        <select class="form-control" name="SireId" id="SireId">
+                            <option value="0" selected="selected">
+                                Sire
+                            </option>
+                            @foreach (GoatDto item in (List<GoatDto>)ViewData["Sires"])
+                            {
+                                <option value="@item.Id">@item.Color.Name - @item.Code </option>
+                            }
+                        </select>
+                    </div>
+                    <h4 class="mt-5">Siblings</h4>
+                    <div class="small">
+                        from added parents show siblings
+                    </div>
+                </div>
+                <div class="col col-12">
+                    <h4 class="mt-5">Breeds</h4>
+                    <div>
+                        Breed calculation (manual overrides)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4 col-md-4 col-sm-6 col-12 ">
+            <div class="row">
+                <div class="col col-12 goatImageWrapper">
+                    <div class="form-group">
+                        <span class="wrapper">
+                            <input type="file" id="goatImage" data-action="/api/image" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row lineage">
+                <div class="col col-12 goatImageWrapper">
+                    <div class="form-group">
+                        Lineage org graph
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
             <div class="form-group">
-                <input type="submit" value="Create" name="Save" class="btn btn-default" />
-                <input type="submit" value="Save and Broadcast" name="Save" class="btn btn-default" />
+                <input type="submit" value="Create" name="Save" class="btn btn-default" id="Submit" />
             </div>
         </div>
     </div>
-
 </form>
 @*
     TODO://multiple images per gaots
@@ -98,6 +164,24 @@
         (function ($) {
 
             $(document).ready(function () {
+
+                $('#ColorId, #Code').on('change', function (event) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/goat',
+                        data:  {colorId:$("#ColorId").val(),code:$("#Code").val()},
+                    }).done(function (response) {
+                        if (response.error == 0) {
+                            $(".code .error").addClass('d-none').removeClass('d-inline-block');
+                            $("#Submit").removeAttr("disabled");
+                        } else {
+                            $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
+                            $("#Submit").attr("disabled", "disabled");
+                        }
+                    });
+
+                   
+                });
 
                 $('#goatImage').on('change', function (event) {
                     event.preventDefault();
@@ -117,9 +201,16 @@
                         processData: false,
                         contentType: false
                     }).done(function (result) {
+
+                        var img = $('<img />',
+                            {
+                                width: '100%',
+                                id: 'goatImg',
+                                src: '/images/uploads/' + result
+                            });
+
                         $("#Picture").val(result);
-                        console.log(result);
-                        $(".goatImageWrapper .wrapper").html(result);
+                        $(".goatImageWrapper .wrapper").html(img);
                     });
 
                     return false; // avoid to execute the actual submit of the form.

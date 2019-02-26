@@ -23,8 +23,8 @@ namespace eGoatDDD.Application.Goats.Queries
             {
                     Goats = await _context.Goats
                        .Select(GoatDto.Projection)
-                       .Where(g => g.SlaughterDate == null)
-                       .OrderBy(p => p.ColorId).ThenBy(g => g.BreedId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
+                       .Where(g => g.DisposalId == null || g.DisposalId <= 0)
+                       .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
                        .ToListAsync(cancellationToken),
                     CreateEnabled = true
                 };

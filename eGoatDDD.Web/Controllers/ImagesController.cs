@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eGoatDDD.Web.Controllers
 {
-
-
         [Route("api/image")]
         public class ImagesController : Controller
         {
