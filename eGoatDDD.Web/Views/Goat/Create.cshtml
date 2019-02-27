@@ -22,13 +22,13 @@
                 <div class="col col-6">
                     <div class="form-group">
                         <label class="small">Color</label>
-                        <select class="form-control" data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
-                            <option value="0" selected="selected">
+                        <select class="form-control" required data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
+                            <option value="" selected="selected">
                                 Tag color
                             </option>
                             @foreach (ColorDto item in (List
-                          <ColorDto>
-                              )ViewData["Colors"])
+                        <ColorDto>
+                            )ViewData["Colors"])
                             {
                                 <option value="@item.Id"> @item.Name</option>
                             }
@@ -59,7 +59,7 @@
                     <div class="form-group">
                         <label class="small" asp-for="BirthDate">Birth of Date</label>
                         <div class='input-group'>
-                            <input asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" type="date" class="form-control" />
+                            <input required asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" type="date" class="form-control" />
                             <span asp-validation-for="BirthDate" class="text-danger"></span>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -93,12 +93,12 @@
                             <div class="form-group parent-container">
                                 <label class="small">Maternal</label>
                                 <select class="form-control" name="MaternalId" id="MaternalId">
-                                    <option value="0" selected="selected">
+                                    <option value="" selected="selected">
                                         Maternal
                                     </option>
                                     @foreach (GoatDto item in (List
-                                <GoatDto>
-                                    )ViewData["Maternals"])
+                              <GoatDto>
+                                  )ViewData["Maternals"])
                                     {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
                                     }
@@ -113,12 +113,12 @@
                             <div class="form-group parent-container">
                                 <label class="small">Sire</label>
                                 <select class="form-control" name="SireId" id="SireId">
-                                    <option value="0" selected="selected">
+                                    <option value="" selected="selected">
                                         Sire
                                     </option>
                                     @foreach (GoatDto item in (List
-                                 <GoatDto>
-                                     )ViewData["Sires"])
+                               <GoatDto>
+                                   )ViewData["Sires"])
                                     {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
                                     }
@@ -140,11 +140,37 @@
                         </div>
                     </div>
                 </div>
-                <div class="col col-12">
-                    <h4 class="mt-5">Breeds</h4>
-                    <div>
-                        TODO:// Breed calculation (manual overrides)
+                <div class="col col-12" id="breeds">
+                    <h4>Breeds</h4><div class="row">
+                        <button type="button" id="add_breed">Add</button>
                     </div>
+                    <div class="row breed-wrapper">
+
+                        <div class="col col-6 breed-type">
+                            <div class="form-group">
+                                <select required class="form-control" name="BreedId[]">
+                                    <option value="" selected="selected">
+                                        Breed Type
+                                    </option>
+                                    @foreach (BreedDto item in (List<BreedDto>)ViewData["Breeds"])
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                </select>
+                                <div class="table">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <input requied type="number" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -288,6 +314,21 @@
                     });
 
                     return false; // avoid to execute the actual submit of the form.
+                });
+
+                $('#add_breed').on('click', function (event) {
+
+                    var breed_clone = $('#breeds .breed-wrapper').first().clone(true)
+                        .find("input:text").val("0.00").end()
+                        .find("select").val("").end()
+                        .find(".remove_breed").removeClass("d-none").end();
+
+                    $('#breeds').append(breed_clone);
+
+                });
+
+                $('.remove_breed').on('click', function (event) {
+                    var breed_for_remove = $('#breeds .breed-wrapper').last().remove();
                 });
             });
         })(jQuery);

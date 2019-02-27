@@ -32,7 +32,7 @@ namespace eGoatDDD.Web.Controllers
             GoatsListViewModel goatListForPotentialParentMaternal = await _mediator.Send(new GetAllGoatsPotentialParentQuery(false));
 
             GoatsListViewModel goatListForPotentialParentSire = await _mediator.Send(new GetAllGoatsPotentialParentQuery(true));
-
+ 
             ViewData["Colors"] = colorsListViewModel.Colors;
 
             ViewData["Breeds"] = breedsListViewModel.Breeds;
@@ -40,6 +40,8 @@ namespace eGoatDDD.Web.Controllers
             ViewData["Maternals"] = goatListForPotentialParentMaternal.Goats;
 
             ViewData["Sires"] = goatListForPotentialParentSire.Goats;
+
+            ViewData["Breeds"] = breedsListViewModel.Breeds;
 
             return View();
         }

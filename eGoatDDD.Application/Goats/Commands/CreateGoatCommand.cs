@@ -2,6 +2,7 @@
 using eGoatDDD.Domain.Entities;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace eGoatDDD.Application.Goats.Commands
@@ -21,6 +22,10 @@ namespace eGoatDDD.Application.Goats.Commands
         public string Code { get; set; }
 
         public char Gender { get; set; }
+
+        public ICollection<int> BreedId { get; set; }
+
+        public ICollection<float> BreedPercent { get; set; }
 
         public string Picture { get; set; }
 
