@@ -6,6 +6,7 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace eGoatDDD.Application.Goats.Commands
 {
@@ -42,28 +43,39 @@ namespace eGoatDDD.Application.Goats.Commands
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                if (request.MaternalId.Value > 0)
-                {
-                    _context.Parents.Add(new Parent
+                if (request.MaternalId.HasValue)
+                    if (request.MaternalId.Value > 0)
                     {
-                        Id = 0,
-                        GoatId = goat.Id,
-                        ParentId = request.MaternalId.Value
-                    });
-                }
+                        _context.Parents.Add(new Parent
+                        {
+                            Id = 0,
+                            GoatId = goat.Id,
+                            ParentId = request.MaternalId.Value
+                        });
+                    }
 
-                if (request.SireId.Value > 0)
-                {
-                    _context.Parents.Add(new Parent
+                if (request.SireId.HasValue)
+                    if (request.SireId.Value > 0)
                     {
-                        Id = 0,
+                        _context.Parents.Add(new Parent
+                        {
+                            Id = 0,
+                            GoatId = goat.Id,
+                            ParentId = request.SireId.Value
+                        });
+                    }
+
+                for (int i = 0; i < request.BreedId.Count(); i++)
+                {
+                    _context.GoatBreeds.Add(new GoatBreed
+                    {
                         GoatId = goat.Id,
-                        ParentId = request.SireId.Value
+                        BreedId = (int)request.BreedId.ElementAt(i),
+                        Percentage = (float)request.BreedPercent.ElementAt(i)
                     });
                 }
 
                 await _context.SaveChangesAsync(cancellationToken);
-
 
             }
             catch (Exception e)

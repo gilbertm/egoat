@@ -27,11 +27,11 @@
                                 Tag color
                             </option>
                             @foreach (ColorDto item in (List
-                        <ColorDto>
-                            )ViewData["Colors"])
-                            {
+                            <ColorDto>
+                                )ViewData["Colors"])
+                                {
                                 <option value="@item.Id"> @item.Name</option>
-                            }
+                                }
                         </select>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="col col-6">
                     <div class="form-group">
-                        <label class="small" asp-for="BirthDate">Birth of Date</label>
+                        <label class="small" asp-for="BirthDate">Birth Date</label>
                         <div class='input-group'>
                             <input required asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" type="date" class="form-control" />
                             <span asp-validation-for="BirthDate" class="text-danger"></span>
@@ -97,15 +97,18 @@
                                         Maternal
                                     </option>
                                     @foreach (GoatDto item in (List
-                              <GoatDto>
-                                  )ViewData["Maternals"])
-                                    {
+                                    <GoatDto>
+                                        )ViewData["Maternals"])
+                                        {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                                    }
+                                        }
                                 </select>
-                                <div class="table">
-
+                                <div class="goat-info-wrapper">
+                                    <span class="close d-none">close</span>
+                                    <div class="table-info"></div>
+                                    <div class="table-breeds"></div>
                                 </div>
+                               
                             </div>
 
                         </div>
@@ -117,15 +120,19 @@
                                         Sire
                                     </option>
                                     @foreach (GoatDto item in (List
-                               <GoatDto>
-                                   )ViewData["Sires"])
-                                    {
+                                    <GoatDto>
+                                        )ViewData["Sires"])
+                                        {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                                    }
+                                        }
                                 </select>
-                                <div class="table">
-
+                              
+                                <div class="goat-info-wrapper">
+                                    <span class="close d-none">close</span>
+                                    <div class="table-info"></div>
+                                    <div class="table-breeds"></div>
                                 </div>
+                              
                             </div>
 
                         </div>
@@ -148,24 +155,25 @@
 
                         <div class="col col-6 breed-type">
                             <div class="form-group">
-                                <select required class="form-control" name="BreedId[]">
+                                <select required class="form-control breedid" name="BreedId[]" data-ctr="0">
                                     <option value="" selected="selected">
                                         Breed Type
                                     </option>
-                                    @foreach (BreedDto item in (List<BreedDto>)ViewData["Breeds"])
-                                    {
+                                    @foreach (BreedDto item in (List
+                                    <BreedDto>
+                                        )ViewData["Breeds"])
+                                        {
                                         <option value="@item.Id">@item.Name</option>
-                                    }
+                                        }
                                 </select>
                                 <div class="table">
-
                                 </div>
                             </div>
 
                         </div>
                         <div class="col col-6">
                             <div class="form-group">
-                                <input requied type="number" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
+                                <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
                             </div>
 
                         </div>
@@ -207,131 +215,198 @@
 *@
 
 @section scripts{
-    <script type="text/javascript">
-        (function ($) {
+<script type="text/javascript">
+    (function ($) {
 
-            $(document).ready(function () {
+        $(document).ready(function () {
 
-                $('#ColorId, #Code').on('change', function (event) {
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/goat/code',
-                        data: { colorId: $("#ColorId").val(), code: $("#Code").val() },
-                    }).done(function (response) {
-                        if (response.error == 0) {
-                            $(".code .error").addClass('d-none').removeClass('d-inline-block');
-                            $("#Submit").removeAttr("disabled");
-                        } else {
-                            $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
-                            $("#Submit").attr("disabled", "disabled");
-                        }
-                    });
-                });
-
-                $('#MaternalId, #SireId').on('change', function (event) {
-                    // display maternal and paternal
-                    // after changing val
-                    var parent_container = $('#' + this.id).parents(".parent-container");
-
-                    console.log($('#' + this.id).val());
-
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/goat',
-                        data: { Id: $('#' + this.id).val() },
-                    }).done(function (response) {
-                        if (response.error == 0) {
-                            var table = $('<table  class="table small" />');
-                            var row = "";
-
-                            row = $('<tr/>');
-                            row.append('<td class="w-25"><img width="100%" src="/images/uploads/' + response.response.picture + '"/><br />Goat Id: ' + response.response.id + '</td>');
-                            row.append('<td>Tag Code: <strong>' + response.response.color.name + ' ' + response.response.code + '</strong></td>');
-                            table.append(row);
-
-                            $(parent_container).children(".table").html(table);
-                        } else {
-                            $(parent_container).children(".table").empty();
-                        }
-                    });
-
-                    // siblings
-                    $.ajax({
-                        type: "POST",
-                        url: '/api/goat/siblings',
-                        data: { maternalId: $("#MaternalId").val(), sireId: $("#SireId").val() },
-                    }).done(function (response) {
-                        if (response.error == 0) {
-                            $('.siblings .list .siblings-table').empty();
-                            $(".siblings .list .info").addClass("d-none");
-
-                            var div = $('<div class="row small"/>');
-                            $(response.goats).each(function () {
-                                var inner_div = $('<div class="col col-4 col-xs-6 text-align-center" />');
-                                inner_div.append('<img width="auto" height="50px" src="/images/uploads/' + this.picture + '"/><br />Goat Id: ' + this.id);
-                                inner_div.append('<br />Tag Code: <strong>' + this.color.name + ' ' + this.code + '</strong>');
-
-                                div.append(inner_div);
-                            });
-
-                            $('.siblings .list .siblings-table').html(div);
-
-                        } else {
-                            $('.siblings .list .siblings-table').empty();
-                            $(".siblings .list .info").removeClass("d-none");
-                        }
-                    });
-                });
-
-                $('#goatImage').on('change', function (event) {
-                    event.preventDefault();
-
-                    var $file = $("#goatImage")[0].files[0];
-
-                    var $action = $("#goatImage").data("action");
-
-                    var $formdata = new FormData();
-
-                    $formdata.append("file", $file);
-
-                    $.ajax({
-                        type: "POST",
-                        url: $action,
-                        data: $formdata, // serializes the form's elements.
-                        processData: false,
-                        contentType: false
-                    }).done(function (result) {
-
-                        var img = $('<img />',
-                            {
-                                width: '100%',
-                                id: 'goatImg',
-                                src: '/images/uploads/' + result
-                            });
-
-                        $("#Picture").val(result);
-                        $(".goatImageWrapper .wrapper").html(img);
-                    });
-
-                    return false; // avoid to execute the actual submit of the form.
-                });
-
-                $('#add_breed').on('click', function (event) {
-
-                    var breed_clone = $('#breeds .breed-wrapper').first().clone(true)
-                        .find("input:text").val("0.00").end()
-                        .find("select").val("").end()
-                        .find(".remove_breed").removeClass("d-none").end();
-
-                    $('#breeds').append(breed_clone);
-
-                });
-
-                $('.remove_breed').on('click', function (event) {
-                    var breed_for_remove = $('#breeds .breed-wrapper').last().remove();
+            $('#ColorId, #Code').on('change', function (event) {
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/code',
+                    data: { colorId: $("#ColorId").val(), code: $("#Code").val() },
+                }).done(function (response) {
+                    if (response.error == 0) {
+                        $(".code .error").addClass('d-none').removeClass('d-inline-block');
+                        $("#Submit").removeAttr("disabled");
+                    } else {
+                        $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
+                        $("#Submit").attr("disabled", "disabled");
+                    }
                 });
             });
-        })(jQuery);
-    </script>
+
+            $('#MaternalId, #SireId').on('change', function (event) {
+                // hide breed add button
+                $('#add_breed').hide();
+                if ($('#MaternalId').val() == "" && $('#SireId').val() == "") {
+                    $('#add_breed').show();
+                }
+
+                var $this = $('#' + this.id);
+
+                // display maternal and paternal
+                // after changing val
+                var parent_container = $this.parents(".parent-container");
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat',
+                    data: { Id: $this.val() },
+                }).done(function (result) {
+
+                    var breeds_added = $(".breed-wrapper.added");
+
+                    breeds_added.remove();
+
+                    if (result.error == 0) {
+                        var table = $('<table  class="small" />');
+                        var row = "";
+
+                        row = $('<tr/>');
+                        row.append('<td class="w-25 text-align-center"><img width="100%" src="/images/uploads/' + result.response.picture + '"/><br class="d-none" /><span class="red d-none">' + result.response.id + '</span></td>');
+                        row.append('<td><strong>' + result.response.color.name + ' ' + result.response.code + '</strong></td>');
+                        table.append(row);
+
+                        $(parent_container).find(".table-info").html(table);
+
+                        var table = $('<table  class="small w-100" />');
+                        $(result.response.breeds).each(function () {
+                            row = $('<tr/>');
+                            row.append('<td class="w-25">' + this.name + ' : ' + this.percentage + '</td>');
+                            table.append(row);
+                        });
+
+                        $(parent_container).find(".table-breeds").html(table);
+                        
+                        // suggestion
+                        // get the breeds from parents
+                        $.ajax({
+                            type: "POST",
+                            url: '/api/goat/parent-breeds',
+                            data: { maternalId: $('#MaternalId').val(), sireId: $('#SireId').val() },
+                        }).done(function (parent_breeds) {
+
+                            if (parent_breeds.breeds != null) {
+                                if (parent_breeds.breeds.length == 1) {
+                                    $("#breeds .breedid").val(parent_breeds.breeds[0].id);
+                                    $("#breeds .breedpercent").val(parent_breeds.breeds[0].percentage);
+                                } else {
+                                    $(parent_breeds.breeds).each(function (i) {
+                                        $("#breeds .breedid").eq(i).val(parent_breeds.breeds[i].id);
+                                        $("#breeds .breedpercent").eq(i).val(parent_breeds.breeds[i].percentage);
+
+                                        if (i < ($(parent_breeds.breeds).length - 1)) {
+                                            $('#add_breed').trigger("click");
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        $(parent_container).find(".close").removeClass("d-none");
+                        $this.hide();
+                    } else {
+                        breeds_added.remove();
+                        $this.show();
+                        $(parent_container).find(".close").addClass("d-none");
+                        $(parent_container).find(".table-breeds").empty();
+                        $(parent_container).find(".table-info").empty();
+
+                    }
+                });
+
+                // siblings
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/siblings',
+                    data: { maternalId: $("#MaternalId").val(), sireId: $("#SireId").val() },
+                }).done(function (response) {
+                    if (response.error == 0) {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").addClass("d-none");
+
+                        var div = $('<div class="row small"/>');
+                        $(response.goats).each(function () {
+                            var inner_div = $('<div class="col col-4 col-xs-6 text-align-center" />');
+                            inner_div.append('<img width="auto" height="50px" src="/images/uploads/' + this.picture + '"/><br />Goat Id: ' + this.id);
+                            inner_div.append('<br />Tag Code: <strong>' + this.color.name + ' ' + this.code + '</strong>');
+
+                            div.append(inner_div);
+                        });
+
+                        $('.siblings .list .siblings-table').html(div);
+
+                    } else {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").removeClass("d-none");
+                    }
+                });
+            });
+
+            // parents container
+            $(".close").on("click", function () {
+                var parent_container = $(this).parents(".parent-container");
+                $(parent_container).find("select").val("");
+                $(parent_container).find("select").show();
+                $(parent_container).find(".close").addClass("d-none");
+                $(parent_container).find(".table-breeds").empty();
+                $(parent_container).find(".table-info").empty();
+            });
+            
+            // main goat image
+            $('#goatImage').on('change', function (event) {
+                event.preventDefault();
+
+                var $file = $("#goatImage")[0].files[0];
+
+                var $action = $("#goatImage").data("action");
+
+                var $formdata = new FormData();
+
+                $formdata.append("file", $file);
+
+                $.ajax({
+                    type: "POST",
+                    url: $action,
+                    data: $formdata, // serializes the form's elements.
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+
+                    var img = $('<img />',
+                        {
+                            width: '100%',
+                            id: 'goatImg',
+                            src: '/images/uploads/' + result
+                        });
+
+                    $("#Picture").val(result);
+                    $(".goatImageWrapper .wrapper").html(img);
+                });
+
+                return false; // avoid to execute the actual submit of the form.
+            });
+
+            // add/remove breed
+            // goat creation
+            $('#add_breed').on('click', function (event) {
+
+                var breed_clone = $('#breeds .breed-wrapper').first().clone(true)
+                    .addClass("added")
+                    .find(".breedpercent").val("0.00").end()
+                    .find(".breedid").val("").end()
+                    .find(".remove_breed").removeClass("d-none").end();
+
+                $('#breeds').append(breed_clone);
+
+            });
+
+            $('.remove_breed').on('click', function (event) {
+                var breed_for_remove = $('#breeds .breed-wrapper').last().remove();
+            });
+        });
+    })(jQuery);
+</script>
 }
 

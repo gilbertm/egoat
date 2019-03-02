@@ -54,3 +54,27 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.red {
+    color:red;
+}
+
+.blue {
+    color:blue;
+}
+
+.green {
+    color:green;
+}
+
+.parent-container .close {
+    position:absolute;
+    top: 40px;
+    font-size: 10px;
+    right: 3px;
+}
+
+.parent-container .table-info,
+.parent-container .table-breeds {
+    font-size:0.75rem;
+}

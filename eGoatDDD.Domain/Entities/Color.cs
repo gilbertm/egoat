@@ -13,6 +13,6 @@ namespace eGoatDDD.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<Goat> Goats { get; private set; }
+        public virtual ICollection<Goat> Goats { get; set;  }
     }
 }

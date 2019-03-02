@@ -23,9 +23,11 @@ namespace eGoatDDD.Application.Goats.Models
 
         public string Description { get; set; }
 
-        public ICollection<Parent> Parents { get; private set; }
+        public ICollection<Parent> Parents { get; set; }
 
         public Color Color { get; private set; }
+
+        public virtual ICollection<GoatBreed> GoatBreeds { get; set; }
 
         public static Expression<Func<Goat, GoatDto>> Projection
         {
@@ -43,7 +45,8 @@ namespace eGoatDDD.Application.Goats.Models
                     BirthDate = p.BirthDate,
                     Description = p.Description,
                     Parents = p.Parents,
-                    Color = p.Color
+                    Color = p.Color,
+                    GoatBreeds = p.GoatBreeds
                 };
             }
         }

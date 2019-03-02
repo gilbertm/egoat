@@ -21,15 +21,17 @@ namespace eGoatDDD.Application.Goats.Queries
         {
             GoatsListViewModel model = new GoatsListViewModel
             {
-                    Goats = await _context.Goats
+                Goats = await _context.Goats
                        .Select(GoatDto.Projection)
                        .Where(g => g.DisposalId == null || g.DisposalId <= 0)
+                       .Include(gb => gb.GoatBreeds)
+                       .ThenInclude(b => b.Breed)
                        .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
                        .ToListAsync(cancellationToken),
-                    CreateEnabled = true
-                };
+                CreateEnabled = true
+            };
 
-            
+
 
             return model;
         }
