@@ -48,9 +48,8 @@ namespace eGoatDDD.Application.Goats.Commands
                     {
                         _context.Parents.Add(new Parent
                         {
-                            Id = 0,
-                            GoatId = goat.Id,
-                            ParentId = request.MaternalId.Value
+                            ParentId = request.MaternalId.Value,
+                            GoatId = goat.Id
                         });
                     }
 
@@ -59,9 +58,8 @@ namespace eGoatDDD.Application.Goats.Commands
                     {
                         _context.Parents.Add(new Parent
                         {
-                            Id = 0,
-                            GoatId = goat.Id,
-                            ParentId = request.SireId.Value
+                            ParentId = request.SireId.Value,
+                            GoatId = goat.Id
                         });
                     }
 

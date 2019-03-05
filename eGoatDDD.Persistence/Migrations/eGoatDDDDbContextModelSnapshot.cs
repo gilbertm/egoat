@@ -202,7 +202,7 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("Birth");
+                    b.ToTable("Births");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Breed", b =>
@@ -362,24 +362,18 @@ namespace eGoatDDD.Persistence.Migrations
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<long>("GoatId");
 
                     b.Property<long>("ParentId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoatId");
+                    b.HasKey("GoatId", "ParentId");
 
                     b.ToTable("Parents");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Service", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("ServiceId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -389,17 +383,17 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<DateTime>("End");
 
-                    b.Property<long?>("GoatId");
+                    b.Property<long>("GoatId");
 
                     b.Property<DateTime>("Start");
 
                     b.Property<string>("Type");
 
-                    b.HasKey("Id");
+                    b.HasKey("ServiceId");
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("Service");
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -516,7 +510,8 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
                         .WithMany("Services")
-                        .HasForeignKey("GoatId");
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using eGoatDDD.Application.GoatBreeds.Models;
+using eGoatDDD.Application.Parents.Models;
 using eGoatDDD.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,10 @@ namespace eGoatDDD.Application.Goats.Models
         public Disposal Disposal { get; set; }
 
         // one-to-many
-        public ICollection<Parent> Parents { get; set; }
+        public ParentsListViewModel Parents { get; set; }
+
+        // one-to-many
+        public GoatsListViewModel Siblings { get; set; }
 
         // one-to-many
         public ICollection<Birth> Births { get; set; }

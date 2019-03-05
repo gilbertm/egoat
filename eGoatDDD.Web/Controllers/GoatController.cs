@@ -18,9 +18,9 @@ namespace eGoatDDD.Web.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            GoatsListViewModel goatsListViewModel = await _mediator.Send(new GetAllGoatsQuery());
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery());
 
-            return View(goatsListViewModel);
+            return View(goatsLisNonDtotViewModel);
         }
 
         public async Task<IActionResult> Create()

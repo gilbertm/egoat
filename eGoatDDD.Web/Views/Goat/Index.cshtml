@@ -1,4 +1,4 @@
-﻿@model eGoatDDD.Application.Goats.Models.GoatsListViewModel
+﻿@model eGoatDDD.Application.Goats.Models.GoatsListNonDtoViewModel
 
 
 @{
@@ -10,13 +10,116 @@
     @foreach (var item in Model.Goats)
     {
         <div class="row">
-            <div class="col col-sm-3 col-xs-12">
-                @item.Code
+            <div class="col col-12 col-md-2 col-sm-4 text-align-center">
+                <img width="150" src="/images/uploads/@(item.Picture)" /><br />
+                @item.Color.Name @item.Code
             </div>
-            <div class="col col-sm-3 col-xs-12">
-                @item.ColorId
+            <div class="col col-12 col-md-10 col-sm-8 small">
+                <div class="row">
+                    <div class="col col-12 col-md-3 col-sm-3">
+
+                        <div class="row">
+                            <div class="col col-12">
+                                @{
+                                    var birthdate = item.BirthDate.HasValue ? item.BirthDate.Value : DateTime.Now;
+
+                                    DateTime date1 = birthdate;
+                                    DateTime date2 = DateTime.Now;
+
+                                    int oldMonth = date2.Month;
+                                    while (oldMonth == date2.Month)
+                                    {
+                                        date1 = date1.AddDays(-1);
+                                        date2 = date2.AddDays(-1);
+                                    }
+
+                                    int years = 0, months = 0, days = 0, hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+
+                                    // getting number of years
+                                    while (date2.CompareTo(date1) >= 0)
+                                    {
+                                        years++;
+                                        date2 = date2.AddYears(-1);
+                                    }
+                                    date2 = date2.AddYears(1);
+                                    years--;
+
+
+                                    // getting number of months and days
+                                    oldMonth = date2.Month;
+                                    while (date2.CompareTo(date1) >= 0)
+                                    {
+                                        days++;
+                                        date2 = date2.AddDays(-1);
+                                        if ((date2.CompareTo(date1) >= 0) && (oldMonth != date2.Month))
+                                        {
+                                            months++;
+                                            days = 0;
+                                            oldMonth = date2.Month;
+                                        }
+                                    }
+                                    date2 = date2.AddDays(1);
+
+                                    <span><strong>@years</strong> Year  <strong>@months</strong> Month  <strong>@days</strong> Days</span>
+                                }
+
+                            </div>
+
+                            <div class="col col-12">
+                                Birthdate: @item.BirthDate?.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col col-12">
+                                Gender: @(item.Gender == 'M' ? "Male" : "Female")
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col col-12">
+                                <strong>Breeds</strong>
+                            </div>
+                        </div>
+                        @if (item.Breeds != null)
+                        {
+                            foreach (var breed in item.Breeds)
+                            {
+                                <div class="row">
+
+                                    <div class="col col-2 col-xs-12">
+                                        @breed.Percentage<em>%</em>
+                                    </div>
+                                    <div class="col col-8 col-xs-12">
+                                        @breed.Name
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+                    <div class="col col-12 col-md-3 col-sm-3">
+                        @if (item.Parents.Goats != null)
+                        {
+                            <strong>Parents</strong>
+
+                            foreach (var parent in item.Parents.Goats)
+                            {
+                                <div class="row">
+                                    <div class="col col-3 col-xs-6">
+                                        <img height="50" src="/images/uploads/@(parent.Picture)" />
+                                    </div>
+                                    <div class="col col-9 col-xs-6">
+                                        @parent.ColorName @parent.Code
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
-           
         </div>
     }
 }

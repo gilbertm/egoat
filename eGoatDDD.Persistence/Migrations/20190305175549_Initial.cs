@@ -227,7 +227,7 @@ namespace eGoatDDD.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Birth",
+                name: "Births",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -239,9 +239,9 @@ namespace eGoatDDD.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Birth", x => x.Id);
+                    table.PrimaryKey("PK_Births", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Birth_Goats_GoatId",
+                        name: "FK_Births_Goats_GoatId",
                         column: x => x.GoatId,
                         principalTable: "Goats",
                         principalColumn: "Id",
@@ -296,14 +296,12 @@ namespace eGoatDDD.Persistence.Migrations
                 name: "Parents",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     GoatId = table.Column<long>(nullable: false),
                     ParentId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parents", x => x.Id);
+                    table.PrimaryKey("PK_Parents", x => new { x.GoatId, x.ParentId });
                     table.ForeignKey(
                         name: "FK_Parents_Goats_GoatId",
                         column: x => x.GoatId,
@@ -313,27 +311,27 @@ namespace eGoatDDD.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Service",
+                name: "Services",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    ServiceId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    GoatId = table.Column<long>(nullable: false),
                     Type = table.Column<string>(nullable: true),
                     Category = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Start = table.Column<DateTime>(nullable: false),
-                    End = table.Column<DateTime>(nullable: false),
-                    GoatId = table.Column<long>(nullable: true)
+                    End = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Service", x => x.Id);
+                    table.PrimaryKey("PK_Services", x => x.ServiceId);
                     table.ForeignKey(
-                        name: "FK_Service_Goats_GoatId",
+                        name: "FK_Services_Goats_GoatId",
                         column: x => x.GoatId,
                         principalTable: "Goats",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -398,8 +396,8 @@ namespace eGoatDDD.Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Birth_GoatId",
-                table: "Birth",
+                name: "IX_Births_GoatId",
+                table: "Births",
                 column: "GoatId");
 
             migrationBuilder.CreateIndex(
@@ -437,13 +435,8 @@ namespace eGoatDDD.Persistence.Migrations
                 column: "HistoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parents_GoatId",
-                table: "Parents",
-                column: "GoatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Service_GoatId",
-                table: "Service",
+                name: "IX_Services_GoatId",
+                table: "Services",
                 column: "GoatId");
 
             migrationBuilder.AddForeignKey(
@@ -485,7 +478,7 @@ namespace eGoatDDD.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Birth");
+                name: "Births");
 
             migrationBuilder.DropTable(
                 name: "GoatBreeds");
@@ -497,7 +490,7 @@ namespace eGoatDDD.Persistence.Migrations
                 name: "Parents");
 
             migrationBuilder.DropTable(
-                name: "Service");
+                name: "Services");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

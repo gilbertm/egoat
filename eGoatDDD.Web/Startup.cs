@@ -95,7 +95,7 @@ namespace eGoatDDD.Web
                 routes.MapApplication();
                 routes.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Goat}/{action=Create}/{id?}");
+                    template: "{controller=Goat}/{action=Index}/{id?}");
             });
 
             app.UseCookiePolicy();

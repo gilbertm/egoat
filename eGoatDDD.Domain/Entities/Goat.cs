@@ -37,7 +37,7 @@ namespace eGoatDDD.Domain.Entities
         public virtual Disposal Disposal { get; set; }
 
         // one-to-many
-        public virtual ICollection<Parent> Parents { get; private set; }
+        public virtual ICollection<Parent> Parents { get; set; }
 
         // one-to-many
         public virtual ICollection<Birth> Births { get; private set; }

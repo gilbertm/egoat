@@ -111,22 +111,6 @@ namespace eGoatDDD.Web.Controllers
 
         }
 
-        /*[Route("api/goat/breeds")]
-        [HttpPost]
-        public async Task<JsonResult> Breeds(int Id)
-        {
-            BreedsListViewModel breeds = await _mediator.Send(new GetAllBreedsQuery());
-
-            if (breeds != null)
-            {
-                if (breeds.Breeds.Count() > 0)
-                {
-                    return Json(new { error = 0, response = breeds.Breeds });
-                }
-            }
-
-            return Json(new { error = 1, response = "Goat does not exists." });
-        } */
     }
 
 }

@@ -6,8 +6,10 @@ namespace eGoatDDD.Domain.Entities
     public class Service
     {
 
-        public long Id { get; set; }
+        public long ServiceId { get; set; }
 
+        public long GoatId { get; set; }
+        
         // medical
         // recreational
         public string Type { get; set; }

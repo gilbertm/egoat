@@ -19,7 +19,11 @@ namespace eGoatDDD.Persistence
 
         public DbSet<Breed> Breeds { get; set; }
 
+        public DbSet<Birth> Births { get; set; }
+
         public DbSet<Parent> Parents { get; set; }
+
+        public DbSet<Service> Services { get; set; }
 
         public DbSet<GoatBreed> GoatBreeds { get; set; }
 
