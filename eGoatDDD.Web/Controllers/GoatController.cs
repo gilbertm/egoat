@@ -59,5 +59,44 @@ namespace eGoatDDD.Web.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public async Task<IActionResult> Edit(long goatId)
+        {
+            BreedsListViewModel breedsListViewModel = await _mediator.Send(new GetAllBreedsQuery());
+
+            ColorsListViewModel colorsListViewModel = await _mediator.Send(new GetAllColorsQuery());
+
+            GoatsListViewModel goatListForPotentialParentMaternal = await _mediator.Send(new GetAllGoatsPotentialParentQuery(false));
+
+            GoatsListViewModel goatListForPotentialParentSire = await _mediator.Send(new GetAllGoatsPotentialParentQuery(true));
+
+            ViewData["Colors"] = colorsListViewModel.Colors;
+
+            ViewData["Breeds"] = breedsListViewModel.Breeds;
+
+            ViewData["Maternals"] = goatListForPotentialParentMaternal.Goats;
+
+            ViewData["Sires"] = goatListForPotentialParentSire.Goats;
+
+            ViewData["Breeds"] = breedsListViewModel.Breeds;
+
+            GoatNonDtoViewModel goat = await _mediator.Send(new GetGoatQuery(goatId));
+
+            return View(goat);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromForm]EditGoatCommand command)
+        {
+            bool response = false;
+
+            if (ModelState.IsValid)
+            {
+                response = await _mediator.Send(command);
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

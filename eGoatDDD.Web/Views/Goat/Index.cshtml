@@ -9,16 +9,19 @@
 {
     @foreach (var item in Model.Goats)
     {
-        <div class="row">
-            <div class="col col-12 col-md-2 col-sm-4 text-align-center">
-                <img width="150" src="/images/uploads/@(item.Picture)" /><br />
-                @item.Color.Name @item.Code
-            </div>
-            <div class="col col-12 col-md-10 col-sm-8 small">
-                <div class="row">
-                    <div class="col col-12 col-md-3 col-sm-3">
 
-                        <div class="row">
+
+        <div class="row">
+            <div class="col col-12 col-md-4 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
+                <div class="row mb-1 mb-lg-3 mb-md-2 small">
+                    <div class="col col-md-5 col-sm-6">
+                        <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+                            <img class="w-100" src="/images/uploads/@(item.Picture)" /><br />
+                            @item.Color.Name @item.Code
+                        </a>
+                    </div>
+                    <div class="col col-md-7 col-sm-6">
+                        <div class="row mb-1">
                             <div class="col col-12">
                                 @{
                                     var birthdate = item.BirthDate.HasValue ? item.BirthDate.Value : DateTime.Now;
@@ -69,9 +72,7 @@
                                 Birthdate: @item.BirthDate?.ToString("dd MMM yyyy")
                             </div>
                         </div>
-
-
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col col-12">
                                 Gender: @(item.Gender == 'M' ? "Male" : "Female")
                             </div>
@@ -97,9 +98,53 @@
                                 </div>
                             }
                         }
-
                     </div>
+                </div>
 
+            </div>
+            <div class="col col-12 col-md-8 col-sm-6 small">
+                <div class="row">
+                    <div class="col col-12 col-md-4 col-sm-4">
+                        <div class="service-wrapper">
+                            <div class="latest">
+                                <div class="row">
+                                    <div class="col col-6">
+                                        <div class="service-type"></div>
+                                    </div>
+                                    <div class="col col-6">
+                                        <div class="service-category"></div>
+                                    </div>
+                                    <div class="col col-6">
+                                        <div class="service-start"></div>
+                                    </div>
+                                    <div class="col col-6">
+                                        <div class="service-end"></div>
+                                    </div>
+                                    <div class="col col-12">
+                                        <div class="service-description"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="add service">Add service</button>
+                            <div class="fields d-none">
+                                <select name="type">
+                                    <option value="Medical">Medical</option>
+                                </select>
+                                <select name="category">
+                                    <option value="Vaccine">Vaccine</option>
+                                    <option value="Deworm">Deworm</option>
+                                </select>
+
+                                <input name="start" type="date" value="@DateTime.Now.ToString(" mm-dd-yyyy")" />
+                                <input name="end" type="date" value="@DateTime.Now.ToString(" mm-dd-yyyy")" />
+
+                                <textarea name="description" rows="2" cols="25" placeholder="short description."></textarea>
+                                <input name="goat" type="hidden" value="@item.Id" />
+                                <input type="submit" name="submit" value="submit" />
+                                <button class="close service">Close</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col col-12 col-md-3 col-sm-3">
                         @if (item.Parents.Goats != null)
                         {
@@ -122,4 +167,95 @@
             </div>
         </div>
     }
+}
+
+@section scripts{
+    <script type="text/javascript">
+        (function ($) {
+            $.date = function (dateObject) {
+                var d = new Date(dateObject);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+                if (day < 10) {
+                    day = "0" + day;
+                }
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                var date = month + "-" + day + "-" + year;
+
+                return date;
+            };
+
+            $(document).ready(function () {
+
+                $(".add.service").on("click", function () {
+
+                    var container = $(this).parents(".service-wrapper");
+
+                    container.find(".fields").removeClass("d-none");
+
+                });
+
+                $(".close.service").on("click", function () {
+
+                    var container = $(this).parents(".service-wrapper");
+
+                    container.find(".fields").addClass("d-none");
+
+                });
+
+                $("input[type='submit']").on("click", function () {
+                    var container = $(this).parents(".service-wrapper");
+
+                    var $type = container.find("select[name='type']").val();
+                    var $category = container.find("select[name='category']").val();
+                    var $goat = container.find("input[name='goat']").val();
+                    var $description = container.find("textarea[name='description']").val();
+                    var $start = container.find("input[name='start']").val();
+                    var $end = container.find("input[name='end']").val();
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/service/put',
+                        data: { GoatId: $goat, Type: $type, Category: $category, Description: $description, Start: $start, End: $end },
+                    }).done(function (result) {
+                        container.find(".latest").find(".service-type").html(result.service.type);
+                        container.find(".latest").find(".service-description").html(result.service.description);
+                        container.find(".latest").find(".service-category").html(result.service.category);
+
+                        container.find(".latest").find(".service-start").html($.date(result.service.start));
+                        container.find(".latest").find(".service-end").html($.date(result.service.end));
+
+                    });
+                    container.find(".fields").addClass("d-none");
+                });
+
+
+                $(".service-wrapper").each(function () {
+                    var container = $(this);
+
+                    var $goat = container.find("input[name='goat']").val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/service',
+                        data: { GoatId: $goat },
+                    }).done(function (result) {
+
+                        if (!result.error) {
+                            container.find(".latest").find(".service-type").html(result.service.type);
+                            container.find(".latest").find(".service-description").html(result.service.description);
+                            container.find(".latest").find(".service-category").html(result.service.category);
+
+                            container.find(".latest").find(".service-start").html($.date(result.service.start));
+                            container.find(".latest").find(".service-end").html($.date(result.service.end));
+                        }
+                    });
+
+                });
+            });
+
+        })(jQuery);
+    </script>
 }

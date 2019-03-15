@@ -4,14 +4,6 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Views\Goat\Edit.cshtm_" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Goat\Edit.cshtm_" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />

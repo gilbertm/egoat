@@ -1,0 +1,585 @@
+﻿@model eGoatDDD.Application.Goats.Models.GoatNonDtoViewModel
+@using eGoatDDD.Application.Breeds.Models
+@using eGoatDDD.Application.Colors.Models
+@using eGoatDDD.Application.Goats.Models
+
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+@if (Model != null)
+{
+    <form asp-action="Edit">
+        <div class="row">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+                <h4>Details</h4>
+                <div class="row">
+                    <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small">Color</label>
+                            <select class="form-control" required data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
+                                <option value="" selected="selected">
+                                    Tag color
+                                </option>
+                                @foreach (ColorDto item in (List
+<ColorDto>
+)ViewData["Colors"])
+                                {
+                                    if (Model.ColorId == item.Id)
+                                    {
+                                        <option value="@item.Id" selected="selected"> @item.Name</option>
+                                    }
+
+                                    else
+                                    {
+                                        <option value="@item.Id"> @item.Name</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small" asp-for="Code">Code</label>
+                            <input asp-for="Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Code)" />
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small d-block" asp-for="Gender">Gender</label>
+                            <label>
+                                <input asp-for="Gender" type="radio" value="M" checked="@(Model.Gender == 'M' ? " checked" : "" )" /> Male
+                            </label>
+                            <label>
+                                <input asp-for="Gender" type="radio" value="F" checked="@(Model.Gender == 'F' ? " checked" : "" )" /> Female
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small" asp-for="BirthDate">Birth Date</label>
+                            <div class='input-group'>
+                                <input required asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" value="@Model.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group d-none">
+                    <input asp-for="Picture" required class="form-control" placeholder="Picture" id="Picture" />
+                    <span asp-validation-for="Picture" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="small" asp-for="Description">Description</label>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <textarea class="form-control"
+                              asp-for="Description"
+                              rows="3"
+                              cols="20">@(Model.Description)</textarea>
+                </div>
+
+
+            </div>
+            <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+                @{
+
+                    long sireId = 0;
+                    long maternalId = 0;
+
+                    var parents = Model.Parents.Goats;
+
+                    if (parents != null)
+                    {
+                        var sire = parents.Where(g => g.Gender == 'M').SingleOrDefault();
+                        if (sire != null)
+                        {
+                            sireId = sire.ParentId;
+                        }
+                        var maternal = parents.Where(g => g.Gender == 'F').SingleOrDefault();
+                        if (maternal != null)
+                        {
+                            maternalId = maternal.ParentId;
+                        }
+
+                    }
+                    <h4>Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
+                    <div class="row">
+                        <div class="col col-12">
+                            <div class="row">
+                                <div class="col col-6">
+                                    <div class="form-group parent-container">
+                                        <label class="small">Sire</label>
+                                        <select class="form-control" name="SireId" id="SireId">
+                                            <option value="" selected="selected">
+                                                Sire
+                                            </option>
+                                            @foreach (GoatDto item in (List
+<GoatDto>
+)ViewData["Sires"])
+                                            {
+                                                if (sireId > 0)
+                                                {
+                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.Color.Name - @item.Code </option>
+                                                }
+                                            }
+
+                                        </select>
+
+                                        <div class="goat-info-wrapper">
+                                            <span class="close d-none">close</span>
+                                            <div class="table-info"></div>
+                                            <div class="table-breeds"></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col col-6">
+                                    <div class="form-group parent-container">
+                                        <label class="small">Maternal</label>
+                                        <select class="form-control" name="MaternalId" id="MaternalId">
+                                            <option value="" selected="selected">
+                                                Maternal
+                                            </option>
+                                            @foreach (GoatDto item in (List
+<GoatDto>
+)ViewData["Maternals"])
+                                            {
+
+                                                if (maternalId > 0)
+                                                {
+                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.Color.Name - @item.Code </option>
+                                                }
+                                            }
+
+                                        </select>
+                                        <div class="goat-info-wrapper">
+                                            <span class="close d-none">close</span>
+                                            <div class="table-info"></div>
+                                            <div class="table-breeds"></div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group siblings">
+                                <h4>Siblings</h4>
+                                <div class="list">
+                                    <span class="info font-italic small">None</span>
+                                    <div class="siblings-table"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-12" id="breeds">
+                            <h4>Breeds</h4><div class="row">
+                                <button type="button" id="add_breed">Add</button>
+                            </div>
+                            <div class="row breed-wrapper">
+
+                                <div class="col col-6 breed-type">
+                                    <div class="form-group">
+                                        <select required class="form-control breedid" name="BreedId[]" data-ctr="0">
+                                            <option value="" selected="selected">
+                                                Breed Type
+                                            </option>
+                                            @foreach (BreedDto item in (List
+<BreedDto>
+)ViewData["Breeds"])
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        </select>
+                                        <div class="table">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col col-6">
+                                    <div class="form-group">
+                                        <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col col-lg-4 col-md-4 col-sm-6 col-12 ">
+                <div class="row">
+                    <div class="col col-12 goatImageWrapper">
+                        <div class="form-group">
+                            <span class="wrapper">
+                                <span class="img"></span>
+                                <input required type="file" id="goatImage" data-action="/api/image" />
+
+                                @*
+                                        < hr / >
+
+                                    < input required type = "file" name = "files" multiple id = "goatImages" data - action = "/api/images" />
+                                *@
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row lineage d-none">
+                    <div class="col col-12 goatImageWrapper">
+                        <div class="form-group">
+                            TODO:// Lineage org graph
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" required id="Id" value="@(Model.Id)" />
+                    <input type="submit" value="Edit" name="Save" class="btn btn-default" id="Submit" />
+                </div>
+            </div>
+        </div>
+
+       
+    </form>
+    @*
+        TODO://multiple images per gaots
+            https://tutorialzine.com/2013/05/mini-ajax-file-upload-form
+    *@
+}
+
+
+@section scripts{
+    <script type="text/javascript">
+        (function ($) {
+
+            function detail(input) {
+
+                var $this = input;
+
+                // display maternal and paternal
+                // after changing val
+                var parent_container = $this.parents(".parent-container");
+
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat',
+                    data: { Id: $this.val() },
+                }).done(function (result) {
+
+                    if (result.error == 0) {
+                        var table = $('<table  class="small" />');
+                        var row = "";
+
+                        row = $('<tr/>');
+                        row.append('<td class="w-25 text-align-center"><img width="100%" src="/images/uploads/' + result.response.picture + '"/><br class="d-none" /><span class="red d-none">' + result.response.id + '</span></td>');
+                        row.append('<td><strong>' + result.response.color.name + ' ' + result.response.code + '</strong></td>');
+                        table.append(row);
+
+                        $(parent_container).find(".table-info").html(table);
+
+                        var table = $('<table  class="small w-100" />');
+                        $(result.response.breeds).each(function () {
+                            row = $('<tr/>');
+                            row.append('<td class="w-25">' + this.name + ' : ' + this.percentage + '</td>');
+                            table.append(row);
+                        });
+
+                        $(parent_container).find(".table-breeds").html(table);
+
+                        $(parent_container).find(".close").removeClass("d-none");
+                        $this.hide();
+                    } else {
+                        $this.show();
+                        $(parent_container).find(".close").addClass("d-none");
+                        $(parent_container).find(".table-breeds").empty();
+                        $(parent_container).find(".table-info").empty();
+
+                    }
+                });
+            }
+
+            function parent() {
+                // suggestion
+                // get the breeds from parents
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/parent-breeds',
+                    data: { maternalId: $('#MaternalId').val(), sireId: $('#SireId').val() },
+                }).done(function (parent_breeds) {
+
+                    if (parent_breeds.breeds != null) {
+                        if (parent_breeds.breeds.length == 1) {
+                            $("#breeds .breedid").val(parent_breeds.breeds[0].id);
+                            $("#breeds .breedpercent").val(parent_breeds.breeds[0].percentage);
+                        } else {
+                            $(parent_breeds.breeds).each(function (i) {
+                                $("#breeds .breedid").eq(i).val(parent_breeds.breeds[i].id);
+                                $("#breeds .breedpercent").eq(i).val(parent_breeds.breeds[i].percentage);
+
+                                if (i < ($(parent_breeds.breeds).length - 1)) {
+                                    $('#add_breed').trigger("click");
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            function sibling() {
+                // siblings
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/siblings',
+                    data: { maternalId: $("#MaternalId").val(), sireId: $("#SireId").val() },
+                }).done(function (response) {
+                    if (response.error == 0) {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").addClass("d-none");
+
+                        var div = $('<div class="row small"/>');
+                        $(response.goats).each(function () {
+                            var inner_div = $('<div class="col col-4 col-xs-6 text-align-center" />');
+                            inner_div.append('<img width="auto" height="50px" src="/images/uploads/' + this.picture + '"/><br />Goat Id: ' + this.id);
+                            inner_div.append('<br />Tag Code: <strong>' + this.color.name + ' ' + this.code + '</strong>');
+
+                            div.append(inner_div);
+                        });
+
+                        $('.siblings .list .siblings-table').html(div);
+
+                    } else {
+                        $('.siblings .list .siblings-table').empty();
+                        $(".siblings .list .info").removeClass("d-none");
+                    }
+                });
+            }
+
+            function breed() {
+
+                var breeds_added = $(".breed-wrapper.added");
+
+                breeds_added.remove();
+
+                // suggestion
+                // get the breeds from parents
+                $.ajax({
+                    type: "POST",
+                    url: '/api/goat/parent-breeds',
+                    data: { maternalId: $('#MaternalId').val(), sireId: $('#SireId').val() },
+                }).done(function (parent_breeds) {
+
+                    if (parent_breeds.breeds != null) {
+                        if (parent_breeds.breeds.length == 1) {
+                            $("#breeds .breedid").val(parent_breeds.breeds[0].id);
+                            $("#breeds .breedpercent").val(parent_breeds.breeds[0].percentage);
+                        } else {
+                            $(parent_breeds.breeds).each(function (i) {
+
+                                if ((i > 0) && (i < ($(parent_breeds.breeds).length - 1))) {
+                                    $('#add_breed').trigger("click");
+                                }
+
+                                $("#breeds .breedid").eq(i).val(parent_breeds.breeds[i].id);
+                                $("#breeds .breedpercent").eq(i).val(parent_breeds.breeds[i].percentage);
+
+                            });
+                        }
+                    } else {
+                        $("#breeds .breedid").val("");
+                        $("#breeds .breedpercent").val("0");
+                    }
+                });
+            }
+
+            function image(picture) {
+
+                var img = $('<img />',
+                    {
+                        width: '100%',
+                        id: 'goatImg',
+                        src: '/images/uploads/' + picture.val()
+                    });
+
+                $(".goatImageWrapper .wrapper .img").html(img);
+
+            }
+
+            $(document).ready(function () {
+
+                detail($('#MaternalId'));
+
+                detail($('#SireId'));
+
+                parent();
+
+                sibling();
+
+                breed();
+
+                image($("#Picture"));
+
+                $('#ColorId, #Code').on('change', function (event) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/goat/code',
+                        data: { colorId: $("#ColorId").val(), code: $("#Code").val() },
+                    }).done(function (response) {
+                        if (response.error == 0) {
+                            $(".code .error").addClass('d-none').removeClass('d-inline-block');
+                            $("#Submit").removeAttr("disabled");
+                        } else {
+                            $(".code .error").removeClass('d-none').addClass('d-inline-block').html(response.response);
+                            $("#Submit").attr("disabled", "disabled");
+                        }
+                    });
+                });
+
+                $('#MaternalId, #SireId').on('change', function (event) {
+                    detail($(this));
+
+                    parent();
+
+                    sibling();
+
+                    breed();
+                });
+
+                // parents container
+                $(".close").on("click", function () {
+                    var parent_container = $(this).parents(".parent-container");
+                    $(parent_container).find("select").val("");
+                    $(parent_container).find("select").show();
+                    $(parent_container).find(".close").addClass("d-none");
+                    $(parent_container).find(".table-breeds").empty();
+                    $(parent_container).find(".table-info").empty();
+
+                    sibling();
+
+                    breed();
+                });
+
+                // add/remove breed
+                // goat creation
+                $('#add_breed').on('click', function (event) {
+
+                    var breed_clone = $('#breeds .breed-wrapper').first().clone(true)
+                        .addClass("added")
+                        .find(".breedpercent").val("0.00").end()
+                        .find(".breedid").val("").end()
+                        .find(".remove_breed").removeClass("d-none").end();
+
+                    $('#breeds').append(breed_clone);
+
+                });
+
+                $('.remove_breed').on('click', function (event) {
+                    var breed_for_remove = $('#breeds .breed-wrapper').last().remove();
+                });
+
+                // main goat image
+                $('#goatImage').on('change', function (event) {
+                    event.preventDefault();
+
+                    var $file = $("#goatImage")[0].files[0];
+
+                    var $action = $("#goatImage").data("action");
+
+                    var $formdata = new FormData();
+
+                    $formdata.append("file", $file);
+
+                    $.ajax({
+                        type: "POST",
+                        url: $action,
+                        data: $formdata, // serializes the form's elements.
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+
+                        var img = $('<img />',
+                            {
+                                width: '100%',
+                                id: 'goatImg',
+                                src: '/images/uploads/' + result
+                            });
+
+                        $("#Picture").val(result);
+                        $(".goatImageWrapper .wrapper").html(img);
+                    });
+
+                    return false; // avoid to execute the actual submit of the form.
+                });
+
+
+                // main goat image
+                $('#goatImages').on('change', function (event) {
+                    event.preventDefault();
+
+                    var $goatImages = $("#goatImages").get(0);
+
+                    var $files = $goatImages.files;
+
+                    var $action = $("#goatImages").data("action");
+
+                    var $formData = new FormData();
+
+                    for (var i = 0; i < $files.length; i++) {
+                        $formData.append("files", $files[i]);
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: $action,
+                        data: $formData, // serializes the form's elements.
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+
+                        var img = $('<img />',
+                            {
+                                width: '100%',
+                                id: 'goatImg',
+                                src: '/images/uploads/' + result
+                            });
+
+                        $("#Picture").val(result);
+                        $(".goatImageWrapper .wrapper").html(img);
+                    });
+
+                    return false; // avoid to execute the actual submit of the form.
+                });
+            });
+        })(jQuery);
+    </script>
+}
+

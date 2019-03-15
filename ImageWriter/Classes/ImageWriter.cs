@@ -11,11 +11,11 @@ namespace ImageWriter.Classes
 {
     public class ImageWriter : IImageWriter
     {
-        public async Task<string> UploadImage(IFormFile file)
+        public async Task<string> UploadImage(IFormFile file, string folderLocation)
         {
             if (CheckIfImageFile(file))
             {
-                return await WriteFile(file);
+                return await WriteFile(file, folderLocation);
             }
 
             return "Invalid image file";
@@ -43,20 +43,31 @@ namespace ImageWriter.Classes
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public async Task<string> WriteFile(IFormFile file)
+        public async Task<string> WriteFile(IFormFile file, string folderLocation)
         {
             string fileName;
             try
             {
+                var path = Path.Combine(
+                            Directory.GetCurrentDirectory(), folderLocation);
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
                 var extension = "." + file.FileName.Split('.')[file.FileName.Split('.').Length - 1];
+
                 fileName = Guid.NewGuid().ToString() + extension; //Create a new Name 
                                                                   //for the file due to security reasons.
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\uploads", fileName);
+                var pathWithFile = Path.Combine(path,
+                            fileName);
 
-                using (var bits = new FileStream(path, FileMode.Create))
+                using (var stream = new FileStream(pathWithFile, FileMode.Create))
                 {
-                    await file.CopyToAsync(bits);
+                    await file.CopyToAsync(stream);
                 }
+                
             }
             catch (Exception e)
             {
@@ -65,5 +76,7 @@ namespace ImageWriter.Classes
 
             return fileName;
         }
+
+       
     }
 }

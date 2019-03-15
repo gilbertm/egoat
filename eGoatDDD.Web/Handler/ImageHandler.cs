@@ -7,7 +7,7 @@ namespace eGoatDDD.Web.Handler
 {
     public interface IImageHandler
     {
-        Task<IActionResult> UploadImage(IFormFile file);
+        Task<string> UploadImage(IFormFile file, string folderLocation);
     }
 
     public class ImageHandler : IImageHandler
@@ -18,10 +18,10 @@ namespace eGoatDDD.Web.Handler
             _imageWriter = imageWriter;
         }
 
-        public async Task<IActionResult> UploadImage(IFormFile file)
+        public async Task<string> UploadImage(IFormFile file, string folderLocation)
         {
-            var result = await _imageWriter.UploadImage(file);
-            return new ObjectResult(result);
+            var result = await _imageWriter.UploadImage(file, folderLocation);
+            return result;
         }
     }
 }

@@ -359,3 +359,4 @@ C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Web\obj\Debug\ne
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Web\obj\Debug\netcoreapp3.0\eGoatDDD.Web.csproj.CopyComplete
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Web\obj\Debug\netcoreapp3.0\eGoatDDD.Web.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Web\obj\Debug\netcoreapp3.0\eGoatDDD.Web.pdb
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Web\obj\Debug\netcoreapp3.0\Razor\Views\Goat\Edit.cshtml.g.cs

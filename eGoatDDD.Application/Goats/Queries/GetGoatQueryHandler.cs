@@ -10,16 +10,21 @@ using eGoatDDD.Domain.Entities;
 using eGoatDDD.Application.Breeds.Models;
 using System.Collections.Generic;
 using eGoatDDD.Application.GoatBreeds.Models;
+using eGoatDDD.Application.Parents.Models;
+using MediatR;
+using eGoatDDD.Application.Parents.Queries;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
     public class GetGoatQueryHandler : MediatR.IRequestHandler<GetGoatQuery, GoatNonDtoViewModel>
     {
         private readonly eGoatDDDDbContext _context;
+        private readonly IMediator _mediator;
 
-        public GetGoatQueryHandler(eGoatDDDDbContext context)
+        public GetGoatQueryHandler(eGoatDDDDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         public async Task<GoatNonDtoViewModel> Handle(GetGoatQuery request, CancellationToken cancellationToken)
@@ -31,6 +36,7 @@ namespace eGoatDDD.Application.Goats.Queries
                     .Include(c => c.Color)
                     .Include(gb => gb.GoatBreeds)
                         .ThenInclude(b => b.Breed)
+                    .Include(p => p.Parents)
                     .SingleOrDefaultAsync(cancellationToken);
 
                 Color color = new Color
@@ -49,12 +55,33 @@ namespace eGoatDDD.Application.Goats.Queries
                     {
                         breeds.Add(new GoatBreedViewModel
                         {
-                               Id = item.Breed.Id,                               
-                               Name = item.Breed.Name,
-                               Percentage = item.Percentage
+                            Id = item.Breed.Id,
+                            Name = item.Breed.Name,
+                            Percentage = item.Percentage
                         });
                     }
                 }
+
+
+                ParentsListViewModel parents = await _mediator.Send(new GetParentsQuery(request.Id));
+
+                long maternalId, sireId;
+                maternalId = sireId = 0;
+
+                foreach (var parent in goat.Parents)
+                {
+                    if (parent.Goat.Gender == 'M')
+                    {
+                        sireId = parent.ParentId;
+                    }
+                    if (parent.Goat.Gender == 'F')
+                    {
+                        maternalId = parent.ParentId;
+                    }
+                }
+
+                GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId));
+
 
                 if (goat == null)
                 {
@@ -72,6 +99,8 @@ namespace eGoatDDD.Application.Goats.Queries
                     Picture = goat.Picture,
                     Color = color,
                     Breeds = breeds,
+                    Parents = parents,
+                    Siblings = siblings,
                     EditEnabled = true,
                     DeleteEnabled = false
                 };

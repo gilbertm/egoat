@@ -29,7 +29,6 @@ namespace eGoatDDD.Application.Goats.Commands
 
         public string Picture { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? BirthDate { get; set; }
 
         public string Description { get; set; }
