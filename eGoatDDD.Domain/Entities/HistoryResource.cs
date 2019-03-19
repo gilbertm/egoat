@@ -4,16 +4,9 @@ using System.Text;
 
 namespace eGoatDDD.Domain.Entities
 {
-    public class HistoryResource
+    public class HistoryResource : BaseEntity
     {
-        public long Id { get; set; }
-
         public long HistoryId { get; set; }
-
-        // created/updated are crucial dates
-        public DateTime Created { get; set; }
-
-        public DateTime Updated { get; set; }
 
         // store the URL
         public string ResourceURL { get; set; }

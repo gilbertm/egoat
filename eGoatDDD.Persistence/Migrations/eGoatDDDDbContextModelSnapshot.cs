@@ -148,9 +148,40 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("HomeAddress")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("HomeCity")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("HomeCountryCode")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("HomePhone")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("HomeRegion")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("IsActivated");
+
+                    b.Property<DateTime>("Joined");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -192,11 +223,17 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<int>("Alive");
 
+                    b.Property<DateTime>("Created");
+
                     b.Property<DateTime>("Delivery");
 
                     b.Property<long>("GoatId");
 
+                    b.Property<DateTime>("Modified");
+
                     b.Property<int>("Total");
+
+                    b.Property<Guid>("UniqeId");
 
                     b.HasKey("Id");
 
@@ -243,13 +280,19 @@ namespace eGoatDDD.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Created");
+
                     b.Property<DateTime>("DisposedOn");
 
                     b.Property<long?>("GoatId");
 
+                    b.Property<DateTime>("Modified");
+
                     b.Property<string>("Reason");
 
                     b.Property<int>("Type");
+
+                    b.Property<Guid>("UniqeId");
 
                     b.HasKey("Id");
 
@@ -270,6 +313,8 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<int>("ColorId");
 
+                    b.Property<DateTime>("Created");
+
                     b.Property<string>("Description");
 
                     b.Property<long?>("DisposalId");
@@ -278,7 +323,11 @@ namespace eGoatDDD.Persistence.Migrations
                         .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
 
+                    b.Property<DateTime>("Modified");
+
                     b.Property<string>("Picture");
+
+                    b.Property<Guid>("UniqeId");
 
                     b.HasKey("Id");
 
@@ -308,70 +357,7 @@ namespace eGoatDDD.Persistence.Migrations
                     b.ToTable("GoatBreeds");
                 });
 
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.History", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("date");
-
-                    b.Property<long>("GoatId");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("ntext");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoatId");
-
-                    b.ToTable("History");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.HistoryResource", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("date");
-
-                    b.Property<long>("HistoryId");
-
-                    b.Property<string>("ResourceURL")
-                        .HasColumnType("ntext");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HistoryId");
-
-                    b.ToTable("HistoryResource");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
-                {
-                    b.Property<long>("GoatId");
-
-                    b.Property<long>("ParentId");
-
-                    b.HasKey("GoatId", "ParentId");
-
-                    b.ToTable("Parents");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Service", b =>
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatService", b =>
                 {
                     b.Property<long>("ServiceId")
                         .ValueGeneratedOnAdd()
@@ -393,7 +379,74 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("Services");
+                    b.ToTable("GoatServices");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.History", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("date");
+
+                    b.Property<long>("GoatId");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("ntext");
+
+                    b.Property<Guid>("UniqeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoatId");
+
+                    b.ToTable("History");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.HistoryResource", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("Id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("date");
+
+                    b.Property<long>("HistoryId");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ResourceURL")
+                        .HasColumnType("ntext");
+
+                    b.Property<Guid>("UniqeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HistoryId");
+
+                    b.ToTable("HistoryResource");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
+                {
+                    b.Property<long>("GoatId");
+
+                    b.Property<long>("ParentId");
+
+                    b.HasKey("GoatId", "ParentId");
+
+                    b.ToTable("Parents");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -481,6 +534,14 @@ namespace eGoatDDD.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatService", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("Services")
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("eGoatDDD.Domain.Entities.History", b =>
                 {
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
@@ -502,14 +563,6 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
                         .WithMany("Parents")
-                        .HasForeignKey("GoatId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Service", b =>
-                {
-                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany("Services")
                         .HasForeignKey("GoatId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

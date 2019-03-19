@@ -23,6 +23,7 @@ namespace eGoatDDD.Web.Controllers
             return View(goatsLisNonDtotViewModel);
         }
 
+        [Authorize(Policy = "CanEdits")]
         public async Task<IActionResult> Create()
         {
             BreedsListViewModel breedsListViewModel = await _mediator.Send(new GetAllBreedsQuery());
@@ -46,6 +47,7 @@ namespace eGoatDDD.Web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "CanEdits")]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CreateGoatCommand command)
         {
@@ -60,6 +62,7 @@ namespace eGoatDDD.Web.Controllers
         }
 
 
+        [Authorize(Policy = "CanEdits")]
         public async Task<IActionResult> Edit(long goatId)
         {
             BreedsListViewModel breedsListViewModel = await _mediator.Send(new GetAllBreedsQuery());
@@ -85,6 +88,7 @@ namespace eGoatDDD.Web.Controllers
             return View(goat);
         }
 
+        [Authorize(Policy = "CanEdits")]
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm]EditGoatCommand command)
         {

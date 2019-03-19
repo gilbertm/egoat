@@ -3,7 +3,6 @@ using eGoatDDD.Persistence.Extension;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace eGoatDDD.Persistence
 {
     public class eGoatDDDDbContext : IdentityDbContext<ApplicationUser>
@@ -12,6 +11,8 @@ namespace eGoatDDD.Persistence
            : base(options)
         {
         }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         public DbSet<Goat> Goats { get; set; }
 
@@ -23,7 +24,7 @@ namespace eGoatDDD.Persistence
 
         public DbSet<Parent> Parents { get; set; }
 
-        public DbSet<Service> Services { get; set; }
+        public DbSet<GoatService> GoatServices { get; set; }
 
         public DbSet<GoatBreed> GoatBreeds { get; set; }
 

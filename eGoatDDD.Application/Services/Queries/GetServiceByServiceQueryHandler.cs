@@ -27,7 +27,7 @@ namespace eGoatDDD.Application.Services.Queries
         {
             ServiceViewModel model = null;
 
-            var service = await _context.Services
+            var service = await _context.GoatServices
                     .Select(ServiceDto.Projection)
                     .Where(s => s.ServiceId == request.ServiceId)
                     .SingleOrDefaultAsync(cancellationToken);

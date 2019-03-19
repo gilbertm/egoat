@@ -1,0 +1,18 @@
+﻿@model IEnumerable<eGoatDDD.Application.Users.Manages.Models.UserRolesViewModel>
+
+@{
+    ViewData["Title"] = "Users Roles";
+}
+
+@if (Model != null)
+{
+    foreach (var userRolesViewModel in Model)
+    {
+        <h4>@userRolesViewModel.UserId - @userRolesViewModel.UserName</h4>
+        foreach (var role in userRolesViewModel.Roles.SelectOptionViewModels)
+        {
+            <p>@role.Value</p>
+        }
+        <hr />
+    }
+}

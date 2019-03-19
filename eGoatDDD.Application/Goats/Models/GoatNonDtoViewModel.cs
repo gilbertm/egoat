@@ -39,7 +39,7 @@ namespace eGoatDDD.Application.Goats.Models
         // one-to-many
         public ICollection<Birth> Births { get; set; }
 
-        public ICollection<Service> Services { get; set; }
+        public ICollection<GoatService> GoatServices { get; set; }
 
         // many-to-many
         public IList<GoatBreedViewModel> Breeds { get; set; }

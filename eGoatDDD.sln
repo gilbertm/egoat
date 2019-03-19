@@ -33,7 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{9B81E418-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWriter", "ImageWriter\ImageWriter.csproj", "{5EFAF1EA-B367-489C-940E-3DDDD5ED74A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGoatDDD.Web", "eGoatDDD.Web\eGoatDDD.Web.csproj", "{61E24AC6-4291-451B-B6A1-4AD23D2A046B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eGoatDDD.Web", "eGoatDDD.Web\eGoatDDD.Web.csproj", "{61E24AC6-4291-451B-B6A1-4AD23D2A046B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F1C0EBF7-78DA-4574-AD3F-53C8F7124FAD} = {F1C0EBF7-78DA-4574-AD3F-53C8F7124FAD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

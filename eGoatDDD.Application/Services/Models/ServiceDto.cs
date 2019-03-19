@@ -20,7 +20,7 @@ namespace eGoatDDD.Application.Services.Models
 
         public DateTime End { get; set; }
 
-        public static Expression<Func<Service, ServiceDto>> Projection
+        public static Expression<Func<GoatService, ServiceDto>> Projection
         {
             get
             {
@@ -38,7 +38,7 @@ namespace eGoatDDD.Application.Services.Models
             }
         }
 
-        public static ServiceDto Create(Service service)
+        public static ServiceDto Create(GoatService service)
         {
             return Projection.Compile().Invoke(service);
         }

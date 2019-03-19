@@ -4,9 +4,9 @@ using eGoatDDD.Domain.Entities;
 
 namespace eGoatDDD.Persistence.Configuration
 {
-    public class ServiceConfiguration : IEntityTypeConfiguration<Service>
+    public class ServiceConfiguration : IEntityTypeConfiguration<GoatService>
     {
-        public void Configure(EntityTypeBuilder<Service> builder)
+        public void Configure(EntityTypeBuilder<GoatService> builder)
         {
             builder.HasKey(e => new { e.ServiceId });
 

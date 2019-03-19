@@ -1,5 +1,6 @@
 ﻿using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
+using eGoatDDD.Persistence.Service.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,8 @@ namespace eGoatDDD.Web.Infrastructure
     {
         private IMediator mediator;
 
+        private IUserService userService;
+
         private UserManager<ApplicationUser> userManager;
 
         private eGoatDDDDbContext context;
@@ -21,5 +24,7 @@ namespace eGoatDDD.Web.Infrastructure
         protected UserManager<ApplicationUser> _userManager => userManager ?? (userManager = HttpContext.RequestServices.GetService<UserManager<ApplicationUser>>());
 
         protected eGoatDDDDbContext _context => context ?? (context = HttpContext.RequestServices.GetService<eGoatDDDDbContext>());
+
+        protected IUserService _userService => userService ?? (userService = HttpContext.RequestServices.GetService<IUserService>());
     }
 }

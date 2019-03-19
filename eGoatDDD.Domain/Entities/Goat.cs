@@ -3,19 +3,17 @@ using System.Collections.Generic;
 
 namespace eGoatDDD.Domain.Entities
 {
-    public class Goat
+    public class Goat : BaseEntity
     {
         public Goat()
         {
             Parents = new HashSet<Parent>();
             Births = new HashSet<Birth>();
-            Services = new HashSet<Service>();
+            Services = new HashSet<GoatService>();
 
             GoatBreeds = new HashSet<GoatBreed>();
         }
-
-        public long Id { get; set; }
-
+        
         public int ColorId { get; set; }
 
         public long? DisposalId { get; set; }
@@ -42,7 +40,7 @@ namespace eGoatDDD.Domain.Entities
         // one-to-many
         public virtual ICollection<Birth> Births { get; private set; }
 
-        public virtual ICollection<Service> Services { get; private set; }
+        public virtual ICollection<GoatService> Services { get; private set; }
 
         // many-to-many
         public virtual ICollection<GoatBreed> GoatBreeds { get; private set; }

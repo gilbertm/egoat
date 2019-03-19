@@ -5,12 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Users\Roles\Models\UserRolesListViewModel.cs_" />
+    <None Remove="Users\Roles\Models\UserRoleViewModel.cs_" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Users\Roles\Models\UserRolesListViewModel.cs_" />
+    <Compile Include="Users\Roles\Models\UserRoleViewModel.cs_" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\eGoatDDD.Persistence\eGoatDDD.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Users\Manages\Commands\" />
   </ItemGroup>
 
 </Project>

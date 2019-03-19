@@ -58,12 +58,35 @@
                     <div class="col col-6">
                         <div class="form-group">
                             <label class="small d-block" asp-for="Gender">Gender</label>
-                            <label>
-                                <input asp-for="Gender" type="radio" value="M" checked="@(Model.Gender == 'M' ? " checked" : "" )" /> Male
-                            </label>
-                            <label>
-                                <input asp-for="Gender" type="radio" value="F" checked="@(Model.Gender == 'F' ? " checked" : "" )" /> Female
-                            </label>
+
+                            @if (Model.Gender == 'M')
+                            {
+                                <label>
+                                    <input asp-for="Gender" type="radio" value="M" checked="checked" /> Male
+                                </label>
+                            }
+
+                            else
+                            {
+                                <label>
+                                    <input asp-for="Gender" type="radio" value="M" /> Male
+                                </label>
+                            }
+
+                            @if (Model.Gender == 'F')
+                            {
+                                <label>
+                                    <input asp-for="Gender" type="radio" value="F" checked="checked" /> Female
+                                </label>
+                            }
+
+                            else
+                            {
+                                <label>
+                                    <input asp-for="Gender" type="radio" value="F" /> Female
+                                </label>
+                            }
+
                         </div>
                     </div>
                     <div class="col col-6">
@@ -264,12 +287,12 @@
             <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
                     <input asp-for="Id" type="hidden" required id="Id" value="@(Model.Id)" />
-                    <input type="submit" value="Edit" name="Save" class="btn btn-default" id="Submit" />
+                    <input type="submit" value="Save" name="Save" class="btn btn-default" id="Submit" />
                 </div>
             </div>
         </div>
 
-       
+
     </form>
     @*
         TODO://multiple images per gaots

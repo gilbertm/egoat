@@ -1,6 +1,9 @@
+using AutoMapper;
 using eGoatDDD.Application.Goats.Commands;
 using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
+using eGoatDDD.Persistence.Repository;
+using eGoatDDD.Persistence.Service.User;
 using eGoatDDD.Web.Handler;
 using MediatR;
 using MediatR.Pipeline;
@@ -41,7 +44,23 @@ namespace eGoatDDD.Web
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+            // services.AddMediatR();
             services.AddMediatR(typeof(CreateGoatCommandHandler).GetTypeInfo().Assembly);
+
+            services.AddHttpContextAccessor();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<IUserService, UserService>();
+
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             // Add DbContext using SQL Server Provider
             services.AddDbContext<eGoatDDDDbContext>(options =>
@@ -60,8 +79,11 @@ namespace eGoatDDD.Web
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Administrators", policy => policy.RequireClaim(ClaimTypes.Role, "Administrator"));
+                options.AddPolicy("PowerUsers", policy => policy.RequireClaim(ClaimTypes.Role, "PowerUser"));
                 options.AddPolicy("Supervisors", policy => policy.RequireClaim(ClaimTypes.Role, "Supervisor"));
                 options.AddPolicy("Attendants", policy => policy.RequireClaim(ClaimTypes.Role, "Attendant"));
+
+                options.AddPolicy("CanEdits", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Administrator", "Administrator", "Administrator" }));
             });
             #endregion
 
@@ -87,6 +109,10 @@ namespace eGoatDDD.Web
                 app.UseHsts();
             }
 
+            #region ++g++ seed roles
+            eGoatDDDInitializerRoles.SeedRoles(app.ApplicationServices).Wait();
+            #endregion
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -101,8 +127,8 @@ namespace eGoatDDD.Web
             app.UseCookiePolicy();
 
             app.UseAuthorization();
-
-
+            
+            app.UseAuthentication();
         }
     }
 }

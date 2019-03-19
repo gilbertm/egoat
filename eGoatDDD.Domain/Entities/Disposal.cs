@@ -11,10 +11,8 @@ namespace eGoatDDD.Domain.Entities
         Other = 99
     }
 
-    public class Disposal
+    public class Disposal : BaseEntity 
     {
-        public long Id { get; set; }
-
         public DateTime DisposedOn { get; set; }
 
         public DisposeType Type { get; set; }

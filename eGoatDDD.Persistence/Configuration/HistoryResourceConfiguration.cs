@@ -15,7 +15,7 @@ namespace eGoatDDD.Persistence.Configuration
             builder.Property(e => e.Id).HasColumnType("bigint");
 
             builder.Property(e => e.Created).HasColumnType("date");
-            builder.Property(e => e.Updated).HasColumnType("date");
+            builder.Property(e => e.Modified).HasColumnType("date");
 
             builder.Property(e => e.ResourceURL).HasColumnType("ntext");
 

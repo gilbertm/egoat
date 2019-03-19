@@ -1,0 +1,232 @@
+﻿using eGoatDDD.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using eGoatDDD.Persistence.Enum;
+using eGoatDDD.Persistence.Repository;
+
+namespace eGoatDDD.Persistence.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
+        // private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        private readonly string _currentUserGuid;
+        private readonly string _currentUserName;
+        private readonly string _currentUserEmail;
+
+        public UserService(
+            IUnitOfWork unitOfWork,
+            UserManager<ApplicationUser> userManager,
+            /// SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager)
+        {
+            //_httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
+            _userManager = userManager;
+            // _signInManager = signInManager;
+            _roleManager = roleManager;
+            //_currentUserGuid = _httpContextAccessor?.HttpContext?.User?.FindFirst(UserClaimsKey.Sub)?.Value;
+            //_currentUserName = _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
+            _currentUserEmail = _currentUserGuid == null ? "" : userManager.FindByIdAsync(_currentUserGuid)?.Result?.Email;
+        }
+
+        public UserService()
+        {
+             // = new HttpContextAccessor();
+        }
+
+        #region User
+        public async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _unitOfWork.Repository<ApplicationUser>().GetByUniqueIdAsync(_currentUserGuid);
+        }
+
+        public async Task<IEnumerable<ApplicationUser>> GetAllUser()
+        {
+            return await _unitOfWork.Repository<ApplicationUser>().GetAll().AsQueryable().ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetAllUserIds()
+        {
+            return await _unitOfWork.Repository<ApplicationUser>().Query().Select(u => u.Id).ToListAsync();
+        }
+
+        public string GetCurrentUserGuid()
+        {
+            return _currentUserGuid;
+        }
+
+        public string GetCurrentUserName()
+        {
+            return _currentUserName;
+        }
+
+        public string GetCurrentUserEmail()
+        {
+            return _currentUserEmail;
+        }
+        #endregion
+
+        #region User info, user account
+        public async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal principal)
+        {
+            return await _userManager.GetUserAsync(principal);
+        }
+
+        public async Task<ApplicationUser> FindByNameAsync(string username)
+        {
+            return await _userManager.FindByNameAsync(username);
+        }
+
+        public async Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<ApplicationUser> FindByIdAsync(string id)
+        {
+            return await _userManager.FindByIdAsync(id);
+        }
+
+        public async Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
+        {
+            return await _userManager.CreateAsync(user, password);
+        }
+
+        public async Task<IdentityResult> SetLockoutEnabledAsync(ApplicationUser user, bool enabled)
+        {
+            return await _userManager.SetLockoutEnabledAsync(user, enabled);
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(ApplicationUser user, string code, string password)
+        {
+            return await _userManager.ResetPasswordAsync(user, code, password);
+        }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(ApplicationUser user, string code)
+        {
+            return await _userManager.ConfirmEmailAsync(user, code);
+        }
+
+        /* public async Task<SignInResult> PasswordSignInAsync(string username, string password, bool rememberMe, bool lockoutOnFailure)
+        {
+            return await _signInManager.PasswordSignInAsync(username, password, rememberMe, lockoutOnFailure);
+        } */
+
+        /* public async Task<ClaimsPrincipal> CreateUserPrincipalAsync(ApplicationUser user)
+        {
+            return await _signInManager.CreateUserPrincipalAsync(user);
+        } */
+
+        public async Task SaveResetPasswordRequest(string token, string email)
+        {
+            var passwordRequest = new PasswordRequest
+            {
+                Token = token,
+                Email = email,
+                IsActive = true
+            };
+
+            await _unitOfWork.Repository<PasswordRequest>().AddAsync(passwordRequest);
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(ApplicationUser user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(ApplicationUser user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<int> GetAccessFailedCountAsync(ApplicationUser user)
+        {
+            return await _userManager.GetAccessFailedCountAsync(user);
+        }
+
+        public async Task ToggleRequestPasswordStatusByEmail(string email)
+        {
+            var passwordRequests = await _unitOfWork.Repository<PasswordRequest>().Query()
+                .Where(rq => rq.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && rq.IsActive)
+                .ToListAsync();
+
+            foreach (var passwordRequest in passwordRequests)
+            {
+                passwordRequest.IsActive = false;
+                await _unitOfWork.Repository<PasswordRequest>().UpdateAsync(passwordRequest);
+            }
+        }
+        #endregion
+
+        #region Roles
+        public async Task AddUserToRolesAsync(ApplicationUser user, List<string> roles)
+        {
+            await _userManager.AddToRolesAsync(user, roles);
+        }
+
+        public async Task AddUserRoles(string[] userRoles)
+        {
+            foreach (var role in userRoles)
+            {
+                if (!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new ApplicationRole
+                    {
+                        Name = role,
+                        NormalizedName = role.ToUpper()
+                    });
+                }
+            }
+        }
+
+        public async Task RemoveFromRolesAsync(ApplicationUser user, string roles)
+        {
+            await _userManager.RemoveFromRoleAsync(user, roles);
+        }
+
+        public async Task RemoveFromRolesAsync(ApplicationUser user, string[] roles)
+        {
+            await _userManager.RemoveFromRolesAsync(user, roles);
+        }
+
+        public IEnumerable<string> GetCurrentUserRoles()
+        {
+            var claims = User.Claims.ToList();
+
+            foreach (var claim in claims)
+            {
+                if (claim.Type == UserClaimsKey.Role)
+                    yield return claim.Value;
+            }
+        }
+
+        public async Task<List<string>> GetUserRoles()
+        {
+            return await _roleManager.Roles.Select(x => x.Name).ToListAsync();
+        }
+
+        public async Task<IList<string>> GetUserRolesByGuid(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task<List<ApplicationUser>> GetListRoleOfUser(string role)
+        {
+            var userList = await _userManager.GetUsersInRoleAsync(role);
+            return userList.ToList();
+        }
+        #endregion
+
+        
+    }
+}

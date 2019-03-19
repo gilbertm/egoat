@@ -27,7 +27,7 @@ namespace eGoatDDD.Application.Services.Commands
         {
             try
             {
-                var service = new Service
+                var service = new GoatService
                 {
                     ServiceId = 0,
                     GoatId = request.GoatId,
@@ -38,7 +38,7 @@ namespace eGoatDDD.Application.Services.Commands
                     End = request.End
                 };
 
-                _context.Services.Add(service);
+                _context.GoatServices.Add(service);
 
                 await _context.SaveChangesAsync(cancellationToken);
 

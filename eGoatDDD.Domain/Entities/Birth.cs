@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eGoatDDD.Domain.Entities
 {
-    public class Birth
-    {
-        public long Id { get; set; }
-
+    public class Birth : BaseEntity
+    { 
         public long GoatId { get; set; }
 
         public DateTime Delivery { get; set; }

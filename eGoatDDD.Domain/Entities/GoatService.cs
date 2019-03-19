@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace eGoatDDD.Domain.Entities
 {
-    public class Service
+    public class GoatService
     {
 
         public long ServiceId { get; set; }
