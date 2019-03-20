@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<eGoatDDD.Application.Users.Manages.Models.UserRolesViewModel>
+@using  eGoatDDD.Application.Users.Manages.Models
 
 @{
     ViewData["Title"] = "Users Roles";
@@ -6,13 +7,35 @@
 
 @if (Model != null)
 {
-    foreach (var userRolesViewModel in Model)
+   
+    @foreach (UserRolesViewModel userRolesViewModel in Model)
     {
         <h4>@userRolesViewModel.UserId - @userRolesViewModel.UserName</h4>
-        foreach (var role in userRolesViewModel.Roles.SelectOptionViewModels)
-        {
-            <p>@role.Value</p>
-        }
+        <form asp-controller="Role" asp-action="Update" method="post">
+
+            <input asp-for="@userRolesViewModel.UserId" type="hidden" />
+            <input asp-for="@userRolesViewModel.UserName" type="hidden" />
+            <input asp-for="@userRolesViewModel.Email" type="hidden" />
+            <input asp-for="@userRolesViewModel.EmailConfirmed" type="hidden" />
+            @{
+                for (int i = 0; i < userRolesViewModel.Roles.SelectOptionViewModels.Count(); i++)
+                {
+                    if (userRolesViewModel.Roles.SelectOptionViewModels[i].Value == true)
+                    {
+                        <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" class="form-control" checked /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                    }
+                    else
+                    {
+                        <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" class="form-control" /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                    }
+
+                    <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Label" type="hidden" />
+                }
+            }
+
+            <input type="submit" value="Update" name="Update" class="btn btn-default" id="Update" />
+        </form>
+
         <hr />
     }
 }

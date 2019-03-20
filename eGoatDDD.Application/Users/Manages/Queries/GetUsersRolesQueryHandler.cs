@@ -36,15 +36,14 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                                       Username = user.UserName,
                                       user.Email,
                                       user.EmailConfirmed,
-                                      RoleNames = (from userRole in _context.UserRoles  //[AspNetUserRoles]
-                                                   where userRole.UserId.Equals(user.Id)
-                                                   join role in _context.Roles          //[AspNetRoles]//
-                                                   on userRole.RoleId
-                                                   equals role.Id
-                                                   select new
+                                      RoleNames = (from aa in _context.Roles
+                                                   join bb in _context.UserRoles.Where(u => u.UserId.Equals(user.Id))
+                                                   on aa.Id equals bb.RoleId into newgroup
+                                                   from cc in newgroup.DefaultIfEmpty()
+                                                   select new 
                                                    {
-                                                       Value = role.Name,
-                                                       Label = role.Name
+                                                       Label = aa.Name,
+                                                       Value = (cc.UserId == null ? false : true)
                                                    }).ToList()
                                   }).ToListAsync();
 
@@ -53,11 +52,12 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                 UserId = p.UserId,
                 UserName = p.Username,
                 Email = p.Email,
+                EmailConfirmed = p.EmailConfirmed.ToString(),
+
                 Roles = new SelectOptionList
                 {
-                    SelectOptionViewModels = _mapper.Map<IEnumerable<SelectOptionViewModel>>(p.RoleNames)
-                },
-                EmailConfirmed = p.EmailConfirmed.ToString()
+                    SelectOptionViewModels = _mapper.Map<IList<SelectOptionViewModel>>(p.RoleNames)
+                }               
             });
 
             //  _mapper.Map<IEnumerable<UserRoleViewModel>>(userRoles);

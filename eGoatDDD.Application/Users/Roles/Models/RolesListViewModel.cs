@@ -2,9 +2,9 @@
 
 namespace eGoatDDD.Application.Users.Roles.Models
 {
-    public class UserRolesListViewModel
+    public class RolesListViewModel
     {
-        public IEnumerable<UserRoleViewModel> UserRoles { get; set; }
+        public IEnumerable<RoleViewModel> Roles { get; set; }
 
         public bool CreateEnabled { get; set; }
     }

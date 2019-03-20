@@ -18,10 +18,6 @@ namespace eGoatDDD.Persistence.Service.User
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private readonly string _currentUserGuid;
-        private readonly string _currentUserName;
-        private readonly string _currentUserEmail;
-
         public object ClaimsType { get; private set; }
 
         public UserService(
@@ -72,30 +68,7 @@ namespace eGoatDDD.Persistence.Service.User
             await _userManager.AddToRolesAsync(user, roles);
         }
 
-        public async Task AddUserRoles(string[] userRoles)
-        {
-            foreach (var role in userRoles)
-            {
-                if (!await _roleManager.RoleExistsAsync(role))
-                {
-                    await _roleManager.CreateAsync(new ApplicationRole
-                    {
-                        Name = role,
-                        NormalizedName = role.ToUpper()
-                    });
-                }
-            }
-        }
-
-        public async Task RemoveFromRolesAsync(ApplicationUser user, string role)
-        {
-            await _userManager.RemoveFromRoleAsync(user, role);
-        }
-
-        public async Task RemoveFromRolesAsync(ApplicationUser user, string[] roles)
-        {
-            await _userManager.RemoveFromRolesAsync(user, roles);
-        }
+       
 
         public async Task<List<string>> GetUserRoles()
         {

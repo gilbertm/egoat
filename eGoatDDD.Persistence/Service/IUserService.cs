@@ -18,9 +18,6 @@ namespace eGoatDDD.Persistence.Service.User
 
         #region Roles
         Task AddUserToRolesAsync(ApplicationUser user, List<string> roles);
-        Task AddUserRoles(string[] userRoles);
-        Task RemoveFromRolesAsync(ApplicationUser user, string role);
-        Task RemoveFromRolesAsync(ApplicationUser user, string[] roles);
         Task<List<ApplicationUser>> GetListRoleOfUser(string role);
         Task<List<string>> GetUserRoles();
         Task<IList<string>> GetUserRolesByGuid(string userId);

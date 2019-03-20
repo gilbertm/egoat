@@ -3,7 +3,7 @@
 {
     public class SelectOptionViewModel
     {
-        public string Value { get; set; }
+        public bool Value { get; set; }
         public string Label { get; set; }
     }
 }

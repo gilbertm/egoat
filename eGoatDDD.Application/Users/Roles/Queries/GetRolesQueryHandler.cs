@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace eGoatDDD.Application.Users.Roles.Queries
 {
-    public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, UserRolesListViewModel>
+    public class GetRolesQueryHandler : IRequestHandler<GetRolesQuery, RolesListViewModel>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -22,16 +22,16 @@ namespace eGoatDDD.Application.Users.Roles.Queries
             _mapper = mapper;
         }
 
-        public async Task<UserRolesListViewModel> Handle(GetRolesQuery request, CancellationToken cancellationToken)
+        public async Task<RolesListViewModel> Handle(GetRolesQuery request, CancellationToken cancellationToken)
         {
-            var userRoles = await _unitOfWork.Repository<IdentityRole>().Query().ToListAsync();
+            var roles = await _unitOfWork.Repository<IdentityRole>().Query().ToListAsync();
 
-            var userRolesMapper = _mapper.Map<IEnumerable<UserRoleViewModel>>(userRoles);
+            var rolesMapper = _mapper.Map<IEnumerable<RoleViewModel>>(roles);
 
-            return new UserRolesListViewModel
+            return new RolesListViewModel
             {
                 CreateEnabled = true,
-                UserRoles = userRolesMapper
+                Roles = rolesMapper
             };
         }
     }

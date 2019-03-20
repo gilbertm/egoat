@@ -1,11 +1,9 @@
-﻿using eGoatDDD.Application.Users.Manages.Models;
+﻿using eGoatDDD.Application.Users.Manages.Commands;
+using eGoatDDD.Application.Users.Manages.Models;
 using eGoatDDD.Application.Users.Manages.Queries;
-using eGoatDDD.Application.Users.Roles.Models;
-using eGoatDDD.Application.Users.Roles.Queries;
+using eGoatDDD.Domain.Entities;
 using eGoatDDD.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace eGoatDDD.Web.Controllers.Manage
@@ -20,42 +18,31 @@ namespace eGoatDDD.Web.Controllers.Manage
         {
             if (User.Identity.IsAuthenticated)
             {
-                // var user = await _userService.FindByIdAsync(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-
-                // System.Diagnostics.Debug.WriteLine(user);
-
-                // var getUser = await _userService.GetUserAsync(HttpContext.User);
-
-                // System.Diagnostics.Debug.WriteLine(getUser);
-
 
                 var usersRoles = await _mediator.Send(new GetUsersRolesQuery());
 
                 System.Diagnostics.Debug.WriteLine(usersRoles);
 
                 return View(usersRoles);
-                /* var userRoles = await _mediator.Send(new GetRolesCurrentQuery());
-
-
-                UserRolesListViewModel userRolesListViewModel = await _mediator.Send(new GetRolesQuery());
-
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-                RolesUserViewModel rolesUser = await _mediator.Send(new GetRolesByIdQuery(userId)); */
+               
             }
 
             return View();
         }
 
-
-        [Route("update/{userRoles}")]
         [HttpPost]
-        public async Task<IActionResult> UserRoles(UserRolesViewModel userRoles) {
+        [Route("manage/user/roles/update")]
+        public async Task<IActionResult> Update(UserRolesViewModel userRolesViewModel) {
 
-            UserRolesListViewModel userRolesListViewModel = await _mediator.Send(new GetRolesQuery());
-            
+            ApplicationUser user = await _userManager.FindByIdAsync("c7f5cb53-4494-41ce-9257-eb00932ff8f8");
 
-            return View();
+            // await _userManager.Remove.RemoveFromRolesAsync(user, new string[] { "Supervisor" });
+
+            // await _userManager.AddToRolesAsync(user, new string[] { "Administrator" });
+
+            await _mediator.Send(new UpdateRolesCommand(userRolesViewModel));
+
+            return RedirectToAction("Index");
         }
 
         /*public async Task ManageRoles(SelectOptionList roles)
