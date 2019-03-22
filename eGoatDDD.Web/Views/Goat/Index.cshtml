@@ -1,4 +1,6 @@
 ﻿@model eGoatDDD.Application.Goats.Models.GoatsListNonDtoViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 
 @{
@@ -10,15 +12,25 @@
     @foreach (var item in Model.Goats)
     {
 
-
         <div class="row">
             <div class="col col-12 col-md-4 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
                 <div class="row mb-1 mb-lg-3 mb-md-2 small">
-                    <div class="col col-md-5 col-sm-6">
-                        <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+                    <div class="col col-md-5 col-sm-6 text-align-center">
+
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
+                        {
+                            <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+
+                                <img class="w-100" src="/images/uploads/@(item.Picture)" /><br />
+                                @item.Color.Name @item.Code
+                            </a>
+                        }
+                        else
+                        {
                             <img class="w-100" src="/images/uploads/@(item.Picture)" /><br />
                             @item.Color.Name @item.Code
-                        </a>
+                        }
+
                     </div>
                     <div class="col col-md-7 col-sm-6">
                         <div class="row mb-1">
@@ -125,7 +137,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="add service">Add service</button>
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
+                            {
+                                <button class="add service">Add service</button>
+                            }
                             <div class="fields d-none">
                                 <select name="type">
                                     <option value="Medical">Medical</option>

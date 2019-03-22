@@ -13,7 +13,7 @@ namespace eGoatDDD.Web.Infrastructure
     {
         private IMediator mediator;
 
-        private IUserService userService;
+        // private IUserService userService;
 
         private UserManager<ApplicationUser> userManager;
 
@@ -25,6 +25,6 @@ namespace eGoatDDD.Web.Infrastructure
 
         protected eGoatDDDDbContext _context => context ?? (context = HttpContext.RequestServices.GetService<eGoatDDDDbContext>());
 
-        protected IUserService _userService => userService ?? (userService = HttpContext.RequestServices.GetService<IUserService>());
+        // protected IUserService _userService => userService ?? (userService = HttpContext.RequestServices.GetService<IUserService>());
     }
 }

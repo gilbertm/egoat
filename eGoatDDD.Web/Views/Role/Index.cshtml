@@ -7,35 +7,59 @@
 
 @if (Model != null)
 {
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th class="w-50" scope="col">User</th>
+                <th class="w-25" scope="col">Roles</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
    
-    @foreach (UserRolesViewModel userRolesViewModel in Model)
-    {
-        <h4>@userRolesViewModel.UserId - @userRolesViewModel.UserName</h4>
-        <form asp-controller="Role" asp-action="Update" method="post">
+            
+            @foreach (UserRolesViewModel userRolesViewModel in Model)
+            {
+                <form asp-controller="Role" asp-action="Update" method="post">
 
-            <input asp-for="@userRolesViewModel.UserId" type="hidden" />
-            <input asp-for="@userRolesViewModel.UserName" type="hidden" />
-            <input asp-for="@userRolesViewModel.Email" type="hidden" />
-            <input asp-for="@userRolesViewModel.EmailConfirmed" type="hidden" />
-            @{
-                for (int i = 0; i < userRolesViewModel.Roles.SelectOptionViewModels.Count(); i++)
-                {
-                    if (userRolesViewModel.Roles.SelectOptionViewModels[i].Value == true)
-                    {
-                        <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" class="form-control" checked /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
-                    }
-                    else
-                    {
-                        <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" class="form-control" /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
-                    }
+                    <tr>
+                       
+                        <th scope="row">
+                            <label>@userRolesViewModel.UserName</label>
+                            <input asp-for="@userRolesViewModel.UserName" type="hidden" />
+                        </th>
+                        <td>
+                            @{
+                                for (int i = 0; i < userRolesViewModel.Roles.SelectOptionViewModels.Count(); i++)
+                                {
+                                    <div class="checkbox">
+                                        <label>
 
-                    <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Label" type="hidden" />
-                }
+                                            @if (userRolesViewModel.Roles.SelectOptionViewModels[i].Value == true)
+                                            {
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" checked /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                                            }
+                                            else
+                                            {
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value"  /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                                            }
+
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Label" type="hidden" />
+                                        </label>
+                                    </div>
+
+                                }
+                            }
+                        </td>
+                        <td class="text-align-right">
+                            <input type="submit" value="Update" name="Update" class="btn btn-default" id="Update" />
+                        </td>
+                    </tr>
+                </form>
             }
-
-            <input type="submit" value="Update" name="Update" class="btn btn-default" id="Update" />
-        </form>
-
-        <hr />
-    }
+        </tbody>
+    </table>
 }
+

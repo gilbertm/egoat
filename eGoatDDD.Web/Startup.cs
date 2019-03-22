@@ -49,9 +49,11 @@ namespace eGoatDDD.Web
 
             services.AddHttpContextAccessor();
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
 
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
@@ -70,11 +72,12 @@ namespace eGoatDDD.Web
             // Reference: https://blogs.msdn.microsoft.com/webdev/2018/03/02/aspnetcore-2-1-identity-ui
             #region ++g++ allows identity overrides
             services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
+                .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<eGoatDDDDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
             #endregion
-
+            
             #region ++g++ configure all Claims Policies
             services.AddAuthorization(options =>
             {
@@ -83,7 +86,7 @@ namespace eGoatDDD.Web
                 options.AddPolicy("Supervisors", policy => policy.RequireClaim(ClaimTypes.Role, "Supervisor"));
                 options.AddPolicy("Attendants", policy => policy.RequireClaim(ClaimTypes.Role, "Attendant"));
 
-                options.AddPolicy("CanEdits", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Administrator", "Administrator", "Administrator" }));
+                options.AddPolicy("CanEdits", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Administrator", "Poweruser", "Supervisor" }));
             });
             #endregion
 
@@ -96,7 +99,7 @@ namespace eGoatDDD.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -111,6 +114,8 @@ namespace eGoatDDD.Web
 
             #region ++g++ seed roles
             eGoatDDDInitializerRoles.SeedRoles(app.ApplicationServices).Wait();
+
+            eGoatDDDInitializerAdminUser.SeedAdminUserAsync(userManager).Wait();
             #endregion
 
             app.UseHttpsRedirection();
@@ -125,9 +130,7 @@ namespace eGoatDDD.Web
             });
 
             app.UseCookiePolicy();
-
-            app.UseAuthorization();
-            
+                        
             app.UseAuthentication();
         }
     }

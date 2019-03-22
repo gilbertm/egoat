@@ -63,8 +63,13 @@ namespace eGoatDDD.Web.Controllers
 
 
         [Authorize(Policy = "CanEdits")]
-        public async Task<IActionResult> Edit(long goatId)
+        public async Task<IActionResult> Edit(long? goatId)
         {
+            if (goatId == null)
+            {
+                return RedirectToAction("Index", "Goat");
+            }
+
             BreedsListViewModel breedsListViewModel = await _mediator.Send(new GetAllBreedsQuery());
 
             ColorsListViewModel colorsListViewModel = await _mediator.Send(new GetAllColorsQuery());
@@ -83,7 +88,7 @@ namespace eGoatDDD.Web.Controllers
 
             ViewData["Breeds"] = breedsListViewModel.Breeds;
 
-            GoatNonDtoViewModel goat = await _mediator.Send(new GetGoatQuery(goatId));
+            GoatNonDtoViewModel goat = await _mediator.Send(new GetGoatQuery(goatId.Value));
 
             return View(goat);
         }

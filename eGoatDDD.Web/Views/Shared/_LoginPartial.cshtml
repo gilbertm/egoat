@@ -2,14 +2,32 @@
 @using eGoatDDD.Domain.Entities
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                Hi @UserManager.GetUserAsync(User).Result.FirstName!<br />
+                <span class="small d-none text-light">@User.Identity.Name!</span>
+            </a>
         </li>
+
+        @if ((await AuthorizationService.AuthorizeAsync(User, "Administrators")).Succeeded)
+        {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" asp-controller="Role" asp-action="Index" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Roles
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-controller="Role" asp-action="Index">Manage</a>
+                </div>
+            </li>
+        }
+
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
