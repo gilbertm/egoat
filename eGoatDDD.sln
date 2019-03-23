@@ -22,6 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eGoatDDD.Persistence", "eGo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eGoatDDD.Application", "eGoatDDD.Application\eGoatDDD.Application.csproj", "{4882002D-3178-4548-8959-6A47F823388B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{5EFAF1EA-B367-489C-940E-3DDDD5ED74A7} = {5EFAF1EA-B367-489C-940E-3DDDD5ED74A7}
 		{F1C0EBF7-78DA-4574-AD3F-53C8F7124FAD} = {F1C0EBF7-78DA-4574-AD3F-53C8F7124FAD}
 	EndProjectSection
 EndProject

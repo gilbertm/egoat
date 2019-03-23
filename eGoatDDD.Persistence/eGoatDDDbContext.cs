@@ -24,9 +24,13 @@ namespace eGoatDDD.Persistence
 
         public DbSet<Parent> Parents { get; set; }
 
+        public DbSet<Resource> Resources { get; set; }
+
         public DbSet<GoatService> GoatServices { get; set; }
 
         public DbSet<GoatBreed> GoatBreeds { get; set; }
+
+        public DbSet<GoatResource> GoatResources { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

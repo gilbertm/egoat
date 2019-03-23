@@ -10,7 +10,7 @@
 
 <h2>Create</h2>
 <hr />
-<form asp-action="Create">
+<form asp-action="Create" enctype="multipart/form-data">
     <div class="row">
         <div asp-validation-summary="All" class="text-danger"></div>
     </div>
@@ -48,10 +48,10 @@
                     <div class="form-group">
                         <label class="small d-block" asp-for="Gender">Gender</label>
                         <label>
-                            <input asp-for="Gender" type="radio" value="M" /> Male
+                            <input required asp-for="Gender" type="radio" value="M" /> Male
                         </label>
                         <label>
-                            <input asp-for="Gender" type="radio" value="F" /> Female
+                            <input required asp-for="Gender" type="radio" value="F" /> Female
                         </label>
                     </div>
                 </div>
@@ -68,11 +68,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="form-group d-none">
-                <input asp-for="Picture" required class="form-control" placeholder="Picture" id="Picture" />
-                <span asp-validation-for="Picture" class="text-danger"></span>
-            </div>
+                       
             <div class="form-group">
                 <label class="small" asp-for="Description">Description</label>
                 <span asp-validation-for="Description" class="text-danger"></span>
@@ -97,11 +93,11 @@
                                         Sire
                                     </option>
                                     @foreach (GoatDto item in (List
-                                   <GoatDto>
-                                       )ViewData["Sires"])
-                                    {
+                                    <GoatDto>
+                                        )ViewData["Sires"])
+                                        {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                                    }
+                                        }
                                 </select>
 
                                 <div class="goat-info-wrapper">
@@ -122,11 +118,11 @@
                                         Maternal
                                     </option>
                                     @foreach (GoatDto item in (List
-                                   <GoatDto>
-                                       )ViewData["Maternals"])
-                                    {
+                                    <GoatDto>
+                                        )ViewData["Maternals"])
+                                        {
                                         <option value="@item.Id">@item.Color.Name - @item.Code </option>
-                                    }
+                                        }
                                 </select>
                                 <div class="goat-info-wrapper">
                                     <span class="close d-none">close</span>
@@ -186,16 +182,18 @@
         </div>
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12 ">
             <div class="row">
-                <div class="col col-12 goatImageWrapper">
+                <div class="col col-12 goatImagesWrapper">
                     <div class="form-group">
                         <span class="wrapper">
-                            <input required type="file" id="goatImage" data-action="/api/image" />
+                            <span class="images"></span>
+                            <span class="imagesClose invisible">close</span>
+                            <input name="Files" required type="file" id="goatImages" multiple />
                         </span>
                     </div>
                 </div>
             </div>
             <div class="row lineage d-none">
-                <div class="col col-12 goatImageWrapper">
+                <div class="col col-12 goatLineageWrapper">
                     <div class="form-group">
                         TODO:// Lineage org graph
                     </div>
@@ -238,12 +236,37 @@
                 });
             });
 
+            $("#goatImages").change(function () {
+                if (typeof (FileReader) != "undefined") {
+                    var dvPreview = $(".goatImagesWrapper .images");
+                    dvPreview.html("");
+                    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+                    $($(this)[0].files).each(function () {
+                        var file = $(this);
+                        if (regex.test(file[0].name.toLowerCase())) {
+                            var reader = new FileReader();
+                            reader.onload = function (e) {
+                                var img = $("<img />");
+                                img.attr("style", "height:100px;width: 100px");
+                                img.attr("src", e.target.result);
+                                dvPreview.append(img);
+                            }
+                            reader.readAsDataURL(file[0]);
+
+                            $("#goatImages").hide();
+                            $(".imagesClose").removeClass("invisible");
+                        } else {
+                            alert(file[0].name + " is not a valid image file.");
+                            dvPreview.html("");
+                            return false;
+                        }
+                    });
+                } else {
+                    alert("This browser does not support HTML5 FileReader.");
+                }
+            });
+
             $('#MaternalId, #SireId').on('change', function (event) {
-                // hide breed add button
-                /* $('#add_breed').hide();
-                if ($('#MaternalId').val() == "" || $('#SireId').val() == "") {
-                    $('#add_breed').show();
-                } */
 
                 var $this = $('#' + this.id);
 
@@ -262,15 +285,20 @@
                     breeds_added.remove();
 
                     if (result.error == 0) {
-                        var table = $('<table  class="small" />');
-                        var row = "";
 
-                        row = $('<tr/>');
-                        row.append('<td class="w-25 text-align-center"><img width="100%" src="/images/uploads/' + result.response.picture + '"/><br class="d-none" /><span class="red d-none">' + result.response.id + '</span></td>');
-                        row.append('<td><strong>' + result.response.color.name + ' ' + result.response.code + '</strong></td>');
-                        table.append(row);
+                        if (result.response.resources != null) {
+                            var table = $('<table  class="small" />');
+                            var row = "";
 
-                        $(parent_container).find(".table-info").html(table);
+                            row = $('<tr/>');
+                            row.append('<td class="w-25 text-align-center"><img width="100%" src="/' + result.response.resources[0]["location"] + '/' + result.response.resources[0]["filename"] + '"/><br class="d-none" /><span class="red d-none">' + result.response.id + '</span></td>');
+                            row.append('<td><strong>' + result.response.color.name + ' ' + result.response.code + '</strong></td>');
+
+                            table.append(row);
+
+                            $(parent_container).find(".table-info").html(table);
+                        }
+
 
                         var table = $('<table  class="small w-100" />');
                         $(result.response.breeds).each(function () {
@@ -280,7 +308,7 @@
                         });
 
                         $(parent_container).find(".table-breeds").html(table);
-                        
+
                         // suggestion
                         // get the breeds from parents
                         $.ajax({
@@ -355,41 +383,14 @@
                 $(parent_container).find(".table-breeds").empty();
                 $(parent_container).find(".table-info").empty();
             });
-            
-            // main goat image
-            $('#goatImage').on('change', function (event) {
-                event.preventDefault();
 
-                var $file = $("#goatImage")[0].files[0];
-
-                var $action = $("#goatImage").data("action");
-
-                var $formdata = new FormData();
-
-                $formdata.append("file", $file);
-
-                $.ajax({
-                    type: "POST",
-                    url: $action,
-                    data: $formdata, // serializes the form's elements.
-                    processData: false,
-                    contentType: false
-                }).done(function (result) {
-
-                    var img = $('<img />',
-                        {
-                            width: '100%',
-                            id: 'goatImg',
-                            src: '/images/uploads/' + result
-                        });
-
-                    $("#Picture").val(result);
-                    $(".goatImageWrapper .wrapper").html(img);
-                });
-
-                return false; // avoid to execute the actual submit of the form.
+            // images 
+            $(".imagesClose").on("click", function () {
+                $(this).addClass("invisible");
+                $(".goatImagesWrapper .images").empty();
+                $("#goatImages").val("").show();
             });
-
+            
             // add/remove breed
             // goat creation
             $('#add_breed').on('click', function (event) {

@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\eGoatDDD.Persistence\eGoatDDD.Persistence.csproj" />
+    <ProjectReference Include="..\ImageWriter\ImageWriter.csproj" />
   </ItemGroup>
 
 </Project>

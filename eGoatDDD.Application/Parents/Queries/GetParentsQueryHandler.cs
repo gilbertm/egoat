@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using eGoatDDD.Domain.Entities;
+using eGoatDDD.Application.GoatResources.Models;
 
 namespace eGoatDDD.Application.Parents.Queries
 {
@@ -46,20 +47,37 @@ namespace eGoatDDD.Application.Parents.Queries
                         var parent = await _context.Goats
                         .Where(g => g.Id == item.ParentId)
                         .Include(c => c.Color)
+                        .Include(gr => gr.GoatResources)
+                        .ThenInclude(r => r.Resource)
                         .SingleOrDefaultAsync(cancellationToken);
 
                         if (parent != null)
                         {
+                            var singleResource = parent.GoatResources.FirstOrDefault();
+
+                            GoatResourceViewModel resource = null;
+
+                            if (singleResource != null)
+                            {
+                                resource = new GoatResourceViewModel
+                                {
+                                    Filename = singleResource.Resource.Filename,
+                                    Location = singleResource.Resource.Location,
+                                    ResourceId = singleResource.Resource.ResourceId
+
+                                };
+                            }
+
                             parents.Add(new ParentViewModel
                             {
                                 Code = parent.Code,
                                 ColorName = parent.Color.Name,
                                 Gender = parent.Gender,
                                 ParentId = parent.Id,
-                                Picture = parent.Picture
+                                Resource = resource
                             });
                         }
-                       
+
                     }
                 }
                 model = new ParentsListViewModel

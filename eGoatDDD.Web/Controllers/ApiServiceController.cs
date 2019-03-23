@@ -18,7 +18,9 @@ namespace eGoatDDD.Web.Controllers
 {
     public class ApiServiceController : BaseController
     {
-       
+        // Use JWT
+        // [Authorize(Policy = "CanEdits")]
+
         /// <summary>
         /// Put
         /// </summary>

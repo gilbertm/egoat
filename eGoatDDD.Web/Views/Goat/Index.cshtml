@@ -9,11 +9,18 @@
 
 @if (Model != null)
 {
+    var ctr = 1;
     @foreach (var item in Model.Goats)
     {
+        var row = "bg-light";
 
-        <div class="row">
-            <div class="col col-12 col-md-4 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
+        if (ctr % 2 == 0)
+        {
+            row = "";
+        }
+
+        <div class="row p-3 @(row)">
+            <div class="col col-12 col-md-5 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
                 <div class="row mb-1 mb-lg-3 mb-md-2 small">
                     <div class="col col-md-5 col-sm-6 text-align-center">
 
@@ -21,13 +28,38 @@
                         {
                             <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
 
-                                <img class="w-100" src="/images/uploads/@(item.Picture)" /><br />
+                                @if (item.Resources != null)
+                                {
+                                    var ictr = 1;
+
+                                    <div class="row">
+                                        @foreach (var resource in item.Resources)
+                                        {
+                                            @if (ictr == 1)
+                                            {
+                                                <div class="col-md-12">
+                                                    <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                                </div>
+                                            }
+
+                                            ictr++;
+                                        }
+                                    </div>
+                                }
+                                <br />
                                 @item.Color.Name @item.Code
                             </a>
                         }
                         else
                         {
-                            <img class="w-100" src="/images/uploads/@(item.Picture)" /><br />
+                            @if (item.Resources != null)
+                            {
+                                foreach (var resource in item.Resources)
+                                {
+                                    <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                }
+                            }
+                            <br />
                             @item.Color.Name @item.Code
                         }
 
@@ -114,7 +146,7 @@
                 </div>
 
             </div>
-            <div class="col col-12 col-md-8 col-sm-6 small">
+            <div class="col col-12 col-md-7 col-sm-6 small">
                 <div class="row">
                     <div class="col col-12 col-md-4 col-sm-4">
                         <div class="service-wrapper">
@@ -168,9 +200,12 @@
                             foreach (var parent in item.Parents.Goats)
                             {
                                 <div class="row">
-                                    <div class="col col-3 col-xs-6">
-                                        <img height="50" src="/images/uploads/@(parent.Picture)" />
-                                    </div>
+                                    @if (parent.Resource != null)
+                                    {
+                                        <div class="col col-3 col-xs-6">
+                                            <img height="50" src="@(parent.Resource.Location)/@(parent.Resource.Filename)" />
+                                        </div>
+                                    }
                                     <div class="col col-9 col-xs-6">
                                         @parent.ColorName @parent.Code
                                     </div>
@@ -179,8 +214,27 @@
                         }
                     </div>
                 </div>
+                @if (item.Resources != null)
+                {
+
+                    <div class="row pt-3">
+                        @if (item.Resources.Count() > 1)
+                        {
+                            @foreach (var resource in item.Resources)
+                            {
+
+                                <div class="col col-4">
+                                    <img height="75" src="/@(resource.Location)/@(resource.Filename)" />
+                                </div>
+                            }
+                        }
+
+                    </div>
+                }
             </div>
         </div>
+
+        ctr++;
     }
 }
 

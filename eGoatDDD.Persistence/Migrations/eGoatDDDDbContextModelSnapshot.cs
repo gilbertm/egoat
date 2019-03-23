@@ -325,8 +325,6 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<DateTime>("Modified");
 
-                    b.Property<string>("Picture");
-
                     b.Property<Guid>("UniqeId");
 
                     b.HasKey("Id");
@@ -355,6 +353,23 @@ namespace eGoatDDD.Persistence.Migrations
                     b.HasIndex("BreedId");
 
                     b.ToTable("GoatBreeds");
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatResource", b =>
+                {
+                    b.Property<long>("GoatId");
+
+                    b.Property<Guid>("ResourceId");
+
+                    b.Property<DateTime>("Created");
+
+                    b.Property<DateTime>("Modified");
+
+                    b.HasKey("GoatId", "ResourceId");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("GoatResources");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatService", b =>
@@ -449,6 +464,20 @@ namespace eGoatDDD.Persistence.Migrations
                     b.ToTable("Parents");
                 });
 
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.Resource", b =>
+                {
+                    b.Property<Guid>("ResourceId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Filename");
+
+                    b.Property<string>("Location");
+
+                    b.HasKey("ResourceId");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -531,6 +560,19 @@ namespace eGoatDDD.Persistence.Migrations
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
                         .WithMany("GoatBreeds")
                         .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatResource", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("GoatResources")
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("eGoatDDD.Domain.Entities.Resource", "Resource")
+                        .WithMany("GoatResources")
+                        .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

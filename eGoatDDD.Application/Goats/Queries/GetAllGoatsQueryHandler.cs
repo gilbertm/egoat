@@ -10,6 +10,7 @@ using eGoatDDD.Domain.Entities;
 using eGoatDDD.Application.GoatBreeds.Models;
 using eGoatDDD.Application.Parents.Models;
 using eGoatDDD.Application.Parents.Queries;
+using eGoatDDD.Application.GoatResources.Models;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
@@ -32,6 +33,8 @@ namespace eGoatDDD.Application.Goats.Queries
                 .Include(gb => gb.GoatBreeds)
                 .ThenInclude(b => b.Breed)
                 .Include(p => p.Parents)
+                .Include(gr => gr.GoatResources)
+                .ThenInclude(r => r.Resource)
                 .ToListAsync(cancellationToken);
 
             IList<GoatNonDtoViewModel> goatFullInfo = new List<GoatNonDtoViewModel>();
@@ -78,6 +81,15 @@ namespace eGoatDDD.Application.Goats.Queries
                     }
                 }
 
+                IList<GoatResourceViewModel> resources = (from gr in item.GoatResources
+                                                          where (gr.GoatId == item.Id)
+                                                          select new GoatResourceViewModel
+                                                          {
+                                                              Filename = gr.Resource.Filename,
+                                                              Location = gr.Resource.Location,
+                                                              ResourceId = gr.Resource.ResourceId
+                                                          }).ToList();
+
                 GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId));
 
                 goatFullInfo.Add(new GoatNonDtoViewModel
@@ -87,10 +99,10 @@ namespace eGoatDDD.Application.Goats.Queries
                     Code = item.Code,
                     BirthDate = item.BirthDate,
                     Gender = item.Gender,
-                    Picture = item.Picture,
                     Description = item.Description,
                     Color = color,
                     Breeds = breeds,
+                    Resources = resources,
                     Parents = parents,
                     Siblings = siblings,
 

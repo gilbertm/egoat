@@ -4,14 +4,12 @@ using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
 using eGoatDDD.Persistence.Repository;
 using eGoatDDD.Persistence.Service.User;
-using eGoatDDD.Web.Handler;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -90,7 +88,6 @@ namespace eGoatDDD.Web
             });
             #endregion
 
-            services.AddTransient<IImageHandler, ImageHandler>();
             services.AddTransient<ImageWriter.Interface.IImageWriter,
                                   ImageWriter.Classes.ImageWriter>();
 
@@ -104,6 +101,7 @@ namespace eGoatDDD.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {

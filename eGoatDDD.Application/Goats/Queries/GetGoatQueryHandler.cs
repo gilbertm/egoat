@@ -13,6 +13,7 @@ using eGoatDDD.Application.GoatBreeds.Models;
 using eGoatDDD.Application.Parents.Models;
 using MediatR;
 using eGoatDDD.Application.Parents.Queries;
+using eGoatDDD.Application.GoatResources.Models;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
@@ -37,6 +38,8 @@ namespace eGoatDDD.Application.Goats.Queries
                     .Include(gb => gb.GoatBreeds)
                         .ThenInclude(b => b.Breed)
                     .Include(p => p.Parents)
+                    .Include(gr => gr.GoatResources)
+                        .ThenInclude(r => r.Resource)
                     .SingleOrDefaultAsync(cancellationToken);
 
                 Color color = new Color
@@ -88,6 +91,15 @@ namespace eGoatDDD.Application.Goats.Queries
                     throw new NotFoundException(nameof(Goat), request.Id);
                 }
 
+                IList<GoatResourceViewModel> resources = (from gr in goat.GoatResources
+                                                          where (gr.GoatId == goat.Id)
+                                                          select new GoatResourceViewModel
+                                                          {
+                                                              Filename = gr.Resource.Filename,
+                                                              Location = gr.Resource.Location,
+                                                              ResourceId = gr.Resource.ResourceId
+                                                          }).ToList();
+
                 // TODO: Set view model state based on user permissions.
                 var model = new GoatNonDtoViewModel
                 {
@@ -96,11 +108,11 @@ namespace eGoatDDD.Application.Goats.Queries
                     Code = goat.Code,
                     ColorId = goat.ColorId,
                     Gender = goat.Gender,
-                    Picture = goat.Picture,
                     Color = color,
                     Breeds = breeds,
                     Parents = parents,
                     Siblings = siblings,
+                    Resources = resources,
                     EditEnabled = true,
                     DeleteEnabled = false
                 };

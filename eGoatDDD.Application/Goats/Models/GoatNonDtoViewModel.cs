@@ -1,4 +1,5 @@
 ﻿using eGoatDDD.Application.GoatBreeds.Models;
+using eGoatDDD.Application.GoatResources.Models;
 using eGoatDDD.Application.Parents.Models;
 using eGoatDDD.Domain.Entities;
 using System;
@@ -43,7 +44,10 @@ namespace eGoatDDD.Application.Goats.Models
 
         // many-to-many
         public IList<GoatBreedViewModel> Breeds { get; set; }
-        
+
+        // many-to-many
+        public IList<GoatResourceViewModel> Resources { get; set; }
+
         public bool EditEnabled { get; set; }
 
         public bool DeleteEnabled { get; set; }

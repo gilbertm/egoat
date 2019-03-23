@@ -1,4 +1,7 @@
-﻿namespace eGoatDDD.Application.Parents.Models
+﻿using eGoatDDD.Application.GoatResources.Models;
+using System.Collections.Generic;
+
+namespace eGoatDDD.Application.Parents.Models
 {
     public class ParentViewModel
     {
@@ -11,5 +14,7 @@
         public string Picture { get; set; }
 
         public char Gender { get; set; }
+
+        public GoatResourceViewModel Resource { get; set; }
     }
 }

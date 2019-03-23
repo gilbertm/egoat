@@ -12,6 +12,7 @@ namespace eGoatDDD.Domain.Entities
             Services = new HashSet<GoatService>();
 
             GoatBreeds = new HashSet<GoatBreed>();
+            GoatResources = new HashSet<GoatResource>();
         }
         
         public int ColorId { get; set; }
@@ -19,9 +20,7 @@ namespace eGoatDDD.Domain.Entities
         public long? DisposalId { get; set; }
 
         public string Code { get; set; }
-
-        public string Picture { get; set; }
-
+        
         public char Gender { get; set; }
 
         public DateTime? BirthDate { get; set; }
@@ -44,6 +43,8 @@ namespace eGoatDDD.Domain.Entities
 
         // many-to-many
         public virtual ICollection<GoatBreed> GoatBreeds { get; private set; }
+
+        public virtual ICollection<GoatResource> GoatResources { get; private set; }
 
     }
 }

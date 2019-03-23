@@ -4,18 +4,14 @@ using eGoatDDD.Web.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;
-using eGoatDDD.Application.Breeds.Models;
-using eGoatDDD.Application.Breeds.Queries;
-using Newtonsoft.Json;
 using eGoatDDD.Application.GoatBreeds.Models;
 using System.Collections.Generic;
-using eGoatDDD.Application.Services.Models;
-using eGoatDDD.Application.Services.Queries;
-using eGoatDDD.Application.Services.Commands;
-using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eGoatDDD.Web.Controllers
 {
+    // Use JWT
+    // [Authorize(Policy = "CanEdits")]
     public class ApiGoatController : BaseController
     {
         [Route("api/goat")]

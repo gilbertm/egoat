@@ -41,7 +41,6 @@ namespace eGoatDDD.Application.Goats.Models
                     ColorId = p.ColorId,
                     Gender = p.Gender,
                     Code = p.Code,
-                    Picture = p.Picture,
                     BirthDate = p.BirthDate,
                     Description = p.Description,
                     Parents = p.Parents,

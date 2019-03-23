@@ -1,6 +1,7 @@
 ﻿using eGoatDDD.Application.Goats.Models;
 using eGoatDDD.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,8 +28,8 @@ namespace eGoatDDD.Application.Goats.Commands
 
         public ICollection<float> BreedPercent { get; set; }
 
-        public string Picture { get; set; }
-
+        public IList<IFormFile> Files { get; set;  }
+        
         public DateTime? BirthDate { get; set; }
 
         public string Description { get; set; }
