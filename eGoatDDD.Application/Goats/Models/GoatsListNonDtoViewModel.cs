@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using X.PagedList;
 
 namespace eGoatDDD.Application.Goats.Models
 {
     public class GoatsListNonDtoViewModel
     {
-        public IList<GoatNonDtoViewModel> Goats { get; set; }
+        public IPagedList<GoatNonDtoViewModel> Goats { get; set; }
+
+        public int TotalPages { get; set; }
 
         public bool CreateEnabled { get; set; }
     }

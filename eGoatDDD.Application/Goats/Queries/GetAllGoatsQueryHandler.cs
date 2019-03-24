@@ -11,6 +11,7 @@ using eGoatDDD.Application.GoatBreeds.Models;
 using eGoatDDD.Application.Parents.Models;
 using eGoatDDD.Application.Parents.Queries;
 using eGoatDDD.Application.GoatResources.Models;
+using X.PagedList;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
@@ -111,10 +112,12 @@ namespace eGoatDDD.Application.Goats.Queries
                 });
             }
 
+            IPagedList<GoatNonDtoViewModel> goatFullInfos = goatFullInfo.ToPagedList(request.PageNumber, request.PageSize);
 
             return new GoatsListNonDtoViewModel
             {
-                Goats = goatFullInfo,
+                Goats = goatFullInfos,
+                TotalPages = goatFullInfo.Count(),
                 CreateEnabled = false
             };
         }

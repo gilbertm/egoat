@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using eGoatDDD.Application.GoatBreeds.Models;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 
 namespace eGoatDDD.Web.Controllers
 {

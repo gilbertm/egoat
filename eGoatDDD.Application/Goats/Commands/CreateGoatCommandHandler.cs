@@ -112,7 +112,7 @@ namespace eGoatDDD.Application.Goats.Commands
 
                                 var newFilePathAndName = Path.Combine(webRootPath, targetPath, result.ToString());
 
-                                File.Copy(oldFilePathAndName, newFilePathAndName);
+                                File.Move(oldFilePathAndName, newFilePathAndName);
 
                                 Resource resource = new Resource
                                 {
