@@ -17,18 +17,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0-preview.19074.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
-    <PackageReference Include="X.PagedList" Version="7.6.0.0" />
+    <PackageReference Include="X.PagedList" Version="7.6.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\eGoatDDD.Application\eGoatDDD.Application.csproj" />
     <ProjectReference Include="..\ImageWriter\ImageWriter.csproj" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Handler\" />
   </ItemGroup>
 
 </Project>
