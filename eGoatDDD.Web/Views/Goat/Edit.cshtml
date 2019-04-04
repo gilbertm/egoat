@@ -623,7 +623,7 @@
                 $(this).addClass("invisible");
                 $(".goatImagesWrapper .images").empty();
                 $("#goatImages").attr('required', "required");
-                $("#goatImages").val("").show();
+                $("#goatImages").removeClass("invisible").val("").show();
             });
 
             // main goat images
@@ -655,13 +655,6 @@
                 } else {
                     alert("This browser does not support HTML5 FileReader.");
                 }
-            });
-
-            // images
-            $(".imagesClose").on("click", function () {
-                $(this).addClass("invisible");
-                $(".goatImagesWrapper .images").empty();
-                $("#goatImages").removeClass("invisible").val("").show();
             });
         });
     })(jQuery);
