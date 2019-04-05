@@ -2,6 +2,9 @@
 PM> add-migration -c eGoatDDDDbContext Initial -project eGoatDDD.Persistence
 PM> update-database
 
+
+
+
 Drop Databases
 Use eGoatDDD;
 	DROP TABLE __EFMigrationsHistory,

@@ -55,6 +55,18 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+button {
+    cursor:pointer;
+}
+
+.display-4 {
+    font-size:1.5rem;
+}
+
+.display-4 .small {
+    font-size:0.75rem;
+}
+
 .red {
     color:red;
 }
@@ -82,4 +94,22 @@ body {
 .parent-container .table-info,
 .parent-container .table-breeds {
     font-size:0.75rem;
+}
+
+
+.create .add-breed,
+.create .remove-breed {
+    color: #555;
+    font-size: xx-small;
+    border-radius: 1px;
+    box-shadow: none;
+    border: none;
+    padding: 5px;
+    background: #efefef;
+    margin-bottom: 5px;
+}
+
+.create .remove-breed {
+    margin-top:5px;
+    margin-bottom:auto;
 }

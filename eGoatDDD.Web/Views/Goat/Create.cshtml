@@ -10,13 +10,13 @@
 
 <h2>Create</h2>
 <hr />
-<form asp-action="Create" enctype="multipart/form-data">
+<form class="create" asp-action="Create" enctype="multipart/form-data">
     <div class="row">
         <div asp-validation-summary="All" class="text-danger"></div>
     </div>
     <div class="row">
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
-            <h4>Details</h4>
+            <h4 class="text-muted display-4">Details</h4>
             <div class="row">
                 <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
                 <div class="col col-6">
@@ -81,7 +81,7 @@
 
         </div>
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
-            <h4>Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
+            <h4 class="text-muted display-4">Parents <span class="small">(if applicable)</span><i class="fa fa-envelope-o"><!-- empty --></i></h4>
             <div class="row">
                 <div class="col col-12">
                     <div class="row">
@@ -138,7 +138,7 @@
 
 
                     <div class="form-group siblings">
-                        <h4>Siblings</h4>
+                        <h4 class="text-muted display-4">Siblings</h4>
                         <div class="list">
                             <span class="info font-italic small">None</span>
                             <div class="siblings-table"></div>
@@ -146,8 +146,11 @@
                     </div>
                 </div>
                 <div class="col col-12" id="breeds">
-                    <h4>Breeds</h4><div class="row">
-                        <button type="button" id="add_breed">Add</button>
+                    <h4 class="text-muted display-4">Breeds</h4>
+                    <div class="row">
+                        <div class="col col-12">
+                            <button type="button" id="add_breed" class="add-breed">Add</button>
+                        </div>                       
                     </div>
                     <div class="row breed-wrapper">
 
@@ -171,7 +174,7 @@
                         </div>
                         <div class="col col-6">
                             <div class="form-group">
-                                <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
+                                <input requied type="number" class="breedpercent form-control" data-ctr="0" name="BreedPercent[]" value="0.00" step="0.01" /> <button type="button" class="d-none remove_breed remove-breed">Remove</button>
                             </div>
 
                         </div>
@@ -190,6 +193,12 @@
                             <input name="Files" required type="file" id="goatImages" multiple />
                         </span>
                     </div>
+
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" multiple>
+                        <label class="custom-file-label" for="customFile">Choose files</label>
+                    </div>
+
                 </div>
             </div>
             <div class="row lineage d-none">
