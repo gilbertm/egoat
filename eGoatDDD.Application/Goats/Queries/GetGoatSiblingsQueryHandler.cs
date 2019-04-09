@@ -27,6 +27,8 @@ namespace eGoatDDD.Application.Goats.Queries
                 model = new GoatsListViewModel
                 {
                     Goats = await _context.Goats
+                           .Include(gr => gr.GoatResources)
+                           .ThenInclude(r => r.Resource)
                            .Select(GoatDto.Projection)
                            .Where(g => g.DisposalId == null || g.DisposalId <= 0)
                            .Where(g => (g.Parents.Where(p => p.ParentId == request.MaternalId).Count() > 0) && (g.Parents.Where(p => p.ParentId == request.SireId).Count() > 0))
@@ -41,6 +43,8 @@ namespace eGoatDDD.Application.Goats.Queries
                 model = new GoatsListViewModel
                 {
                     Goats = await _context.Goats
+                           .Include(gr => gr.GoatResources)
+                           .ThenInclude(r => r.Resource)
                            .Select(GoatDto.Projection)
                            .Where(g => g.DisposalId == null || g.DisposalId <= 0)
                            .Where(g => (g.Parents.Where(p => p.ParentId == request.MaternalId).Count() > 0) || (g.Parents.Where(p => p.ParentId == request.SireId).Count() > 0))

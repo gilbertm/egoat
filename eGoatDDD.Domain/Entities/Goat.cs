@@ -37,14 +37,14 @@ namespace eGoatDDD.Domain.Entities
         public virtual ICollection<Parent> Parents { get; set; }
 
         // one-to-many
-        public virtual ICollection<Birth> Births { get; private set; }
+        public virtual ICollection<Birth> Births { get; set; }
 
-        public virtual ICollection<GoatService> Services { get; private set; }
+        public virtual ICollection<GoatService> Services { get; set; }
 
         // many-to-many
-        public virtual ICollection<GoatBreed> GoatBreeds { get; private set; }
+        public virtual ICollection<GoatBreed> GoatBreeds { get; set; }
 
-        public virtual ICollection<GoatResource> GoatResources { get; private set; }
+        public virtual ICollection<GoatResource> GoatResources { get; set; }
 
     }
 }

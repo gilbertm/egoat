@@ -101,7 +101,7 @@
                                 </select>
 
                                 <div class="goat-info-wrapper">
-                                    <span class="close d-none">close</span>
+                                    <span class="close parents d-none">close</span>
                                     <div class="table-info"></div>
                                     <div class="table-breeds"></div>
                                 </div>
@@ -125,7 +125,7 @@
                                         }
                                 </select>
                                 <div class="goat-info-wrapper">
-                                    <span class="close d-none">close</span>
+                                    <span class="close parents d-none">close</span>
                                     <div class="table-info"></div>
                                     <div class="table-breeds"></div>
                                 </div>
@@ -186,18 +186,20 @@
         <div class="col col-lg-4 col-md-4 col-sm-6 col-12 ">
             <div class="row">
                 <div class="col col-12 goatImagesWrapper">
+                    <h4 class="text-muted display-4">Resources</h4>
+
                     <div class="form-group">
-                        <span class="wrapper">
-                            <span class="images"></span>
-                            <span class="imagesClose invisible">close</span>
-                            <input name="Files" required type="file" id="goatImages" multiple />
-                        </span>
+                        <label class="small">Images</label>
+                        <div class="goatImages custom-file">
+                            <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
+                            <label class="custom-file-label" for="customFile">Choose files</label>
+                        </div>
+
+                        <span class="images"></span>
+                        <span class="close images invisible">close</span>
                     </div>
 
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile" multiple>
-                        <label class="custom-file-label" for="customFile">Choose files</label>
-                    </div>
+                  
 
                 </div>
             </div>
@@ -256,14 +258,14 @@
                             var reader = new FileReader();
                             reader.onload = function (e) {
                                 var img = $("<img />");
-                                img.attr("style", "height:100px;width: 100px");
+                                img.attr("style", "height:100px");
                                 img.attr("src", e.target.result);
                                 dvPreview.append(img);
                             }
                             reader.readAsDataURL(file[0]);
 
-                            $("#goatImages").hide();
-                            $(".imagesClose").removeClass("invisible");
+                            $(".goatImages").hide();
+                            $(".close.images").removeClass("invisible");
                         } else {
                             alert(file[0].name + " is not a valid image file.");
                             dvPreview.html("");
@@ -343,12 +345,12 @@
                             }
                         });
 
-                        $(parent_container).find(".close").removeClass("d-none");
+                        $(parent_container).find(".close.parents").removeClass("d-none");
                         $this.hide();
                     } else {
                         breeds_added.remove();
                         $this.show();
-                        $(parent_container).find(".close").addClass("d-none");
+                        $(parent_container).find(".close.parents").addClass("d-none");
                         $(parent_container).find(".table-breeds").empty();
                         $(parent_container).find(".table-info").empty();
 
@@ -367,8 +369,10 @@
 
                         var div = $('<div class="row small"/>');
                         $(response.goats).each(function () {
+                            console.log(response.goats);
+
                             var inner_div = $('<div class="col col-4 col-xs-6 text-align-center" />');
-                            inner_div.append('<img width="auto" height="50px" src="/images/uploads/' + this.picture + '"/><br />Goat Id: ' + this.id);
+                            inner_div.append('<img width="auto" height="50px" src="' + this.resources[0]["location"] + '/' + this.resources[0]["filename"] + '"/><br />Goat Id: ' + this.id);
                             inner_div.append('<br />Tag Code: <strong>' + this.color.name + ' ' + this.code + '</strong>');
 
                             div.append(inner_div);
@@ -384,20 +388,21 @@
             });
 
             // parents container
-            $(".close").on("click", function () {
+            $(".close.parents").on("click", function () {
                 var parent_container = $(this).parents(".parent-container");
                 $(parent_container).find("select").val("");
                 $(parent_container).find("select").show();
-                $(parent_container).find(".close").addClass("d-none");
+                $(parent_container).find(".close.parents").addClass("d-none");
                 $(parent_container).find(".table-breeds").empty();
                 $(parent_container).find(".table-info").empty();
             });
 
             // images 
-            $(".imagesClose").on("click", function () {
+            $(".close.images").on("click", function () {
                 $(this).addClass("invisible");
                 $(".goatImagesWrapper .images").empty();
-                $("#goatImages").val("").show();
+                $("#goatImages").val("");
+                $(".goatImages").show();
             });
             
             // add/remove breed

@@ -96,7 +96,8 @@ button {
     font-size:0.75rem;
 }
 
-
+.add.service,
+.service-wrapper .fields input[type=submit],
 .create .add-breed,
 .create .remove-breed {
     color: #555;
@@ -107,9 +108,25 @@ button {
     padding: 5px;
     background: #efefef;
     margin-bottom: 5px;
+    cursor:pointer;
+}
+
+.add.service {
+    margin-top:5px;
+    margin-bottom:0;
 }
 
 .create .remove-breed {
     margin-top:5px;
     margin-bottom:auto;
+}
+
+.service-wrapper .fields {
+    position:relative;
+}
+
+.service-wrapper .fields .close.service {
+    top:0;
+    right:10px;
+    position:absolute;
 }

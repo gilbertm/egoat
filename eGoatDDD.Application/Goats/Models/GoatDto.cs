@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace eGoatDDD.Application.Goats.Models
 {
@@ -17,7 +18,7 @@ namespace eGoatDDD.Application.Goats.Models
 
         public char Gender { get; set; }
 
-        public string Picture { get; set; }
+        public ICollection<GoatResource> GoatResources { get; set; }
 
         public DateTime? BirthDate { get; set; }
 
@@ -44,6 +45,7 @@ namespace eGoatDDD.Application.Goats.Models
                     BirthDate = p.BirthDate,
                     Description = p.Description,
                     Parents = p.Parents,
+                    GoatResources = p.GoatResources,
                     Color = p.Color,
                     GoatBreeds = p.GoatBreeds
                 };
