@@ -85,6 +85,23 @@ namespace eGoatDDD.Web.Controllers
             return Json(new { error = 1, response = "No service." });
         }
 
+        [Route("api/goat/services")]
+        [HttpPost]
+        public async Task<JsonResult> GetServices(long GoatId)
+        {
+            ServicesListViewModel service = await _mediator.Send(new GetServicesQuery(GoatId));
+
+            if (service != null)
+            {
+                if (service.Services != null)
+                {
+                    return Json(new { error = 0, services = service.Services.OrderByDescending(s => s.Start) });
+                }
+            }
+
+            return Json(new { error = 1, response = "No service." });
+        }
+
     }
 
 }

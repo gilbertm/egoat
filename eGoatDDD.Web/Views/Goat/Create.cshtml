@@ -195,7 +195,7 @@
                             <label class="custom-file-label" for="customFile">Choose files</label>
                         </div>
 
-                        <span class="images"></span>
+                        <span class="images thumbs"></span>
                         <span class="close images invisible">close</span>
                     </div>
 
@@ -249,7 +249,7 @@
 
             $("#goatImages").change(function () {
                 if (typeof (FileReader) != "undefined") {
-                    var dvPreview = $(".goatImagesWrapper .images");
+                    var dvPreview = $(".goatImagesWrapper .images.thumbs");
                     dvPreview.html("");
                     var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
                     $($(this)[0].files).each(function () {

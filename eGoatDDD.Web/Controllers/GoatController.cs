@@ -29,6 +29,7 @@ namespace eGoatDDD.Web.Controllers
             var doublePageSize = (double)(pageSize);
 
             ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
+            ViewData["CurrentPage"] = pageNumber;
 
             return View(goatsLisNonDtotViewModel);
         }

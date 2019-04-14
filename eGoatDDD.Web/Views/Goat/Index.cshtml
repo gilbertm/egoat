@@ -10,6 +10,7 @@
 @if (Model != null)
 {
     var totalPages = (int)ViewData["TotalPages"];
+    var currentPage = (int)ViewData["CurrentPage"];
 
     @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
     {
@@ -20,49 +21,35 @@
             row = "";
         }
 
-        <div class="row p-3 @(row)">
+        <div class="goat row p-3 @(row)">
             <div class="col col-12 col-md-5 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
                 <div class="row mb-1 mb-lg-3 mb-md-2 small">
                     <div class="col col-md-5 col-sm-6 text-align-center">
 
+                        @if (item.Resources != null)
+                        {
+                            <div class="row">
+                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                {
+                                    @if (index == 0)
+                                    {
+                                        <div class="col-md-12">
+                                            <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                        </div>
+                                    }}
+                            </div>
+                        }
+                        <br />
+
                         @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                         {
                             <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
-
-                                @if (item.Resources != null)
-                                {
-                                    <div class="row">
-                                        @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
-                                        {
-                                            @if (index == 0)
-                                            {
-                                                <div class="col-md-12">
-                                                    <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
-                                                </div>
-                                            }                                       }
-                                    </div>
-                                }
-                                <br />
                                 @item.Color.Name @item.Code
                             </a>
+
                         }
                         else
                         {
-                            @if (item.Resources != null)
-                            {
-                                <div class="row">
-                                    @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
-                                    {
-                                        @if (index == 0)
-                                        {
-                                            <div class="col-md-12">
-                                                <img class="w-100" src="~/@(resource.Location)/@(resource.Filename)" />
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                            }
-                            <br />
                             @item.Color.Name @item.Code
                         }
 
@@ -83,7 +70,8 @@
                                         date2 = date2.AddDays(-1);
                                     }
 
-                                    int years = 0, months = 0, days = 0, hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+                                    int years = 0, months = 0, days = 0;
+                                    // , hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
 
                                     // getting number of years
                                     while (date2.CompareTo(date1) >= 0)
@@ -174,7 +162,29 @@
                             </div>
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                             {
+                                <span class="ui-button"><i class="fas fa-plus-circle"><!--empty--></i></span>
                                 <button class="add service">Add service</button>
+                                <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal"  data-target="#modalGoatServices">History</button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalGoatServicesLongTitle">Services</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ...
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                             <div class="fields d-none">
                                 <select name="type">
@@ -231,7 +241,7 @@
                                 }
 
                                 <div class="col col-4">
-                                    <img height="75" src="~/@(resource.Location)/@(resource.Filename)" />
+                                     <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
                                 </div>
                             }
                         }
@@ -249,7 +259,7 @@
 
                 @for (int i = 1; i <= totalPages; i++)
                 {
-                    if (i == 1)
+                    if ((i == 1) && (currentPage != 1))
                     {
                         <li class="page-item">
                             <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
@@ -260,7 +270,7 @@
                     }
                     <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
 
-                    if (i == totalPages)
+                    if ((i == totalPages) && (currentPage != totalPages))
                     {
                         <li class="page-item">
                             <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
@@ -295,6 +305,48 @@
             };
 
             $(document).ready(function () {
+
+                $('.goat').lightGallery({
+                    selector: '.lg-item'
+                });
+
+                $("#modalGoatServices").on("show.bs.modal", function(e) {
+                    var $link = $(e.relatedTarget);
+                    var $this = $(this);
+
+                     $.ajax({
+                        type: "POST",
+                        url: $link.data("link"),
+                        data: { GoatId: $link.data("id") },
+                     }).done(function (result) {
+                         console.log(result);
+                         if (result.error == 0) {
+                             if (result.services != null) {
+                                 var $table = $('<table  class="table table-bordered table-striped small w-100" />');
+                                 row = $('<tr/>');
+                                 row.append('<th>Id</th>');
+                                 row.append('<th>Type</th>');
+                                 row.append('<th>Category</th>');
+                                 row.append('<th>Description</th>');
+                                 $table.append(row);
+                                 $(result.services).each(function () {
+                                     row = $('<tr/>');
+                                     row.append('<td>' + this.serviceId + '</td>');
+                                     row.append('<td>' + this.type + '</td>');
+                                     row.append('<td>' + this.category + '</td>');
+                                     row.append('<td>' + this.description + '</td>');
+                                     $table.append(row);
+                                 });
+
+                                 $this.find(".modal-body").html($table);
+                             } else {
+                                 $this.find(".modal-body").html("Something went wrong.");
+                             }
+                         } else {
+                                 $this.find(".modal-body").html(result.response);
+                             }
+                    });
+                });
 
                 $(".add.service").on("click", function () {
 
