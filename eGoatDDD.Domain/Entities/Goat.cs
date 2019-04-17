@@ -30,9 +30,6 @@ namespace eGoatDDD.Domain.Entities
         // one-to-one
         public virtual Color Color { get; set; }
 
-        // zero-to-one
-        public virtual Disposal Disposal { get; set; }
-
         // one-to-many
         public virtual ICollection<Parent> Parents { get; set; }
 
@@ -45,6 +42,8 @@ namespace eGoatDDD.Domain.Entities
         public virtual ICollection<GoatBreed> GoatBreeds { get; set; }
 
         public virtual ICollection<GoatResource> GoatResources { get; set; }
+
+        public virtual Disposal Disposal { get; set; }
 
     }
 }

@@ -8,9 +8,11 @@ namespace eGoatDDD.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<Disposal> builder)
         {
+            builder.HasKey(d => d.Id);
+
             builder.HasOne<Goat>()
-                .WithOne(d => d.Disposal);
-            // .HasPrincipalKey<Goat>(g => g.Id);
+            .WithOne(d => d.Disposal)
+            .HasPrincipalKey<Disposal>(d => d.Id);
         }
     }
 }

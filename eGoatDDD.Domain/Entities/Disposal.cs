@@ -11,14 +11,17 @@ namespace eGoatDDD.Domain.Entities
         Other = 99
     }
 
-    public class Disposal : BaseEntity 
+    public class Disposal
     {
+        public long Id { get; set; }
+
+        public DateTime Created { get; set; } = DateTime.Now;
+        public DateTime Modified { get; set; }
         public DateTime DisposedOn { get; set; }
 
         public DisposeType Type { get; set; }
 
         public string Reason { get; set; }
 
-        public virtual Goat Goat { get; private set; }
     }
 }

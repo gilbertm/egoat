@@ -48,7 +48,6 @@ namespace eGoatDDD.Application.Goats.Commands
                     {
                         Id = 0,
                         ColorId = request.ColorId,
-                        DisposalId = request.DisposalId,
                         Code = request.Code,
                         Gender = request.Gender,
                         BirthDate = request.BirthDate,

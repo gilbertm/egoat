@@ -284,21 +284,15 @@ namespace eGoatDDD.Persistence.Migrations
 
                     b.Property<DateTime>("DisposedOn");
 
-                    b.Property<long?>("GoatId");
-
                     b.Property<DateTime>("Modified");
 
                     b.Property<string>("Reason");
 
                     b.Property<int>("Type");
 
-                    b.Property<Guid>("UniqeId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("GoatId");
-
-                    b.ToTable("Disposal");
+                    b.ToTable("Disposals");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Goat", b =>
@@ -529,13 +523,6 @@ namespace eGoatDDD.Persistence.Migrations
                         .WithMany("Births")
                         .HasForeignKey("GoatId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Disposal", b =>
-                {
-                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany()
-                        .HasForeignKey("GoatId");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Goat", b =>

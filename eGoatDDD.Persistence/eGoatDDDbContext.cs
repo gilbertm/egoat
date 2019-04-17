@@ -32,6 +32,8 @@ namespace eGoatDDD.Persistence
 
         public DbSet<GoatResource> GoatResources { get; set; }
 
+        public DbSet<Disposal> Disposals { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

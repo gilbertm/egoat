@@ -57,24 +57,17 @@ button {
     font-size:0.75rem;
 }
 
+.view.service,
 .add.service,
 .service-wrapper .fields input[type=submit],
 .create .add-breed,
 .create .remove-breed {
-    color: #555;
-    font-size: xx-small;
     border-radius: 1px;
     box-shadow: none;
     border: none;
     padding: 5px;
-    background: #efefef;
     margin-bottom: 5px;
     cursor:pointer;
-}
-
-.add.service {
-    margin-top:5px;
-    margin-bottom:0;
 }
 
 .create .remove-breed {
@@ -90,4 +83,12 @@ button {
     top:0;
     right:10px;
     position:absolute;
+}
+
+.ui-tooltip {
+    border-radius: 0px;
+    margin-bottom: 6px;
+    background-color: #fefefe;
+    font-size: x-small;
+    box-shadow: none;
 }

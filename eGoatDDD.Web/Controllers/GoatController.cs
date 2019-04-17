@@ -117,6 +117,5 @@ namespace eGoatDDD.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
     }
 }

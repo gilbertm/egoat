@@ -47,11 +47,63 @@
                                 @item.Color.Name @item.Code
                             </a>
 
+                            <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-cross"><!--empty--></i></span></span>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col col-6">
+                                                    <label class="small d-block">Dispose Type</label>
+                                                    <select class="DisposalType" name="DisposalType">
+                                                        <option value="1">Slaughter</option>
+                                                        <option value="2">Sold Whole - Local</option>
+                                                        <option value="3">Sold Whole - Online</option>
+                                                        <option value="99">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col col-6">
+                                                    <div class="form-group">
+                                                        <label class="small d-block">Dispose Date</label>
+                                                        <div class='input-group'>
+                                                            <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-calendar"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row d-none">
+                                                <div class="col col-12">
+                                                    <label class="small d-block">Reason</label>
+                                                    <textarea class="DisposalReason" name="Reason"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="Dispose" type="button" class="btn btn-primary">Dispose</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         }
                         else
                         {
                             @item.Color.Name @item.Code
                         }
+
 
                     </div>
                     <div class="col col-md-7 col-sm-6">
@@ -162,10 +214,12 @@
                             </div>
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                             {
-                                <span class="ui-button"><i class="fas fa-plus-circle"><!--empty--></i></span>
-                                <button class="add service">Add service</button>
-                                <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal"  data-target="#modalGoatServices">History</button>
+                                <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
+                                <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
 
+                                @*<button class="add service">Add service</button>
+                                    <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
+                                *@
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -241,7 +295,7 @@
                                 }
 
                                 <div class="col col-4">
-                                     <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
+                                    <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
                                 </div>
                             }
                         }
@@ -310,41 +364,69 @@
                     selector: '.lg-item'
                 });
 
-                $("#modalGoatServices").on("show.bs.modal", function(e) {
+                $('[data-toggle="tooltip"]').tooltip()
+
+                $("#modalGoatDisposal").on("show.bs.modal", function (e) {
                     var $link = $(e.relatedTarget);
                     var $this = $(this);
 
-                     $.ajax({
+                    $.ajax({
                         type: "POST",
                         url: $link.data("link"),
                         data: { GoatId: $link.data("id") },
-                     }).done(function (result) {
-                         console.log(result);
-                         if (result.error == 0) {
-                             if (result.services != null) {
-                                 var $table = $('<table  class="table table-bordered table-striped small w-100" />');
-                                 row = $('<tr/>');
-                                 row.append('<th>Id</th>');
-                                 row.append('<th>Type</th>');
-                                 row.append('<th>Category</th>');
-                                 row.append('<th>Description</th>');
-                                 $table.append(row);
-                                 $(result.services).each(function () {
-                                     row = $('<tr/>');
-                                     row.append('<td>' + this.serviceId + '</td>');
-                                     row.append('<td>' + this.type + '</td>');
-                                     row.append('<td>' + this.category + '</td>');
-                                     row.append('<td>' + this.description + '</td>');
-                                     $table.append(row);
-                                 });
+                    }).done(function (result) {
+                        console.log($(this).find(".DisposedOn").val());
+                        console.log($(this).find(".DisposalType").val());
+                        console.log($(this).find(".DisposalReason").val());
 
-                                 $this.find(".modal-body").html($table);
-                             } else {
-                                 $this.find(".modal-body").html("Something went wrong.");
-                             }
-                         } else {
-                                 $this.find(".modal-body").html(result.response);
-                             }
+                        console.log(result);
+                        if (result.error == 0) {
+                            if (result.message != null) {
+                                $this.find(".modal-body").html(result.message);
+                            } else {
+                                $this.find(".modal-body").html("Something went wrong.");
+                            }
+                        } else {
+                            $this.find(".modal-body").html(result.response);
+                        }
+                    });
+                });
+
+                $("#modalGoatServices").on("show.bs.modal", function (e) {
+                    var $link = $(e.relatedTarget);
+                    var $this = $(this);
+
+                    $.ajax({
+                        type: "POST",
+                        url: $link.data("link"),
+                        data: { GoatId: $link.data("id") },
+                    }).done(function (result) {
+                        console.log(result);
+                        if (result.error == 0) {
+                            if (result.services != null) {
+                                var $table = $('<table  class="table table-bordered table-striped small w-100" />');
+                                row = $('<tr/>');
+                                row.append('<th>Id</th>');
+                                row.append('<th>Type</th>');
+                                row.append('<th>Category</th>');
+                                row.append('<th>Description</th>');
+                                $table.append(row);
+                                $(result.services).each(function () {
+                                    row = $('<tr/>');
+                                    row.append('<td>' + this.serviceId + '</td>');
+                                    row.append('<td>' + this.type + '</td>');
+                                    row.append('<td>' + this.category + '</td>');
+                                    row.append('<td>' + this.description + '</td>');
+                                    $table.append(row);
+                                });
+
+                                $this.find(".modal-body").html($table);
+                            } else {
+                                $this.find(".modal-body").html("Something went wrong.");
+                            }
+                        } else {
+                            $this.find(".modal-body").html(result.response);
+                        }
                     });
                 });
 
