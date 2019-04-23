@@ -45,8 +45,8 @@ namespace eGoatDDD.Application.Goats.Commands
                             Disposal disposal = new Disposal
                             {
                                 DisposedOn = DateTime.Now,
-                                Reason = "Test",
-                                Type = DisposeType.Slaughter,
+                                Reason = request.Reason,
+                                Type = (DisposeType)Enum.Parse(typeof(DisposeType), request.Type.ToString(), true),
                                 Modified = DateTime.Now,
                                 Created = DateTime.Now,
                             };
@@ -55,7 +55,7 @@ namespace eGoatDDD.Application.Goats.Commands
 
                             await _context.SaveChangesAsync(cancellationToken);
 
-                            goat.Id = disposal.Id;
+                            goat.DisposalId = disposal.Id;
 
                             await _context.SaveChangesAsync(cancellationToken);
 

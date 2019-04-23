@@ -12,12 +12,13 @@ namespace eGoatDDD.Web.Controllers
     public class ApiDisposalController : BaseController
     {
         [Route("api/disposal/goat")]
-        public async Task<JsonResult> Put(long GoatId, string Type, string Reason, DateTime DisposedOn)
+        public async Task<JsonResult> Put(long DisposalGoatId, int DisposalType, string DisposalReason, DateTime DisposedOn)
         {
             DeleteGoatCommand deleteGoatCommand = new DeleteGoatCommand
             {
-                Id = GoatId,
-                Reason = Reason,
+                Id = DisposalGoatId,
+                Reason = DisposalReason,
+                Type = DisposalType,
                 DisposedOn = DisposedOn
             };
 

@@ -36,6 +36,7 @@ namespace eGoatDDD.Application.Goats.Queries
                 .Include(p => p.Parents)
                 .Include(gr => gr.GoatResources)
                 .ThenInclude(r => r.Resource)
+                .Where(g => g.DisposalId == null || g.DisposalId < 0)
                 .ToListAsync(cancellationToken);
 
             IList<GoatNonDtoViewModel> goatFullInfo = new List<GoatNonDtoViewModel>();

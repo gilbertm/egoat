@@ -59,6 +59,13 @@
               "target": "Package",
               "version": "[3.0.0-preview.19073.11, )",
               "autoReferenced": true
+            },
+            "runtime.win-x86.Microsoft.NETCore.DotNetAppHost": {
+              "include": "None",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.0.0-preview-27324-5, )",
+              "autoReferenced": true
             }
           },
           "imports": [
@@ -66,6 +73,11 @@
           ],
           "assetTargetFallback": true,
           "warn": true
+        }
+      },
+      "runtimes": {
+        "win-x86": {
+          "#import": []
         }
       }
     }

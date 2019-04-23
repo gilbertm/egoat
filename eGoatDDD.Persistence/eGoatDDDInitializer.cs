@@ -66,6 +66,12 @@ namespace eGoatDDD.Persistence
                 Name = "Blue"
             });
 
+            Colors.Add(3, new Color
+            {
+                Name = "Yellow"
+            });
+
+
             foreach (var color in Colors.Values)
             {
                 if (context.Colors.Where(b => b.Name.Equals(color.Name)).Count() <= 0)

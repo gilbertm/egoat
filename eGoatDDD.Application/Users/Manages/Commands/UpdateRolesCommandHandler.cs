@@ -38,7 +38,7 @@ namespace eGoatDDD.Application.Users.Manages.Commands
             IEnumerable<string> newRoles = (from uroles in request.RolesUser.Roles.SelectOptionViewModels.Where(r => r.Value == true)
                                      select  uroles.Label);
             
-            ApplicationUser user = await _userManager.FindByIdAsync(request.RolesUser.UserId);
+            ApplicationUser user = await _userManager.FindByEmailAsync(request.RolesUser.UserName);
 
             using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
