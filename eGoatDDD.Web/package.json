@@ -15,5 +15,9 @@
     "gulp-ruby-sass": "^4.0.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5"
+  },
+  "dependencies": {
+    "compass": "^0.1.1",
+    "compass-mixins": "^0.12.10"
   }
 }

@@ -20,7 +20,7 @@ namespace eGoatDDD.Web.Controllers
         [Route("/Goat/Index/{page?}")]
         public async Task<IActionResult> Index(int? page)
         {
-            int pageSize = 3;
+            int pageSize = 15;
             int pageNumber = page ?? 1;
             
             GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery(pageNumber, pageSize));

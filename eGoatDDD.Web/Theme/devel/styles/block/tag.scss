@@ -1,0 +1,132 @@
+﻿@import '../../../../node_modules/compass-mixins/lib/compass/css3';
+
+a {
+    &:hover {
+        .animal-tag-container {
+            .animal-tag {
+                cursor: pointer;
+
+                &::before,
+                &::after {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
+
+.animal-tag-container {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    z-index:1;
+}
+
+.animal-tag {
+    display: inline-block;
+    @include box-sizing(content-box);
+    height: 22px;
+    min-width: 25px;
+    position: relative;
+    content: "";
+    margin: 0 13px 0 0;
+    padding: 5px 15px;
+    border: none;
+    @include border-radius(3px 1px 1px 3px);
+    font: normal 14px/24px "Antic", Helvetica, sans-serif;
+    font-weight: 400;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    text-transform: uppercase;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+
+    &::before {
+        display: inline-block;
+        @include box-sizing(content-box);
+        z-index: -2;
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        content: "";
+        top: -15px;
+        right: 10px;
+        @include border-radius(15px);
+        font: normal medium/normal Arial, Helvetica, sans-serif;
+        color: rgba(255,255,255,0.9);
+        -o-text-overflow: clip;
+        text-overflow: clip;
+        @include text-shadow(none);
+        @include transform(rotateY(1deg) rotateZ(-45deg) );
+    }
+
+    &::after {
+        display: inline-block;
+        @include box-sizing(content-box);
+        z-index: 2;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        content: "";
+        top: -11px;
+        right: 23px;
+        border: none;
+        @include border-radius(10px);
+        font: normal medium/normal Arial, Helvetica, sans-serif;
+        color: rgba(255,255,255,0.9);
+        -o-text-overflow: clip;
+        text-overflow: clip;
+        @include text-shadow(none);
+    }
+
+    &-green {
+        @include background(#1abc9c);
+        @include box-shadow(0 3px 0 0 #16a085, 3px 3px 0 0 #16a085 );
+
+        &::before {
+            border: 9px solid #1abc9c;
+            @include background(#1abc9c);
+            @include box-shadow(0 6px 0 0 #16a085 );
+        }
+
+        &::after {
+            @include background(#fcfcfc);
+            @include box-shadow(3px 3px 0 0 #16a085 inset);
+        }
+    }
+
+    &-blue {
+        @include background(#0000ff);
+        @include box-shadow(0 3px 0 0 #1675fa, 3px 3px 0 0 #1675fa );
+
+        &::before {
+            border: 9px solid #0000ff;
+            @include background(#0000ff);
+            @include box-shadow(0 6px 0 0 #1675fa );
+        }
+
+        &::after {
+            @include background(#fcfcfc);
+            @include box-shadow(3px 3px 0 0 #1675fa inset);
+        }
+    }
+
+    &-yellow {
+        @include background(#ffff00);
+        @include box-shadow(0 3px 0 0 #ffe065, 3px 3px 0 0 #ffe065 );
+        color: #404040;
+
+        &::before {
+            border: 9px solid rgba(255,255,0,1);
+            @include background(rgba(255,255,0,1));
+            @include box-shadow(0 6px 0 0 #ffe065 );
+        }
+
+        &::after {
+            @include background(#fcfcfc);
+            @include box-shadow(3px 3px 0 0 #ffe065 inset);
+        }
+    }
+}
+
+@import "tag_media";

@@ -44,7 +44,9 @@
                         @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                         {
                             <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
-                                @item.Color.Name @item.Code
+                                <div class="animal-tag-container">
+                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                </div>
                             </a>
 
                             <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
@@ -106,7 +108,9 @@
                         }
                         else
                         {
-                            @item.Color.Name @item.Code
+                            <div class="animal-tag-container">
+                                <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                            </div>
                         }
 
 
@@ -382,7 +386,7 @@
                     var $parentContainer = $this.parents(".modalGoatDisposal");
 
                     var parentId = ".modalGoatDisposal" + $parentContainer.find(".DisposalGoatId").val();
-                    
+
                     var id = $(parentId);
 
                     var $thisData = $this.parents(id);
@@ -390,7 +394,7 @@
                     $.ajax({
                         type: "POST",
                         url: $thisData.find(".ApiURL").val(),
-                        data: { DisposalGoatId: $thisData.find(".DisposalGoatId").val(), DisposalType: $thisData.find(".DisposalType").val(), DisposalReason: $thisData.find(".DisposalReason").val(), DisposedOn: $thisData.find(".DisposedOn").val()},
+                        data: { DisposalGoatId: $thisData.find(".DisposalGoatId").val(), DisposalType: $thisData.find(".DisposalType").val(), DisposalReason: $thisData.find(".DisposalReason").val(), DisposedOn: $thisData.find(".DisposedOn").val() },
                     }).done(function (result) {
                         console.log(result);
                         if (result.error == 0) {

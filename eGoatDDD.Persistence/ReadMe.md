@@ -3,6 +3,10 @@ PM> add-migration -c eGoatDDDDbContext Initial -project eGoatDDD.Persistence
 PM> update-database
 
 
+URL: https://egoatdddweb.scm.azurewebsites.net/dev/wwwroot/
+https://egoatdddweb.scm.azurewebsites.net/
+https://egoatdddweb.azurewebsites.net/Goat/Index
+
 
 
 Drop Databases
