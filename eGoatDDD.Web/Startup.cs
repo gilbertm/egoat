@@ -85,6 +85,7 @@ namespace eGoatDDD.Web
                 options.AddPolicy("Attendants", policy => policy.RequireClaim(ClaimTypes.Role, "Attendant"));
 
                 options.AddPolicy("CanEdits", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Administrator", "Poweruser", "Supervisor" }));
+                options.AddPolicy("CanDisposes", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Administrator", "Poweruser" }));
             });
             #endregion
 

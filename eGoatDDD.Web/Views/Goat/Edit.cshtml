@@ -12,7 +12,7 @@
 
 @if (Model != null)
 {
-<form asp-action="Edit"  enctype="multipart/form-data">
+<form asp-action="Edit"  class="edit" enctype="multipart/form-data">
     <div class="row">
         <div asp-validation-summary="All" class="text-danger"></div>
     </div>
@@ -217,10 +217,9 @@
                     </div>
                 </div>
                 <div class="col col-12" id="breeds">
-                    <h4>Breeds</h4><div class="row">
-                        <button type="button" id="add_breed">Add</button>
-                    </div>
-
+                    <h4>Breeds</h4>
+                        <button type="button" id="add_breed" class="add-breed"><i class="fas fa-plus-circle"><!--empty--></i></button>
+                    
                     @if (Model.Breeds.Count() > 0)
                     {
                     @foreach (var itemBreed in Model.Breeds)
@@ -255,7 +254,7 @@
 
                         <div class="col col-6">
                             <div class="form-group">
-                                <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="@itemBreed.Percentage" step="0.01" /> <button type="button" class="d-none remove_breed">Remove</button>
+                                <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="@itemBreed.Percentage" step="0.01" /> <button type="button" class="d-none remove_breed remove-breed"><i class="fas fa-minus-circle"><!--empty--></i></button>
                             </div>
 
                         </div>

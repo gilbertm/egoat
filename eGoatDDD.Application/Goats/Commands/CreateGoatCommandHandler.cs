@@ -167,6 +167,8 @@ namespace eGoatDDD.Application.Goats.Commands
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
+
                     _unitOfWork.Rollback();
 
                     return false;
