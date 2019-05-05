@@ -188,15 +188,15 @@
                 <div class="col col-12 goatImagesWrapper">
                     <h4 class="text-muted display-4">Resources</h4>
 
-                    <div class="form-group">
-                        <label class="small">Images</label>
+                    <div class="form-group position-relative">
+                        <label class="small d-block">Images</label>
                         <div class="goatImages custom-file">
                             <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
                             <label class="custom-file-label" for="customFile">Choose files</label>
                         </div>
 
                         <span class="images thumbs"></span>
-                        <span class="close images invisible">close</span>
+                        <span class="close images invisible"><i class="far fa-trash-alt"><!-- empty --></i></span>
                     </div>
 
                   
@@ -258,7 +258,8 @@
                             var reader = new FileReader();
                             reader.onload = function (e) {
                                 var img = $("<img />");
-                                img.attr("style", "height:100px");
+                                img.addClass("w-100");
+                                // img.attr("style", "height:100px");
                                 img.attr("src", e.target.result);
                                 dvPreview.append(img);
                             }
@@ -400,7 +401,7 @@
             // images 
             $(".close.images").on("click", function () {
                 $(this).addClass("invisible");
-                $(".goatImagesWrapper .images").empty();
+                $(".goatImagesWrapper .thumbs.images").empty();
                 $("#goatImages").val("");
                 $(".goatImages").show();
             });

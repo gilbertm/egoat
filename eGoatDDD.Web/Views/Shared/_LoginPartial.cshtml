@@ -19,11 +19,12 @@
         @if ((await AuthorizationService.AuthorizeAsync(User, "Administrators")).Succeeded)
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" asp-controller="Role" asp-action="Index" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Roles
+                <a class="nav-link dropdown-toggle" asp-controller="User" asp-action="Index" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Users
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" asp-controller="Role" asp-action="Index">Manage</a>
+                    <a class="dropdown-item" asp-controller="User" asp-action="Index">Users</a>
+                    <a class="dropdown-item" asp-controller="Role" asp-action="Index">Roles</a>
                 </div>
             </li>
              <li class="nav-item">

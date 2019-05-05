@@ -1,0 +1,67 @@
+﻿@model IEnumerable<eGoatDDD.Application.Users.Manages.Models.UserRolesViewModel>
+@using  eGoatDDD.Application.Users.Manages.Models
+
+@{
+    ViewData["Title"] = "Users with Roles";
+}
+
+@if (Model != null)
+{
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th class="w-50" scope="col">User</th>
+                <th class="w-25" scope="col">Roles</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+   
+            
+            @foreach (UserRolesViewModel userRolesViewModel in Model)
+            {
+                <form asp-controller="User" asp-action="Update" method="post">
+
+                    <tr>
+                       
+                        <th scope="row">
+                            <label>@userRolesViewModel.UserName</label>
+                            <input asp-for="@userRolesViewModel.UserName" type="hidden" />
+                        </th>
+                        <td>
+                            @{
+                                for (int i = 0; i < userRolesViewModel.Roles.SelectOptionViewModels.Count(); i++)
+                                {
+                                    <div class="checkbox">
+                                        <label>
+
+                                            @if (userRolesViewModel.Roles.SelectOptionViewModels[i].Value == true)
+                                            {
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value" checked /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                                            }
+                                            else
+                                            {
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Value"  /> @userRolesViewModel.Roles.SelectOptionViewModels[i].Label
+                                            }
+
+                                            <input asp-for="@userRolesViewModel.Roles.SelectOptionViewModels[i].Label" type="hidden" />
+                                        </label>
+                                    </div>
+
+                                }
+                            }
+                        </td>
+                        <td class="text-align-right">
+                            <input type="submit" value="Update" name="Update" class="btn btn-default" id="Update" />
+
+                            <input type="submit" value="Delete" name="Update" class="btn btn-default" id="Delete" />
+                        </td>
+                    </tr>
+                </form>
+            }
+        </tbody>
+    </table>
+}
+

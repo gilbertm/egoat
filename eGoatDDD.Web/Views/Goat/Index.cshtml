@@ -28,16 +28,16 @@
 
                         @if (item.Resources != null)
                         {
-                        <div class="row">
-                            @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                            <div class="row">
+                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
                                 {
-                            @if (index == 0)
+                                    @if (index == 0)
                                     {
-                            <div class="col-md-12">
-                                <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
-                            </div>
+                                        <div class="col-md-12">
+                                            <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                        </div>
                                     }}
-                        </div>
+                            </div>
                         }
                         <br />
 
@@ -45,80 +45,80 @@
                         {
 
 
-                        <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
-                            <input type="hidden" class="DisposalGoatId" value="@(item.Id)" />
-                            <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
+                            <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
+                                <input type="hidden" class="DisposalGoatId" value="@(item.Id)" />
+                                <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
 
 
-                            <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
+                                <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col col-6">
-                                                    <label class="small d-block">Dispose Type</label>
-                                                    <select required class="DisposalType" name="DisposalType">
-                                                        <option value="0">Disposal Type</option>
-                                                        <option value="1">Slaughter</option>
-                                                        <option value="2">Sold Whole - Local</option>
-                                                        <option value="3">Sold Whole - Online</option>
-                                                        <option value="99">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col col-6">
-                                                    <div class="form-group">
-                                                        <label class="small d-block">Dispose Date</label>
-                                                        <div class='input-group'>
-                                                            <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
-                                                            <span class="input-group-addon">
-                                                                <span class="glyphicon glyphicon-calendar"></span>
-                                                            </span>
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col col-6">
+                                                        <label class="small d-block">Dispose Type</label>
+                                                        <select required class="DisposalType" name="DisposalType">
+                                                            <option value="0">Disposal Type</option>
+                                                            <option value="1">Slaughter</option>
+                                                            <option value="2">Sold Whole - Local</option>
+                                                            <option value="3">Sold Whole - Online</option>
+                                                            <option value="99">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col col-6">
+                                                        <div class="form-group">
+                                                            <label class="small d-block">Dispose Date</label>
+                                                            <div class='input-group'>
+                                                                <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row d-none reason">
-                                                <div class="col col-12">
-                                                    <label class="small d-block">Reason</label>
-                                                    <textarea required class="DisposalReason" name="Reason"></textarea>
+                                                <div class="row d-none reason">
+                                                    <div class="col col-12">
+                                                        <label class="small d-block">Reason</label>
+                                                        <textarea required class="DisposalReason" name="Reason"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary dispose delete submit">Dispose</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary dispose delete submit">Dispose</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                         }
 
 
                         @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                         {
-                        <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
-                            <div class="animal-tag-container">
-                                <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code <i class="fas fa-edit"><!-- empty --></i></div>
-                            </div>
-                        </a>
+                            <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+                                <div class="animal-tag-container">
+                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code <i class="fas fa-edit"><!-- empty --></i></div>
+                                </div>
+                            </a>
                         }
                         else
                         {
-                        <div class="animal-tag-container">
-                            <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
-                        </div>
+                            <div class="animal-tag-container">
+                                <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                            </div>
                         }
 
 
@@ -233,6 +233,7 @@
                             {
                                 <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
                                 <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
+                                <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
 
                                 @*<button class="add service">Add service</button>
                                     <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
@@ -250,29 +251,53 @@
                                             <div class="modal-body">
                                                 ...
                                             </div>
-                                            <div class="modal-footer">
+                                            @*<div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
+                                            </div> *@
                                         </div>
                                     </div>
                                 </div>
                             }
-                            <div class="fields d-none">
-                                <select name="type">
-                                    <option value="Medical">Medical</option>
-                                </select>
-                                <select name="category">
-                                    <option value="Vaccine">Vaccine</option>
-                                    <option value="Deworm">Deworm</option>
-                                </select>
+                            <div class="fields d-none service">
 
-                                <input name="start" type="date" value="@DateTime.Now.ToString("mm-dd-yyyy")" />
-                                <input name="end" type="date" value="@DateTime.Now.ToString("mm-dd-yyyy")" />
+                                <form class="frm-add-service">
+                                    <div class="form-row mb-1">
+                                        <div class="col col-6 col-xs-12">
+                                            <label for="serviceType">Type</label>
+                                            <select id="serviceType" name="type" required class="browser-default custom-select">
+                                                <option value="Medical">Medical</option>
+                                            </select>
+                                        </div>
+                                        <div class="col col-6 col-xs-12">
+                                            <label for="serviceCategory">Category</label>
+                                            <select id="serviceCategory" name="category" required class="browser-default custom-select">
+                                                <option value="Vaccine">Vaccine</option>
+                                                <option value="Deworm">Deworm</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <div class="col col-12">
+                                            <label for="startDate">Start</label>
+                                            <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                        </div>
+                                        <div class="col col-12">
+                                            <label for="startEnd">End</label>
+                                            <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                        </div>
+                                    </div>
+                                    <div class="form-row mb-1">
+                                        <div class="col col-12">
+                                            <div class="form-group">
+                                                <label for="description">Small textarea</label>
+                                                <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <textarea name="description" rows="2" cols="25" placeholder="short description."></textarea>
-                                <input name="goat" type="hidden" value="@item.Id" />
-                                <input type="submit" name="submit" value="submit" />
-                                <button class="close service"><i class="far fa-window-close"><!-- empty --></i></button>
+                                    <input name="goat" type="hidden" value="@item.Id" />
+                                    <button class="btn btn-primary btn-sm small" type="submit">Add</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -431,14 +456,16 @@
                             if (result.services != null) {
                                 var $table = $('<table  class="table table-bordered table-striped small w-100" />');
                                 row = $('<tr/>');
-                                row.append('<th>Id</th>');
+                                row.append('<th>#</th>');
                                 row.append('<th>Type</th>');
                                 row.append('<th>Category</th>');
                                 row.append('<th>Description</th>');
                                 $table.append(row);
-                                $(result.services).each(function () {
+                                $(result.services).each(function (index) {
                                     row = $('<tr/>');
-                                    row.append('<td>' + this.serviceId + '</td>');
+                                    index++;
+                                    // row.append('<td>' + this.serviceId + '</td>');
+                                    row.append('<td>' + index + '</td>');
                                     row.append('<td>' + this.type + '</td>');
                                     row.append('<td>' + this.category + '</td>');
                                     row.append('<td>' + this.description + '</td>');
@@ -459,6 +486,8 @@
 
                     var container = $(this).parents(".service-wrapper");
 
+                    container.find(".close.service").removeClass("d-none");
+
                     container.find(".fields").removeClass("d-none");
 
                 });
@@ -467,33 +496,52 @@
 
                     var container = $(this).parents(".service-wrapper");
 
+                    container.find(".close.service").addClass("d-none");
+
                     container.find(".fields").addClass("d-none");
 
                 });
 
-                $("input[type='submit']").on("click", function () {
-                    var container = $(this).parents(".service-wrapper");
+                $(".frm-add-service").on("submit", function (e) {
+                    e.preventDefault();
 
+                    var container = $(this);
                     var $type = container.find("select[name='type']").val();
                     var $category = container.find("select[name='category']").val();
                     var $goat = container.find("input[name='goat']").val();
                     var $description = container.find("textarea[name='description']").val();
                     var $start = container.find("input[name='start']").val();
                     var $end = container.find("input[name='end']").val();
+
+                    @* console.log($type);
+                    console.log($category);
+                    console.log($goat);
+                    console.log($description);
+                    console.log($start);
+                    console.log($end); *@
+
                     $.ajax({
                         type: "POST",
                         url: '/api/service/put',
                         data: { GoatId: $goat, Type: $type, Category: $category, Description: $description, Start: $start, End: $end },
                     }).done(function (result) {
-                        container.find(".latest").find(".service-type").html(result.service.type);
-                        container.find(".latest").find(".service-description").html(result.service.description);
-                        container.find(".latest").find(".service-category").html(result.service.category);
+                        container.parents(".service-wrapper").find(".latest").find(".service-type").html(result.service.type);
+                        container.parents(".service-wrapper").find(".latest").find(".service-description").html(result.service.description);
+                        container.parents(".service-wrapper").find(".latest").find(".service-category").html(result.service.category);
 
-                        container.find(".latest").find(".service-start").html($.date(result.service.start));
-                        container.find(".latest").find(".service-end").html($.date(result.service.end));
+                        container.parents(".service-wrapper").find(".latest").find(".service-start").html($.date(result.service.start));
+                        container.parents(".service-wrapper").find(".latest").find(".service-end").html($.date(result.service.end));
+
+                        container.parents(".service-wrapper").find("textarea[name='description']").val("");
+
 
                     });
-                    container.find(".fields").addClass("d-none");
+
+                    container.parents(".service-wrapper").find(".close.service").addClass("d-none");
+
+                    container.parents(".service-wrapper").find(".fields").addClass("d-none");
+
+
                 });
 
 
