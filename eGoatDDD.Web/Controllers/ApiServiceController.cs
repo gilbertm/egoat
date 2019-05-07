@@ -70,7 +70,7 @@ namespace eGoatDDD.Web.Controllers
         /// <returns></returns>
         [Route("api/service")]
         [HttpPost]
-        public async Task<JsonResult> Get(long GoatId)
+        public async Task<JsonResult> Get(long GoatId, int count = 1)
         {
             ServicesListViewModel service = await _mediator.Send(new GetServicesQuery(GoatId));
 
@@ -78,28 +78,37 @@ namespace eGoatDDD.Web.Controllers
             {
                 if (service.Services != null)
                 {
-                    return Json(new { error = 0, service = service.Services.OrderByDescending(s => s.Start).First() });
+                    if (count > 0)
+                        return Json(new { error = 0, services = service.Services.OrderByDescending(s => s.Start).Take(count) });
+                    else
+                        return Json(new { error = 0, services = service.Services.OrderByDescending(s => s.Start) });
                 }
             }
 
             return Json(new { error = 1, response = "No service." });
         }
 
-        [Route("api/goat/services")]
+        /// <summary>
+        /// Delete
+        /// </summary>
+        /// <param name="ServiceId"></param>
+        [Route("api/service/delete")]
         [HttpPost]
-        public async Task<JsonResult> GetServices(long GoatId)
+        public async Task<JsonResult> Delete(long ServiceId)
         {
-            ServicesListViewModel service = await _mediator.Send(new GetServicesQuery(GoatId));
-
-            if (service != null)
+            DeleteServiceCommand deleteServiceCommand = new DeleteServiceCommand
             {
-                if (service.Services != null)
-                {
-                    return Json(new { error = 0, services = service.Services.OrderByDescending(s => s.Start) });
-                }
+                ServiceId = ServiceId
+            };
+
+            bool delete = await _mediator.Send(deleteServiceCommand);
+
+            if (delete == true)
+            {
+                return Json(new { error = 0, service = delete });
             }
 
-            return Json(new { error = 1, response = "No service." });
+            return Json(new { error = 1, response = "Service not found." });
         }
 
     }

@@ -210,33 +210,47 @@
                 <div class="row">
                     <div class="col col-12 col-md-4 col-sm-4">
                         <div class="service-wrapper">
-                            <div class="latest">
-                                <div class="row">
-                                    <div class="col col-6">
-                                        <div class="service-type"></div>
-                                    </div>
-                                    <div class="col col-6">
-                                        <div class="service-category"></div>
-                                    </div>
-                                    <div class="col col-6">
-                                        <div class="service-start"></div>
-                                    </div>
-                                    <div class="col col-6">
-                                        <div class="service-end"></div>
-                                    </div>
-                                    <div class="col col-12">
-                                        <div class="service-description"></div>
+
+                            <div class="carousel-item template d-none">
+                                <div class="latest">
+                                    <div class="row">
+                                        <div class="col col-6">
+                                            <div class="service-type"></div>
+                                        </div>
+                                        <div class="col col-6">
+                                            <div class="service-category"></div>
+                                        </div>
+                                        <div class="col col-6">
+                                            <div class="service-start"></div>
+                                        </div>
+                                        <div class="col col-6">
+                                            <div class="service-end"></div>
+                                        </div>
+                                        <div class="col col-12">
+                                            <div class="service-description"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col col-12">
+                                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                             {
                                 <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
-                                <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
+                                <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
                                 <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
 
                                 @*<button class="add service">Add service</button>
-                                    <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
+            <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
                                 *@
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
@@ -279,14 +293,14 @@
                                                         <div class="form-row mb-1">
                                                             <div class="col col-12">
                                                                 <div class="form-group">
-                                                                    <label for="description">Small textarea</label>
+                                                                    <label for="description">Description</label>
                                                                     <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <input name="goat" type="hidden" value="@item.Id" />
-                                                        <button class="btn btn-primary btn-sm small" type="submit">Add</button>
+                                                        <button class="btn btn-primary btn-sm small" type="submit">Edit</button>
                                                     </form>
                                                 </div>
                                                 <div class="services">
@@ -294,8 +308,8 @@
                                                 </div>
                                             </div>
                                             @*<div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div> *@
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div> *@
                                         </div>
                                     </div>
                                 </div>
@@ -331,7 +345,7 @@
                                     <div class="form-row mb-1">
                                         <div class="col col-12">
                                             <div class="form-group">
-                                                <label for="description">Small textarea</label>
+                                                <label for="description">Description</label>
                                                 <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
                                             </div>
                                         </div>
@@ -397,39 +411,39 @@
                 <ul class="pagination">
 
                     @for (int i = 1; i <= totalPages; i++)
-                {
-                    if ((i == 1) && (currentPage != 1))
                     {
-                    <li class="page-item">
-                        <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    }
-                    <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
+                        if ((i == 1) && (currentPage != 1))
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        }
+                        <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
 
-                    if ((i == totalPages) && (currentPage != totalPages))
-                    {
-                    <li class="page-item">
-                        <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
+                        if ((i == totalPages) && (currentPage != totalPages))
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        }
                     }
-                }
                 </ul>
             </nav>
         </div>
-        
+
     }
 }
 
 @section scripts{
     <script type="text/javascript">
         (function ($) {
-            $.date = function (dateObject) {
+            $.date = function (dateObject, delimeter = "-") {
                 var d = new Date(dateObject);
                 var day = d.getDate();
                 var month = d.getMonth() + 1;
@@ -440,7 +454,7 @@
                 if (month < 10) {
                     month = "0" + month;
                 }
-                var date = month + "-" + day + "-" + year;
+                var date = year + delimeter + month + delimeter + day;
 
                 return date;
             };
@@ -450,7 +464,7 @@
                 $.ajax({
                         type: "POST",
                         url: uriApi,
-                        data: { GoatId: goatId },
+                        data: { GoatId: goatId, count: 0 },
                     }).done(function (result) {
                         if (result.error == 0) {
                             if (result.services != null) {
@@ -473,7 +487,7 @@
                                     row.append('<td>' + this.type + '</td>');
                                     row.append('<td>' + this.category + '</td>');
                                     row.append('<td>' + this.description + '</td>');
-                                    row.append('<td><span data-id="' + this.serviceId + '" class="edit"><i class="fas fa-plus-circle"><!--empty--></i></span><span class="delete"><i class="fas fa-minus-circle"><!--empty--></i></span></td>');
+                                    row.append('<td><div class="row"><div class="col col-6"><span data-id="' + this.serviceId + '" data-start="' + $.date(this.start) + '" data-end="' + $.date(this.end) + '" data-type="' + this.type + '" data-category="' + this.category + '" data-description="' + encodeURIComponent(this.description) + '" class="edit btn btn-primary"><i class="fas fa-plus-circle"><!--empty--></i></span></div><div class="col col-6"><span class="delete btn btn-primary" data-id="' + this.serviceId + '"><i class="fas fa-minus-circle"><!--empty--></i></span></div></div></td>');
                                     $table.append(row);
                                 });
 
@@ -533,9 +547,12 @@
                     var $link = $(e.relatedTarget);
                     var $this = $(this);
 
+                    $this.find(".modal-body .services").removeClass("d-none");
+                    $this.find(".modal-body .edit").addClass("d-none");
+
                     displayServicesTable($link.data("link"), $link.data("id"), $this.find(".modal-body .services"));
 
-                    
+
                 });
 
                 $(".add.service").on("click", function () {
@@ -589,8 +606,46 @@
                         container.parents(".service-wrapper").find(".latest").find(".service-end").html($.date(result.service.end));
 
                         container.parents(".service-wrapper").find("textarea[name='description']").val("");
+                    });
+
+                    container.parents(".service-wrapper").find(".close.service").addClass("d-none");
+
+                    container.parents(".service-wrapper").find(".fields").addClass("d-none");
 
 
+                });
+
+                $(".frm-edit-service").on("submit", function (e) {
+                    e.preventDefault();
+
+                    var container = $(this);
+                    var $type = container.find("select[name='type']").val();
+                    var $category = container.find("select[name='category']").val();
+                    var $goat = container.find("input[name='goat']").val();
+                    var $description = container.find("textarea[name='description']").val();
+                    var $start = container.find("input[name='start']").val();
+                    var $end = container.find("input[name='end']").val();
+
+                    @* console.log($type);
+                    console.log($category);
+                    console.log($goat);
+                    console.log($description);
+                    console.log($start);
+                    console.log($end); *@
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/service/put',
+                        data: { GoatId: $goat, Type: $type, Category: $category, Description: $description, Start: $start, End: $end },
+                    }).done(function (result) {
+                        container.parents(".service-wrapper").find(".latest").find(".service-type").html(result.service.type);
+                        container.parents(".service-wrapper").find(".latest").find(".service-description").html(result.service.description);
+                        container.parents(".service-wrapper").find(".latest").find(".service-category").html(result.service.category);
+
+                        container.parents(".service-wrapper").find(".latest").find(".service-start").html($.date(result.service.start));
+                        container.parents(".service-wrapper").find(".latest").find(".service-end").html($.date(result.service.end));
+
+                        container.parents(".service-wrapper").find("textarea[name='description']").val("");
                     });
 
                     container.parents(".service-wrapper").find(".close.service").addClass("d-none");
@@ -602,12 +657,48 @@
 
                 $("#modalGoatServices").on("click", ".edit", function (event) {
                     $("#modalGoatServices .edit").removeClass("d-none");
+
                     var $t = $(event.target);
                     $t = $t.is('.edit') ? $t : $t.parents('.edit');
-                    console.log($t.data("id"));
-                    // $("#modalGoatServices .services").addClass("d-none");
+                    $("#modalGoatServices .edit select[name='type']").val($t.data("type"));
+                    $("#modalGoatServices .edit select[name='category']").val($t.data("category"));
+                    $("#modalGoatServices .edit input[name='goat']").val($t.data("id"));
+                    $("#modalGoatServices .edit textarea[name='description']").val(decodeURIComponent($t.data("description")));
+                    $("#modalGoatServices .edit input[name='start']").val($t.data("start"));
+                    $("#modalGoatServices .edit input[name='end").val($t.data("end"));
+
+                    $("#modalGoatServices .services").addClass("d-none");
                 });
 
+                $("#modalGoatServices").on("click", ".delete", function (event) {
+                    var $t = $(event.target);
+                    $t = $t.is('.delete') ? $t : $t.parents('.delete');
+
+                    if (confirm("Are you sure you want to delete this?")) {
+
+                        $.ajax({
+                        type: "POST",
+                        url: '/api/service/delete',
+                        data: { ServiceId: $t.data("id") },
+                    }).done(function (result) {
+
+                        if (!result.error) {
+
+                            if (result.service != true) {
+
+                            }
+                        } else {
+
+                        }
+                    });
+
+
+                        $('#modalGoatServices').modal('hide');
+                    }
+                    else{
+                        return false;
+                    }
+                });
 
                 $(".service-wrapper").each(function () {
                     var container = $(this);
@@ -617,16 +708,33 @@
                     $.ajax({
                         type: "POST",
                         url: '/api/service',
-                        data: { GoatId: $goat },
+                        data: { GoatId: $goat, count: 5 },
                     }).done(function (result) {
 
                         if (!result.error) {
-                            container.find(".latest").find(".service-type").html(result.service.type);
-                            container.find(".latest").find(".service-description").html(result.service.description);
-                            container.find(".latest").find(".service-category").html(result.service.category);
 
-                            container.find(".latest").find(".service-start").html($.date(result.service.start));
-                            container.find(".latest").find(".service-end").html($.date(result.service.end));
+                            if (result.services != null) {
+                                $(result.services).each(function (index) {
+
+                                    var $template = container.find(".template").clone().removeClass("template d-none");
+
+                                    if (index == 0) {
+                                        $template.addClass("active");
+                                    }
+
+                                    $template.find(".latest").find(".service-type").html(this.type);
+                                    $template.find(".latest").find(".service-description").html(this.description);
+                                    $template.find(".latest").find(".service-category").html(this.category);
+                                    $template.find(".latest").find(".service-start").html($.date(this.start));
+                                    $template.find(".latest").find(".service-end").html($.date(this.end));
+
+                                    container.find(".carousel-inner").append($template);
+
+                                });
+
+                            } else {
+                                container.find(".latest").html("Something went wrong.");
+                            }
                         }
                     });
 
