@@ -127,6 +127,23 @@ a {
             @include box-shadow(3px 3px 0 0 #ffe065 inset);
         }
     }
+
+    &-orange {
+        @include background(#FF9800);
+        @include box-shadow(0 3px 0 0 #f7c070, 3px 3px 0 0 #f7c070 );
+        color: #404040;
+
+        &::before {
+            border: 9px solid rgba(255,152,0,1);
+            @include background(rgba(255,152,0,1));
+            @include box-shadow(0 6px 0 0 #f7c070 );
+        }
+
+        &::after {
+            @include background(#fcfcfc);
+            @include box-shadow(3px 3px 0 0 #f7c070 inset);
+        }
+    }
 }
 
 @import "tag_media";

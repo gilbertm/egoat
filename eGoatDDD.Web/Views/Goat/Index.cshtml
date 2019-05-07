@@ -54,7 +54,7 @@
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
@@ -240,7 +240,7 @@
                                 *@
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="modalGoatServicesLongTitle">Services</h5>
@@ -249,7 +249,49 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                ...
+                                                <div class="edit d-none">
+                                                    <form class="frm-edit-service">
+                                                        <div class="form-row mb-1">
+                                                            <div class="col col-6 col-xs-12">
+                                                                <label for="serviceType">Type</label>
+                                                                <select id="serviceType" name="type" required class="browser-default custom-select">
+                                                                    <option value="Medical">Medical</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col col-6 col-xs-12">
+                                                                <label for="serviceCategory">Category</label>
+                                                                <select id="serviceCategory" name="category" required class="browser-default custom-select">
+                                                                    <option value="Vaccine">Vaccine</option>
+                                                                    <option value="Deworm">Deworm</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row mb-1">
+                                                            <div class="col col-12">
+                                                                <label for="startDate">Start</label>
+                                                                <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                                            </div>
+                                                            <div class="col col-12">
+                                                                <label for="startEnd">End</label>
+                                                                <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row mb-1">
+                                                            <div class="col col-12">
+                                                                <div class="form-group">
+                                                                    <label for="description">Small textarea</label>
+                                                                    <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <input name="goat" type="hidden" value="@item.Id" />
+                                                        <button class="btn btn-primary btn-sm small" type="submit">Add</button>
+                                                    </form>
+                                                </div>
+                                                <div class="services">
+                                                    ...
+                                                </div>
                                             </div>
                                             @*<div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -350,34 +392,37 @@
 
     @if (totalPages > 1)
     {
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
+        <div class="mt-3 mb-3 pt-3">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
 
-                @for (int i = 1; i <= totalPages; i++)
+                    @for (int i = 1; i <= totalPages; i++)
                 {
                     if ((i == 1) && (currentPage != 1))
                     {
-                        <li class="page-item">
-                            <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
+                    <li class="page-item">
+                        <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
                     }
                     <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
 
                     if ((i == totalPages) && (currentPage != totalPages))
                     {
-                        <li class="page-item">
-                            <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </li>
+                    <li class="page-item">
+                        <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
                     }
                 }
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+        </div>
+        
     }
 }
 
@@ -399,6 +444,48 @@
 
                 return date;
             };
+
+
+            function displayServicesTable(uriApi, goatId, contentTargetElement) {
+                $.ajax({
+                        type: "POST",
+                        url: uriApi,
+                        data: { GoatId: goatId },
+                    }).done(function (result) {
+                        if (result.error == 0) {
+                            if (result.services != null) {
+                                var $table = $('<table  class="table table-bordered table-striped small w-100" />');
+                                row = $('<tr />');
+                                row.append('<th>#</th>');
+                                row.append('<th>Date Start</th>');
+                                row.append('<th>Date End</th>');
+                                row.append('<th>Type</th>');
+                                row.append('<th>Category</th>');
+                                row.append('<th>Description</th>');
+                                row.append('<th>Actions</th>');
+                                $table.append(row);
+                                $(result.services).each(function (index) {
+                                    row = $('<tr />');
+                                    index++;
+                                    row.append('<td>' + index + '</td>');
+                                    row.append('<td>' + $.date(this.start) + '</td>');
+                                    row.append('<td>' + $.date(this.end) + '</td>');
+                                    row.append('<td>' + this.type + '</td>');
+                                    row.append('<td>' + this.category + '</td>');
+                                    row.append('<td>' + this.description + '</td>');
+                                    row.append('<td><span data-id="' + this.serviceId + '" class="edit"><i class="fas fa-plus-circle"><!--empty--></i></span><span class="delete"><i class="fas fa-minus-circle"><!--empty--></i></span></td>');
+                                    $table.append(row);
+                                });
+
+                                contentTargetElement.html($table);
+                            } else {
+                                contentTargetElement.html("Something went wrong.");
+                            }
+                        } else {
+                           contentTargetElement.html(result.response);
+                        }
+                    });
+            }
 
             $(document).ready(function () {
 
@@ -446,40 +533,9 @@
                     var $link = $(e.relatedTarget);
                     var $this = $(this);
 
-                    $.ajax({
-                        type: "POST",
-                        url: $link.data("link"),
-                        data: { GoatId: $link.data("id") },
-                    }).done(function (result) {
-                        console.log(result);
-                        if (result.error == 0) {
-                            if (result.services != null) {
-                                var $table = $('<table  class="table table-bordered table-striped small w-100" />');
-                                row = $('<tr/>');
-                                row.append('<th>#</th>');
-                                row.append('<th>Type</th>');
-                                row.append('<th>Category</th>');
-                                row.append('<th>Description</th>');
-                                $table.append(row);
-                                $(result.services).each(function (index) {
-                                    row = $('<tr/>');
-                                    index++;
-                                    // row.append('<td>' + this.serviceId + '</td>');
-                                    row.append('<td>' + index + '</td>');
-                                    row.append('<td>' + this.type + '</td>');
-                                    row.append('<td>' + this.category + '</td>');
-                                    row.append('<td>' + this.description + '</td>');
-                                    $table.append(row);
-                                });
+                    displayServicesTable($link.data("link"), $link.data("id"), $this.find(".modal-body .services"));
 
-                                $this.find(".modal-body").html($table);
-                            } else {
-                                $this.find(".modal-body").html("Something went wrong.");
-                            }
-                        } else {
-                            $this.find(".modal-body").html(result.response);
-                        }
-                    });
+                    
                 });
 
                 $(".add.service").on("click", function () {
@@ -542,6 +598,14 @@
                     container.parents(".service-wrapper").find(".fields").addClass("d-none");
 
 
+                });
+
+                $("#modalGoatServices").on("click", ".edit", function (event) {
+                    $("#modalGoatServices .edit").removeClass("d-none");
+                    var $t = $(event.target);
+                    $t = $t.is('.edit') ? $t : $t.parents('.edit');
+                    console.log($t.data("id"));
+                    // $("#modalGoatServices .services").addClass("d-none");
                 });
 
 
