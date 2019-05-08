@@ -16,12 +16,12 @@
     {
         var row = "bg-light";
 
-        if (ctr % 2 == 0)
+        /* if (ctr % 2 == 0)
         {
             row = "";
-        }
+        } */
 
-        <div class="goat row p-3 @(row)">
+        <div class="goat row mb-3 pl-3 pr-3 pt-3 pb-5 @(row)">
             <div class="col col-12 col-md-5 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
                 <div class="row mb-1 mb-lg-3 mb-md-2 small">
                     <div class="col col-md-5 col-sm-6 text-align-center">
@@ -39,6 +39,8 @@
                                     }}
                             </div>
                         }
+
+
                         <br />
 
                         @if ((await AuthorizationService.AuthorizeAsync(User, "CanDisposes")).Succeeded)
@@ -61,6 +63,9 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
+                                                <div class="animal-tag-container mt-1">
+                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                </div>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="row">
@@ -213,7 +218,7 @@
 
                             <div class="carousel-item template d-none">
                                 <div class="latest">
-                                    <div class="row">
+                                    <div class="row small">
                                         <div class="col col-6">
                                             <div class="service-type"></div>
                                         </div>
@@ -226,7 +231,7 @@
                                         <div class="col col-6">
                                             <div class="service-end"></div>
                                         </div>
-                                        <div class="col col-12">
+                                        <div class="col col-12 mt-1">
                                             <div class="service-description"></div>
                                         </div>
                                     </div>
@@ -235,7 +240,7 @@
 
                             <div class="row">
                                 <div class="col col-12">
-                                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                                    <div id="carouselGoatServices" class="carousel slide mb-3" data-ride="carousel">
                                         <div class="carousel-inner">
 
                                         </div>
@@ -261,10 +266,14 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
+                                                <div class="animal-tag-container mt-1">
+                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                </div>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="edit d-none">
+                                                <div class="edit form-wrapper d-none">
                                                     <form class="frm-edit-service">
+                                                        <input type="hidden" name="service" value="0" />
                                                         <div class="form-row mb-1">
                                                             <div class="col col-6 col-xs-12">
                                                                 <label for="serviceType">Type</label>
@@ -300,7 +309,7 @@
                                                         </div>
 
                                                         <input name="goat" type="hidden" value="@item.Id" />
-                                                        <button class="btn btn-primary btn-sm small" type="submit">Edit</button>
+                                                        <button class="btn btn-primary btn-sm small" type="submit">Update</button>
                                                     </form>
                                                 </div>
                                                 <div class="services">
@@ -487,7 +496,7 @@
                                     row.append('<td>' + this.type + '</td>');
                                     row.append('<td>' + this.category + '</td>');
                                     row.append('<td>' + this.description + '</td>');
-                                    row.append('<td><div class="row"><div class="col col-6"><span data-id="' + this.serviceId + '" data-start="' + $.date(this.start) + '" data-end="' + $.date(this.end) + '" data-type="' + this.type + '" data-category="' + this.category + '" data-description="' + encodeURIComponent(this.description) + '" class="edit btn btn-primary"><i class="fas fa-plus-circle"><!--empty--></i></span></div><div class="col col-6"><span class="delete btn btn-primary" data-id="' + this.serviceId + '"><i class="fas fa-minus-circle"><!--empty--></i></span></div></div></td>');
+                                    row.append('<td><div class="row"><div class="col col-6"><span data-id="' + this.serviceId + '" data-goat="' + this.goatId + '" data-start="' + $.date(this.start) + '" data-end="' + $.date(this.end) + '" data-type="' + this.type + '" data-category="' + this.category + '" data-description="' + encodeURIComponent(this.description) + '" class="edit btn btn-primary"><i class="fas fa-edit"><!--empty--></i></span></div><div class="col col-6"><span class="delete btn btn-primary" data-id="' + this.serviceId + '"><i class="fas fa-minus-circle"><!--empty--></i></span></div></div></td>');
                                     $table.append(row);
                                 });
 
@@ -586,13 +595,6 @@
                     var $start = container.find("input[name='start']").val();
                     var $end = container.find("input[name='end']").val();
 
-                    @* console.log($type);
-                    console.log($category);
-                    console.log($goat);
-                    console.log($description);
-                    console.log($start);
-                    console.log($end); *@
-
                     $.ajax({
                         type: "POST",
                         url: '/api/service/put',
@@ -619,6 +621,7 @@
                     e.preventDefault();
 
                     var container = $(this);
+                    var $service = container.find("input[name='service']").val();
                     var $type = container.find("select[name='type']").val();
                     var $category = container.find("select[name='category']").val();
                     var $goat = container.find("input[name='goat']").val();
@@ -626,17 +629,10 @@
                     var $start = container.find("input[name='start']").val();
                     var $end = container.find("input[name='end']").val();
 
-                    @* console.log($type);
-                    console.log($category);
-                    console.log($goat);
-                    console.log($description);
-                    console.log($start);
-                    console.log($end); *@
-
                     $.ajax({
                         type: "POST",
-                        url: '/api/service/put',
-                        data: { GoatId: $goat, Type: $type, Category: $category, Description: $description, Start: $start, End: $end },
+                        url: '/api/service/update',
+                        data: { ServiceId: $service, GoatId: $goat, Type: $type, Category: $category, Description: $description, Start: $start, End: $end },
                     }).done(function (result) {
                         container.parents(".service-wrapper").find(".latest").find(".service-type").html(result.service.type);
                         container.parents(".service-wrapper").find(".latest").find(".service-description").html(result.service.description);
@@ -652,27 +648,31 @@
 
                     container.parents(".service-wrapper").find(".fields").addClass("d-none");
 
+                    $('#modalGoatServices').modal('hide');
+
 
                 });
 
-                $("#modalGoatServices").on("click", ".edit", function (event) {
-                    $("#modalGoatServices .edit").removeClass("d-none");
+                $("#modalGoatServices").on("click", ".edit.btn", function (event) {
+                    $("#modalGoatServices .edit.form-wrapper").removeClass("d-none");
 
                     var $t = $(event.target);
-                    $t = $t.is('.edit') ? $t : $t.parents('.edit');
-                    $("#modalGoatServices .edit select[name='type']").val($t.data("type"));
-                    $("#modalGoatServices .edit select[name='category']").val($t.data("category"));
-                    $("#modalGoatServices .edit input[name='goat']").val($t.data("id"));
-                    $("#modalGoatServices .edit textarea[name='description']").val(decodeURIComponent($t.data("description")));
-                    $("#modalGoatServices .edit input[name='start']").val($t.data("start"));
-                    $("#modalGoatServices .edit input[name='end").val($t.data("end"));
+                    $t = $t.is('.edit.btn') ? $t : $t.parents('.edit.btn');
+                    
+                    $("#modalGoatServices .edit.form-wrapper input[name='service']").val($t.data("id"));
+                    $("#modalGoatServices .edit.form-wrapper select[name='type']").val($t.data("type"));
+                    $("#modalGoatServices .edit.form-wrapper select[name='category']").val($t.data("category"));
+                    $("#modalGoatServices .edit.form-wrapper input[name='goat']").val($t.data("goat"));
+                    $("#modalGoatServices .edit.form-wrapper textarea[name='description']").val(decodeURIComponent($t.data("description")));
+                    $("#modalGoatServices .edit.form-wrapper input[name='start']").val($t.data("start"));
+                    $("#modalGoatServices .edit.form-wrapper input[name='end").val($t.data("end"));
 
                     $("#modalGoatServices .services").addClass("d-none");
                 });
 
-                $("#modalGoatServices").on("click", ".delete", function (event) {
+                $("#modalGoatServices").on("click", ".delete.btn", function (event) {
                     var $t = $(event.target);
-                    $t = $t.is('.delete') ? $t : $t.parents('.delete');
+                    $t = $t.is('.delete.btn') ? $t : $t.parents('.delete.btn');
 
                     if (confirm("Are you sure you want to delete this?")) {
 
@@ -691,8 +691,6 @@
 
                         }
                     });
-
-
                         $('#modalGoatServices').modal('hide');
                     }
                     else{

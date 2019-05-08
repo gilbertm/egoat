@@ -59,6 +59,45 @@ namespace eGoatDDD.Web.Controllers
         }
 
         /// <summary>
+        /// Update
+        /// </summary>
+        /// <param name="ServiceId"></param>
+        /// <param name="GoatId"></param>
+        /// <param name="Type"></param>
+        /// <param name="Category"></param>
+        /// <param name="Description"></param>
+        /// <param name="Start"></param>
+        /// <param name="End"></param>
+        /// <returns></returns>
+        [Route("api/service/update")]
+        [HttpPost]
+        public async Task<JsonResult> Update(long ServiceId, long GoatId, string Type, string Category, string Description, DateTime Start, DateTime End)
+        {
+            UpdateServiceCommand updateServiceCommand = new UpdateServiceCommand
+            {
+                ServiceId = ServiceId,
+                GoatId = GoatId,
+                Category = Category,
+                Description = Description,
+                Start = Start,
+                End = End,
+                Type = Type
+            };
+
+            ServiceViewModel service = await _mediator.Send(updateServiceCommand);
+
+            if (service != null)
+            {
+                if (service.Service != null)
+                {
+                    return Json(new { error = 0, service = service.Service });
+                }
+            }
+
+            return Json(new { error = 1, response = "No service." });
+        }
+
+        /// <summary>
         /// Get
         /// </summary>
         /// <param name="GoatId"></param>

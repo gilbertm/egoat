@@ -3,6 +3,16 @@
     margin-bottom: 60px;
 }
 
+main > .goat {
+    box-shadow: 1px 2px 5px #888;
+}
+
+.content-wrapper {
+    background: $gray_1;
+    display:inline-block;
+    width:100%;
+}
+
 .footer {
     bottom: 0;
     width: 100%;

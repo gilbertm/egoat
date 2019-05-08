@@ -32,7 +32,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container">
                 <a class="navbar-brand width-25" asp-area="" asp-controller="Goat" asp-action="Index"><img width="150" src="~/logo.svg" alt=""></a>
 
@@ -69,14 +69,15 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="content-wrapper pb-3 pt-3">
+        <div class="container">
+            <partial name="_CookieConsentPartial" />
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
     </div>
-
-
+    
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2019 - eGoatDDD.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
