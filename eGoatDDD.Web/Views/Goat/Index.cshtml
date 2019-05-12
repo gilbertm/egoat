@@ -7,445 +7,494 @@
     ViewData["Title"] = "View";
 }
 
+
+
 @if (Model != null)
 {
-    var totalPages = (int)ViewData["TotalPages"];
-    var currentPage = (int)ViewData["CurrentPage"];
 
-    @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
+
+    @if (!(await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
     {
-        var row = "bg-light";
-
-        /* if (ctr % 2 == 0)
-        {
-            row = "";
-        } */
-
-        <div class="goat row mb-3 pl-3 pr-3 pt-3 pb-5 @(row)">
-            <div class="col col-12 col-md-5 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
-                <div class="row mb-1 mb-lg-3 mb-md-2 small">
-                    <div class="col col-md-5 col-sm-6 text-align-center">
-
+    <div class="anon">
+        <div class="row">
+            @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
+            {
+                <div class="col col-4 col-md-3 col-sm-4 mb-3">
+                    <div class="goat card bg-dark text-white">
                         @if (item.Resources != null)
-                        {
-                            <div class="row">
-                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
-                                {
-                                    @if (index == 0)
-                                    {
-                                        <div class="col-md-12">
-                                            <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
-                                        </div>
-                                    }}
-                            </div>
-                        }
-
-
-                        <br />
-
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "CanDisposes")).Succeeded)
-                        {
-
-
-                            <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
-                                <input type="hidden" class="DisposalGoatId" value="@(item.Id)" />
-                                <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
-
-
-                                <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                <div class="animal-tag-container mt-1">
-                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <div class="col col-6">
-                                                        <label class="small d-block">Dispose Type</label>
-                                                        <select required class="DisposalType" name="DisposalType">
-                                                            <option value="0">Disposal Type</option>
-                                                            <option value="1">Slaughter</option>
-                                                            <option value="2">Sold Whole - Local</option>
-                                                            <option value="3">Sold Whole - Online</option>
-                                                            <option value="99">Other</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col col-6">
-                                                        <div class="form-group">
-                                                            <label class="small d-block">Dispose Date</label>
-                                                            <div class='input-group'>
-                                                                <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
-                                                                <span class="input-group-addon">
-                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row d-none reason">
-                                                    <div class="col col-12">
-                                                        <label class="small d-block">Reason</label>
-                                                        <textarea required class="DisposalReason" name="Reason"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary dispose delete submit">Dispose</button>
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        }
-
-
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
-                        {
-                            <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
-                                <div class="animal-tag-container">
-                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code <i class="fas fa-edit"><!-- empty --></i></div>
-                                </div>
-                            </a>
-                        }
-                        else
-                        {
-                            <div class="animal-tag-container">
-                                <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
-                            </div>
-                        }
-
-
-                    </div>
-                    <div class="col col-md-7 col-sm-6">
-                        <div class="row mb-1">
-                            <div class="col col-12">
-                                @{
-                                    var birthdate = item.BirthDate.HasValue ? item.BirthDate.Value : DateTime.Now;
-
-                                    DateTime date1 = birthdate;
-                                    DateTime date2 = DateTime.Now;
-
-                                    int oldMonth = date2.Month;
-                                    while (oldMonth == date2.Month)
-                                    {
-                                        date1 = date1.AddDays(-1);
-                                        date2 = date2.AddDays(-1);
-                                    }
-
-                                    int years = 0, months = 0, days = 0;
-                                    // , hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
-
-                                    // getting number of years
-                                    while (date2.CompareTo(date1) >= 0)
-                                    {
-                                        years++;
-                                        date2 = date2.AddYears(-1);
-                                    }
-                                    date2 = date2.AddYears(1);
-                                    years--;
-
-
-                                    // getting number of months and days
-                                    oldMonth = date2.Month;
-                                    while (date2.CompareTo(date1) >= 0)
-                                    {
-                                        days++;
-                                        date2 = date2.AddDays(-1);
-                                        if ((date2.CompareTo(date1) >= 0) && (oldMonth != date2.Month))
-                                        {
-                                            months++;
-                                            days = 0;
-                                            oldMonth = date2.Month;
-                                        }
-                                    }
-                                    date2 = date2.AddDays(1);
-
-                                    <span><strong>@years</strong> Year  <strong>@months</strong> Month  <strong>@days</strong> Days</span>
-                                }
-
-                            </div>
-
-                            <div class="col col-12">
-                                Birthdate: @item.BirthDate?.ToString("dd MMM yyyy")
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col col-12">
-                                Gender: @(item.Gender == 'M' ? "Male" : "Female")
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col col-12">
-                                <strong>Breeds</strong>
-                            </div>
-                        </div>
-                        @if (item.Breeds != null)
-                        {
-                            foreach (var breed in item.Breeds)
-                            {
-                                <div class="row">
-
-                                    <div class="col col-2 col-xs-12">
-                                        @breed.Percentage<em>%</em>
-                                    </div>
-                                    <div class="col col-8 col-xs-12">
-                                        @breed.Name
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-
-            </div>
-            <div class="col col-12 col-md-7 col-sm-6 small">
-                <div class="row">
-                    <div class="col col-12 col-md-4 col-sm-4">
-                        <div class="service-wrapper">
-
-                            <div class="carousel-item template d-none">
-                                <div class="latest">
-                                    <div class="row small">
-                                        <div class="col col-6">
-                                            <div class="service-type"></div>
-                                        </div>
-                                        <div class="col col-6">
-                                            <div class="service-category"></div>
-                                        </div>
-                                        <div class="col col-6">
-                                            <div class="service-start"></div>
-                                        </div>
-                                        <div class="col col-6">
-                                            <div class="service-end"></div>
-                                        </div>
-                                        <div class="col col-12 mt-1">
-                                            <div class="service-description"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col col-12">
-                                    <div id="carouselGoatServices" class="carousel slide mb-3" data-ride="carousel">
-                                        <div class="carousel-inner">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
-                            {
-                                <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
-                                <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
-                                <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
-
-                                @*<button class="add service">Add service</button>
-            <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
-                                *@
-                                <!-- Modal -->
-                                <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalGoatServicesLongTitle">Services</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                                <div class="animal-tag-container mt-1">
-                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="edit form-wrapper d-none">
-                                                    <form class="frm-edit-service">
-                                                        <input type="hidden" name="service" value="0" />
-                                                        <div class="form-row mb-1">
-                                                            <div class="col col-6 col-xs-12">
-                                                                <label for="serviceType">Type</label>
-                                                                <select id="serviceType" name="type" required class="browser-default custom-select">
-                                                                    <option value="Medical">Medical</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col col-6 col-xs-12">
-                                                                <label for="serviceCategory">Category</label>
-                                                                <select id="serviceCategory" name="category" required class="browser-default custom-select">
-                                                                    <option value="Vaccine">Vaccine</option>
-                                                                    <option value="Deworm">Deworm</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                            <div class="col col-12">
-                                                                <label for="startDate">Start</label>
-                                                                <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                            </div>
-                                                            <div class="col col-12">
-                                                                <label for="startEnd">End</label>
-                                                                <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row mb-1">
-                                                            <div class="col col-12">
-                                                                <div class="form-group">
-                                                                    <label for="description">Description</label>
-                                                                    <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <input name="goat" type="hidden" value="@item.Id" />
-                                                        <button class="btn btn-primary btn-sm small" type="submit">Update</button>
-                                                    </form>
-                                                </div>
-                                                <div class="services">
-                                                    ...
-                                                </div>
-                                            </div>
-                                            @*<div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div> *@
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            <div class="fields d-none service">
-
-                                <form class="frm-add-service">
-                                    <div class="form-row mb-1">
-                                        <div class="col col-6 col-xs-12">
-                                            <label for="serviceType">Type</label>
-                                            <select id="serviceType" name="type" required class="browser-default custom-select">
-                                                <option value="Medical">Medical</option>
-                                            </select>
-                                        </div>
-                                        <div class="col col-6 col-xs-12">
-                                            <label for="serviceCategory">Category</label>
-                                            <select id="serviceCategory" name="category" required class="browser-default custom-select">
-                                                <option value="Vaccine">Vaccine</option>
-                                                <option value="Deworm">Deworm</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <div class="col col-12">
-                                            <label for="startDate">Start</label>
-                                            <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                        </div>
-                                        <div class="col col-12">
-                                            <label for="startEnd">End</label>
-                                            <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <div class="col col-12">
-                                            <div class="form-group">
-                                                <label for="description">Description</label>
-                                                <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <input name="goat" type="hidden" value="@item.Id" />
-                                    <button class="btn btn-primary btn-sm small" type="submit">Add</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col col-12 col-md-3 col-sm-3">
-                        @if (item.Parents.Goats != null)
-                        {
-                            <strong>Parents</strong>
-
-                            foreach (var parent in item.Parents.Goats)
-                            {
-                                <div class="row">
-                                    @if (parent.Resource != null)
-                                    {
-                                        <div class="col col-6 col-xs-6">
-                                            <img height="50" src="~/@(parent.Resource.Location)/@(parent.Resource.Filename)" />
-                                        </div>
-                                    }
-                                    <div class="col col-6 col-xs-6">
-                                        <span class="small flex-nowrap">@parent.ColorName @parent.Code</span>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-                @if (item.Resources != null)
-                {
-
-                    <div class="row pt-3">
-                        @if (item.Resources.Count() > 1)
                         {
                             @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
                             {
-                                if (index == 0)
+                                @if (index == 0)
                                 {
-                                    continue;
+                                    <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="card-img w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
                                 }
-
-                                <div class="col col-4">
-                                    <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
-                                </div>
                             }
                         }
 
-                    </div>
-                }
+                    <div class="card-img-overlay">
+                        @* <h5 class="card-title">Card title</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <p class="card-text">Last updated 3 mins ago</p> *@
+                        <div class="animal-tag-container mt-1">
+                            <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                        </div>
+
+
+                        @* <div class="row h-100 align-items-center">
+            <div class="col-sm-12">
+                <div class="card card-block w-25 mx-auto">Card</div>
             </div>
+        </div> *@
+                    </div>
+                    </div>
+                </div>
+
+            }
         </div>
+    </div>
+       
     }
-
-    @if (totalPages > 1)
+    else
     {
-        <div class="mt-3 mb-3 pt-3">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
+        var totalPages = (int)ViewData["TotalPages"];
+        var currentPage = (int)ViewData["CurrentPage"];
 
-                    @for (int i = 1; i <= totalPages; i++)
+        @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
+        {
+            var row = "bg-light";
+
+            /* if (ctr % 2 == 0)
+            {
+                row = "";
+            } */
+
+            <div class="goat row mb-3 pl-3 pr-3 pt-3 pb-5 @(row)">
+                <div class="col col-12 col-md-5 col-sm-6 mb-3 mb-lg-0 mb-mb-1 mb-sm-1 text-align-center">
+                    <div class="row mb-1 mb-lg-3 mb-md-2 small">
+                        <div class="col col-md-5 col-sm-6 text-align-center">
+
+                            @if (item.Resources != null)
+                            {
+                                <div class="row">
+                                    @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                    {
+                                        @if (index == 0)
+                                        {
+                                            <div class="col-md-12">
+                                                <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                            </div>
+                                        }}
+                                </div>
+                            }
+
+
+                            <br />
+
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CanDisposes")).Succeeded)
+                            {
+
+
+                                <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
+                                    <input type="hidden" class="DisposalGoatId" value="@(item.Id)" />
+                                    <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
+
+
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <div class="animal-tag-container mt-1">
+                                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col col-6">
+                                                            <label class="small d-block">Dispose Type</label>
+                                                            <select required class="DisposalType" name="DisposalType">
+                                                                <option value="0">Disposal Type</option>
+                                                                <option value="1">Slaughter</option>
+                                                                <option value="2">Sold Whole - Local</option>
+                                                                <option value="3">Sold Whole - Online</option>
+                                                                <option value="99">Other</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col col-6">
+                                                            <div class="form-group">
+                                                                <label class="small d-block">Dispose Date</label>
+                                                                <div class='input-group'>
+                                                                    <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row d-none reason">
+                                                        <div class="col col-12">
+                                                            <label class="small d-block">Reason</label>
+                                                            <textarea required class="DisposalReason" name="Reason"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary dispose delete submit">Dispose</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+
+
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
+                            {
+                                <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+                                    <div class="animal-tag-container">
+                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code <i class="fas fa-edit"><!-- empty --></i></div>
+                                    </div>
+                                </a>
+                            }
+                            else
+                            {
+                                <div class="animal-tag-container">
+                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                </div>
+                            }
+
+
+                        </div>
+                        <div class="col col-md-7 col-sm-6">
+                            <div class="row mb-1">
+                                <div class="col col-12">
+                                    @{
+                                        var birthdate = item.BirthDate.HasValue ? item.BirthDate.Value : DateTime.Now;
+
+                                        DateTime date1 = birthdate;
+                                        DateTime date2 = DateTime.Now;
+
+                                        int oldMonth = date2.Month;
+                                        while (oldMonth == date2.Month)
+                                        {
+                                            date1 = date1.AddDays(-1);
+                                            date2 = date2.AddDays(-1);
+                                        }
+
+                                        int years = 0, months = 0, days = 0;
+                                        // , hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+
+                                        // getting number of years
+                                        while (date2.CompareTo(date1) >= 0)
+                                        {
+                                            years++;
+                                            date2 = date2.AddYears(-1);
+                                        }
+                                        date2 = date2.AddYears(1);
+                                        years--;
+
+
+                                        // getting number of months and days
+                                        oldMonth = date2.Month;
+                                        while (date2.CompareTo(date1) >= 0)
+                                        {
+                                            days++;
+                                            date2 = date2.AddDays(-1);
+                                            if ((date2.CompareTo(date1) >= 0) && (oldMonth != date2.Month))
+                                            {
+                                                months++;
+                                                days = 0;
+                                                oldMonth = date2.Month;
+                                            }
+                                        }
+                                        date2 = date2.AddDays(1);
+
+                                        <span><strong>@years</strong> Year  <strong>@months</strong> Month  <strong>@days</strong> Days</span>
+                                    }
+
+                                </div>
+
+                                <div class="col col-12">
+                                    Birthdate: @item.BirthDate?.ToString("dd MMM yyyy")
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col col-12">
+                                    Gender: @(item.Gender == 'M' ? "Male" : "Female")
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col col-12">
+                                    <strong>Breeds</strong>
+                                </div>
+                            </div>
+                            @if (item.Breeds != null)
+                            {
+                                foreach (var breed in item.Breeds)
+                                {
+                                    <div class="row">
+
+                                        <div class="col col-2 col-xs-12">
+                                            @breed.Percentage<em>%</em>
+                                        </div>
+                                        <div class="col col-8 col-xs-12">
+                                            @breed.Name
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col col-12 col-md-7 col-sm-6 small">
+                    <div class="row">
+                        <div class="col col-12 col-md-4 col-sm-4">
+                            <div class="service-wrapper">
+
+                                <div class="carousel-item template d-none">
+                                    <div class="latest">
+                                        <div class="row small">
+                                            <div class="col col-6">
+                                                <div class="service-type"></div>
+                                            </div>
+                                            <div class="col col-6">
+                                                <div class="service-category"></div>
+                                            </div>
+                                            <div class="col col-6">
+                                                <div class="service-start"></div>
+                                            </div>
+                                            <div class="col col-6">
+                                                <div class="service-end"></div>
+                                            </div>
+                                            <div class="col col-12 mt-1">
+                                                <div class="service-description"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col col-12">
+                                        <div id="carouselGoatServices" class="carousel slide mb-3" data-ride="carousel">
+                                            <div class="carousel-inner">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
+                                {
+                                    <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
+                                    <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
+
+                                    @*<button class="add service">Add service</button>
+                                        <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
+                                    *@
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalGoatServicesLongTitle">Services</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                    <div class="animal-tag-container mt-1">
+                                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="edit form-wrapper d-none">
+                                                        <form class="frm-edit-service">
+                                                            <input type="hidden" name="service" value="0" />
+                                                            <div class="form-row mb-1">
+                                                                <div class="col col-6 col-xs-12">
+                                                                    <label for="serviceType">Type</label>
+                                                                    <select id="serviceType" name="type" required class="browser-default custom-select">
+                                                                        <option value="Medical">Medical</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col col-6 col-xs-12">
+                                                                    <label for="serviceCategory">Category</label>
+                                                                    <select id="serviceCategory" name="category" required class="browser-default custom-select">
+                                                                        <option value="Vaccine">Vaccine</option>
+                                                                        <option value="Deworm">Deworm</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row mb-1">
+                                                                <div class="col col-12">
+                                                                    <label for="startDate">Start</label>
+                                                                    <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                                                </div>
+                                                                <div class="col col-12">
+                                                                    <label for="startEnd">End</label>
+                                                                    <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row mb-1">
+                                                                <div class="col col-12">
+                                                                    <div class="form-group">
+                                                                        <label for="description">Description</label>
+                                                                        <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <input name="goat" type="hidden" value="@item.Id" />
+                                                            <button class="btn btn-primary btn-sm small" type="submit">Update</button>
+                                                        </form>
+                                                    </div>
+                                                    <div class="services">
+                                                        ...
+                                                    </div>
+                                                </div>
+                                                @*<div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div> *@
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="fields d-none service">
+
+                                    <form class="frm-add-service">
+                                        <div class="form-row mb-1">
+                                            <div class="col col-6 col-xs-12">
+                                                <label for="serviceType">Type</label>
+                                                <select id="serviceType" name="type" required class="browser-default custom-select">
+                                                    <option value="Medical">Medical</option>
+                                                </select>
+                                            </div>
+                                            <div class="col col-6 col-xs-12">
+                                                <label for="serviceCategory">Category</label>
+                                                <select id="serviceCategory" name="category" required class="browser-default custom-select">
+                                                    <option value="Vaccine">Vaccine</option>
+                                                    <option value="Deworm">Deworm</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-1">
+                                            <div class="col col-12">
+                                                <label for="startDate">Start</label>
+                                                <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                            </div>
+                                            <div class="col col-12">
+                                                <label for="startEnd">End</label>
+                                                <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
+                                            </div>
+                                        </div>
+                                        <div class="form-row mb-1">
+                                            <div class="col col-12">
+                                                <div class="form-group">
+                                                    <label for="description">Description</label>
+                                                    <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input name="goat" type="hidden" value="@item.Id" />
+                                        <button class="btn btn-primary btn-sm small" type="submit">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-md-3 col-sm-3">
+                            @if (item.Parents.Goats != null)
+                            {
+                                <strong>Parents</strong>
+
+                                foreach (var parent in item.Parents.Goats)
+                                {
+                                    <div class="row">
+                                        @if (parent.Resource != null)
+                                        {
+                                            <div class="col col-6 col-xs-6">
+                                                <img height="50" src="~/@(parent.Resource.Location)/@(parent.Resource.Filename)" />
+                                            </div>
+                                        }
+                                        <div class="col col-6 col-xs-6">
+                                            <span class="small flex-nowrap">@parent.ColorName @parent.Code</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    @if (item.Resources != null)
                     {
-                        if ((i == 1) && (currentPage != 1))
-                        {
-                            <li class="page-item">
-                                <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                        }
-                        <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
 
-                        if ((i == totalPages) && (currentPage != totalPages))
-                        {
-                            <li class="page-item">
-                                <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        }
+                        <div class="row pt-3">
+                            @if (item.Resources.Count() > 1)
+                            {
+                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                {
+                                    if (index == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    <div class="col col-4">
+                                        <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
                     }
-                </ul>
-            </nav>
-        </div>
+                </div>
+            </div>
+        }
 
+        @if (totalPages > 1)
+        {
+            <div class="mt-3 mb-3 pt-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            if ((i == 1) && (currentPage != 1))
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="/Goat/Index/1" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                            }
+                            <li class="page-item"><a class="page-link" href="/Goat/Index/@i">@i</a></li>
+
+                            if ((i == totalPages) && (currentPage != totalPages))
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
     }
 }
 
@@ -471,43 +520,43 @@
 
             function displayServicesTable(uriApi, goatId, contentTargetElement) {
                 $.ajax({
-                        type: "POST",
-                        url: uriApi,
-                        data: { GoatId: goatId, count: 0 },
-                    }).done(function (result) {
-                        if (result.error == 0) {
-                            if (result.services != null) {
-                                var $table = $('<table  class="table table-bordered table-striped small w-100" />');
+                    type: "POST",
+                    url: uriApi,
+                    data: { GoatId: goatId, count: 0 },
+                }).done(function (result) {
+                    if (result.error == 0) {
+                        if (result.services != null) {
+                            var $table = $('<table  class="table table-bordered table-striped small w-100" />');
+                            row = $('<tr />');
+                            row.append('<th>#</th>');
+                            row.append('<th>Date Start</th>');
+                            row.append('<th>Date End</th>');
+                            row.append('<th>Type</th>');
+                            row.append('<th>Category</th>');
+                            row.append('<th>Description</th>');
+                            row.append('<th>Actions</th>');
+                            $table.append(row);
+                            $(result.services).each(function (index) {
                                 row = $('<tr />');
-                                row.append('<th>#</th>');
-                                row.append('<th>Date Start</th>');
-                                row.append('<th>Date End</th>');
-                                row.append('<th>Type</th>');
-                                row.append('<th>Category</th>');
-                                row.append('<th>Description</th>');
-                                row.append('<th>Actions</th>');
+                                index++;
+                                row.append('<td>' + index + '</td>');
+                                row.append('<td>' + $.date(this.start) + '</td>');
+                                row.append('<td>' + $.date(this.end) + '</td>');
+                                row.append('<td>' + this.type + '</td>');
+                                row.append('<td>' + this.category + '</td>');
+                                row.append('<td>' + this.description + '</td>');
+                                row.append('<td><div class="row"><div class="col col-6"><span data-id="' + this.serviceId + '" data-goat="' + this.goatId + '" data-start="' + $.date(this.start) + '" data-end="' + $.date(this.end) + '" data-type="' + this.type + '" data-category="' + this.category + '" data-description="' + encodeURIComponent(this.description) + '" class="edit btn btn-primary"><i class="fas fa-edit"><!--empty--></i></span></div><div class="col col-6"><span class="delete btn btn-primary" data-id="' + this.serviceId + '"><i class="fas fa-minus-circle"><!--empty--></i></span></div></div></td>');
                                 $table.append(row);
-                                $(result.services).each(function (index) {
-                                    row = $('<tr />');
-                                    index++;
-                                    row.append('<td>' + index + '</td>');
-                                    row.append('<td>' + $.date(this.start) + '</td>');
-                                    row.append('<td>' + $.date(this.end) + '</td>');
-                                    row.append('<td>' + this.type + '</td>');
-                                    row.append('<td>' + this.category + '</td>');
-                                    row.append('<td>' + this.description + '</td>');
-                                    row.append('<td><div class="row"><div class="col col-6"><span data-id="' + this.serviceId + '" data-goat="' + this.goatId + '" data-start="' + $.date(this.start) + '" data-end="' + $.date(this.end) + '" data-type="' + this.type + '" data-category="' + this.category + '" data-description="' + encodeURIComponent(this.description) + '" class="edit btn btn-primary"><i class="fas fa-edit"><!--empty--></i></span></div><div class="col col-6"><span class="delete btn btn-primary" data-id="' + this.serviceId + '"><i class="fas fa-minus-circle"><!--empty--></i></span></div></div></td>');
-                                    $table.append(row);
-                                });
+                            });
 
-                                contentTargetElement.html($table);
-                            } else {
-                                contentTargetElement.html("Something went wrong.");
-                            }
+                            contentTargetElement.html($table);
                         } else {
-                           contentTargetElement.html(result.response);
+                            contentTargetElement.html("Something went wrong.");
                         }
-                    });
+                    } else {
+                        contentTargetElement.html(result.response);
+                    }
+                });
             }
 
             $(document).ready(function () {
@@ -658,7 +707,7 @@
 
                     var $t = $(event.target);
                     $t = $t.is('.edit.btn') ? $t : $t.parents('.edit.btn');
-                    
+
                     $("#modalGoatServices .edit.form-wrapper input[name='service']").val($t.data("id"));
                     $("#modalGoatServices .edit.form-wrapper select[name='type']").val($t.data("type"));
                     $("#modalGoatServices .edit.form-wrapper select[name='category']").val($t.data("category"));
@@ -677,23 +726,23 @@
                     if (confirm("Are you sure you want to delete this?")) {
 
                         $.ajax({
-                        type: "POST",
-                        url: '/api/service/delete',
-                        data: { ServiceId: $t.data("id") },
-                    }).done(function (result) {
+                            type: "POST",
+                            url: '/api/service/delete',
+                            data: { ServiceId: $t.data("id") },
+                        }).done(function (result) {
 
-                        if (!result.error) {
+                            if (!result.error) {
 
-                            if (result.service != true) {
+                                if (result.service != true) {
+
+                                }
+                            } else {
 
                             }
-                        } else {
-
-                        }
-                    });
+                        });
                         $('#modalGoatServices').modal('hide');
                     }
-                    else{
+                    else {
                         return false;
                     }
                 });

@@ -22,8 +22,16 @@ namespace eGoatDDD.Web.Controllers
         {
             int pageSize = 15;
             int pageNumber = page ?? 1;
-            
-            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery(pageNumber, pageSize));
+
+
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                pageSize = 0;
+                pageNumber = 0;
+            }
+
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery(pageNumber, pageSize));
 
             var doubleTotal = (double)(goatsLisNonDtotViewModel.TotalPages);
             var doublePageSize = (double)(pageSize);
@@ -44,7 +52,7 @@ namespace eGoatDDD.Web.Controllers
             GoatsListViewModel goatListForPotentialParentMaternal = await _mediator.Send(new GetAllGoatsPotentialParentQuery(false));
 
             GoatsListViewModel goatListForPotentialParentSire = await _mediator.Send(new GetAllGoatsPotentialParentQuery(true));
- 
+
             ViewData["Colors"] = colorsListViewModel.Colors;
 
             ViewData["Breeds"] = breedsListViewModel.Breeds;
@@ -68,7 +76,7 @@ namespace eGoatDDD.Web.Controllers
             {
                 response = await _mediator.Send(command);
             }
-            
+
             return RedirectToAction("Index");
         }
 

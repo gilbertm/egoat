@@ -16,10 +16,12 @@ a {
 }
 
 .animal-tag-container {
-    position: absolute;
+    position:absolute;
+    bottom: 0;
+    margin-right: auto;
+    margin-left: auto;
     left: 50%;
-    margin-left: -50px;
-    z-index:1;
+    transform: translate(-50%, 0);
 }
 
 .animal-tag {

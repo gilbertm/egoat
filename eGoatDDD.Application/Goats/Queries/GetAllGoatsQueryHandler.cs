@@ -113,7 +113,13 @@ namespace eGoatDDD.Application.Goats.Queries
                 });
             }
 
-            IPagedList<GoatNonDtoViewModel> goatFullInfos = goatFullInfo.ToPagedList(request.PageNumber, request.PageSize);
+            IPagedList<GoatNonDtoViewModel> goatFullInfos = null;
+
+            if (request.PageNumber == 0 && request.PageSize == 0)
+                goatFullInfos = goatFullInfo.ToPagedList();
+
+            else
+                goatFullInfos = goatFullInfo.ToPagedList(request.PageNumber, request.PageSize);
 
             return new GoatsListNonDtoViewModel
             {
