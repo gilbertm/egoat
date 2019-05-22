@@ -3,3 +3,9 @@
     text-align: center;
     word-break: break-all;
 }
+
+.nav {
+    &.nav-stacked {
+        flex-direction:column;
+    }
+}

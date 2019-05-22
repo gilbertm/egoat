@@ -37,6 +37,8 @@ namespace eGoatDDD.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // services.AddTransient<IEmailSender, EmailSender>();
+
             // Add framework services.
             // Add MediatR
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));

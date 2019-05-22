@@ -7,53 +7,53 @@
     ViewData["Title"] = "View";
 }
 
-
-
 @if (Model != null)
 {
 
 
     @if (!(await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
     {
-    <div class="anon">
-        <div class="row">
-            @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
-            {
-                <div class="col col-4 col-md-3 col-sm-4 mb-3">
-                    <div class="goat card bg-dark text-white">
-                        @if (item.Resources != null)
-                        {
-                            @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+        <div class="anon goat">
+            <div class="row">
+                @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
+                {
+                    <div class="col col-4 col-md-3 col-sm-4 mb-3">
+                        <div class="card bg-dark text-white">
+                            @if (item.Resources != null)
                             {
-                                @if (index == 0)
+                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
                                 {
-                                    <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="card-img w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                    @if (index == 0)
+                                    {
+                                        <a class="lg-item" href="/@(resource.Location)/@(resource.Filename)" data-sub-html="@item.Color.Name.ToLower().ToUpper().ToString() @item.Id" data-rel="@item.Id">
+                                            <img class="card-img w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                            <div class="card-img-overlay">
+                                                <div class="animal-tag-container mt-1">
+                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
                                 }
                             }
-                        }
-
-                    <div class="card-img-overlay">
-                        @* <h5 class="card-title">Card title</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        <p class="card-text">Last updated 3 mins ago</p> *@
-                        <div class="animal-tag-container mt-1">
-                            <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                            else
+                            {
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Code</h5>
+                                    <div class="card-text">
+                                        <div class="animal-tag-container mt-1">
+                                            <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
+                    </div>
 
-
-                        @* <div class="row h-100 align-items-center">
-            <div class="col-sm-12">
-                <div class="card card-block w-25 mx-auto">Card</div>
+                }
             </div>
-        </div> *@
-                    </div>
-                    </div>
-                </div>
-
-            }
         </div>
-    </div>
-       
+
     }
     else
     {
@@ -82,7 +82,7 @@
                                         @if (index == 0)
                                         {
                                             <div class="col-md-12">
-                                                <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                                <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)" data-sub-html="@item.Color.Name.ToLower().ToUpper().ToString() @item.Id"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
                                             </div>
                                         }}
                                 </div>
@@ -561,8 +561,13 @@
 
             $(document).ready(function () {
 
-                $('.goat').lightGallery({
+                $goat = $('.goat').lightGallery({
                     selector: '.lg-item'
+                });
+
+                var colours = ['#21171A', '#81575E', '#9C5043', '#8F655D'];
+                $goat.on('onBeforeSlide.lg', function (event, prevIndex, index) {
+                    $('.lg-outer').css('background-color', colours[index])
                 });
 
                 $('[data-toggle="tooltip"]').tooltip()

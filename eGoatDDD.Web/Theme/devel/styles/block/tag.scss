@@ -16,136 +16,134 @@ a {
 }
 
 .animal-tag-container {
-    position:absolute;
+    position: absolute;
     bottom: 0;
     margin-right: auto;
     margin-left: auto;
     left: 50%;
     transform: translate(-50%, 0);
-}
 
-.animal-tag {
-    display: inline-block;
-    @include box-sizing(content-box);
-    height: 22px;
-    min-width: 25px;
-    position: relative;
-    content: "";
-    margin: 0 13px 0 0;
-    padding: 5px 15px;
-    border: none;
-    @include border-radius(3px 1px 1px 3px);
-    font: normal 14px/24px "Antic", Helvetica, sans-serif;
-    font-weight: 400;
-    color: rgba(255,255,255,1);
-    text-align: center;
-    text-transform: uppercase;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
 
-    &::before {
+    .animal-tag {
         display: inline-block;
         @include box-sizing(content-box);
-        z-index: -2;
-        width: 15px;
-        height: 15px;
-        position: absolute;
-        content: "";
-        top: -15px;
-        right: 10px;
-        @include border-radius(15px);
-        font: normal medium/normal Arial, Helvetica, sans-serif;
-        color: rgba(255,255,255,0.9);
-        -o-text-overflow: clip;
-        text-overflow: clip;
-        @include text-shadow(none);
-        @include transform(rotateY(1deg) rotateZ(-45deg) );
-    }
-
-    &::after {
-        display: inline-block;
-        @include box-sizing(content-box);
-        z-index: 2;
-        width: 10px;
-        height: 10px;
-        position: absolute;
-        content: "";
-        top: -11px;
-        right: 23px;
+        min-width: 25px;
+        position: relative;
+        padding: 10px 15px;
         border: none;
-        @include border-radius(10px);
-        font: normal medium/normal Arial, Helvetica, sans-serif;
-        color: rgba(255,255,255,0.9);
-        -o-text-overflow: clip;
-        text-overflow: clip;
-        @include text-shadow(none);
-    }
-
-    &-green {
-        @include background(#1abc9c);
-        @include box-shadow(0 3px 0 0 #16a085, 3px 3px 0 0 #16a085 );
+        @include border-radius(3px 1px 1px 3px);
+        font: 600 14px/14px "Antic", Helvetica, sans-serif;
+        color: rgba(255,255,255,1);
+        text-align: center;
+        text-transform: uppercase;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
 
         &::before {
-            border: 9px solid #1abc9c;
+            display: inline-block;
+            @include box-sizing(content-box);
+            z-index: -2;
+            position: absolute;
+            content: "";
+            width: 12px;
+            height: 12px;
+            top: -22px;
+            right: 12px;
+            @include border-radius(15px);
+            font: normal medium/normal Arial, Helvetica, sans-serif;
+            color: rgba(255,255,255,0.9);
+            -o-text-overflow: clip;
+            text-overflow: clip;
+            @include text-shadow(none);
+            @include transform(rotateY(1deg) rotateZ(-45deg) );
+        }
+
+        &::after {
+            display: inline-block;
+            @include box-sizing(content-box);
+            z-index: 2;
+            position: absolute;
+            content: "";
+            width: 12px;
+            height: 12px;
+            top: -13px;
+            right: 22px;
+            border: none;
+            @include border-radius(10px);
+            font: normal medium/normal Arial, Helvetica, sans-serif;
+            color: rgba(255,255,255,0.9);
+            -o-text-overflow: clip;
+            text-overflow: clip;
+            @include text-shadow(none);
+        }
+
+        &-green {
             @include background(#1abc9c);
-            @include box-shadow(0 6px 0 0 #16a085 );
+            @include box-shadow(0 2px 0 0 #16a085, 3px 3px 0 0 #16a085 );
+
+            &::before {
+                /* border: 9px solid #1abc9c; */
+                @include background(#1abc9c);
+                @include box-shadow(0 2px 0 0 #16a085 );
+            }
+
+            &::after {
+                /* @include background(#fcfcfc); */
+                @include box-shadow(2px 2px 0 0 #16a085 inset);
+            }
         }
 
-        &::after {
-            @include background(#fcfcfc);
-            @include box-shadow(3px 3px 0 0 #16a085 inset);
-        }
-    }
-
-    &-blue {
-        @include background(#0000ff);
-        @include box-shadow(0 3px 0 0 #1675fa, 3px 3px 0 0 #1675fa );
-
-        &::before {
-            border: 9px solid #0000ff;
+        &-blue {
             @include background(#0000ff);
-            @include box-shadow(0 6px 0 0 #1675fa );
+            @include box-shadow(0 3px 0 0 #1675fa, 3px 3px 0 0 #1675fa );
+
+            &::before {
+                border: 9px solid #0000ff;
+                /* @include background(#0000ff); */
+                @include box-shadow(0 2px 0 0 #1675fa );
+            }
+
+            &::after {
+                /* @include background(#fcfcfc); */
+                @include box-shadow(2px 2px 0 0 #1675fa inset);
+            }
         }
 
-        &::after {
-            @include background(#fcfcfc);
-            @include box-shadow(3px 3px 0 0 #1675fa inset);
-        }
-    }
+        &-yellow {
+            @include background(#ffff00);
+            @include box-shadow(0 2px 0 0 #ffe065, 3px 3px 0 0 #ffe065 );
+            color: #404040;
 
-    &-yellow {
-        @include background(#ffff00);
-        @include box-shadow(0 3px 0 0 #ffe065, 3px 3px 0 0 #ffe065 );
-        color: #404040;
+            &::before {
+                border: 9px solid rgba(255,255,0,1);
+                /* @include background(rgba(255,255,0,1)); */
+                @include box-shadow(0 2px 0 0 #ffe065 );
+            }
 
-        &::before {
-            border: 9px solid rgba(255,255,0,1);
-            @include background(rgba(255,255,0,1));
-            @include box-shadow(0 6px 0 0 #ffe065 );
-        }
-
-        &::after {
-            @include background(#fcfcfc);
-            @include box-shadow(3px 3px 0 0 #ffe065 inset);
-        }
-    }
-
-    &-orange {
-        @include background(#FF9800);
-        @include box-shadow(0 3px 0 0 #f7c070, 3px 3px 0 0 #f7c070 );
-        color: #404040;
-
-        &::before {
-            border: 9px solid rgba(255,152,0,1);
-            @include background(rgba(255,152,0,1));
-            @include box-shadow(0 6px 0 0 #f7c070 );
+            &::after {
+                /* @include background(#fcfcfc); */
+                @include box-shadow(2px 2px 0 0 #ffe065 inset);
+            }
         }
 
-        &::after {
-            @include background(#fcfcfc);
-            @include box-shadow(3px 3px 0 0 #f7c070 inset);
+        &-orange {
+            @include background(#FF9800);
+            @include box-shadow(0 3px 0 0 #f7c070, 3px 3px 0 0 #f7c070 );
+            color: #404040;
+
+            &::before {
+                border: 9px solid rgba(255,152,0,1);
+                /* @include background(rgba(255,152,0,1)); */
+                @include box-shadow(0 2px 0 0 #f7c070 );
+            }
+
+            &::after {
+                /* @include background(#fcfcfc); */
+                @include box-shadow(2px 2px 0 0 #f7c070 inset);
+            }
         }
     }
 }
+
 
 @import "tag_media";
