@@ -63,7 +63,8 @@ namespace eGoatDDD.Application.Goats.Commands
                         {
                             Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.MaternalId.Value)).SingleOrDefault();
 
-                            _context.Parents.Remove(parent);
+                            if (parent != null)
+                                _context.Parents.Remove(parent);
 
                             _context.Parents.Add(new Parent
                             {
@@ -77,7 +78,8 @@ namespace eGoatDDD.Application.Goats.Commands
                         {
                             Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.SireId.Value)).SingleOrDefault();
 
-                            _context.Parents.Remove(parent);
+                            if (parent != null)
+                                _context.Parents.Remove(parent);
 
 
                             _context.Parents.Add(new Parent
@@ -196,7 +198,7 @@ namespace eGoatDDD.Application.Goats.Commands
                     return false;
                 }
             }
-           
+
             return true;
         }
     }

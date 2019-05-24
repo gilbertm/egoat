@@ -20,15 +20,18 @@ namespace eGoatDDD.Application.Goats.Queries
 
         public async Task<GoatsListViewModel> Handle(GetAllGoatsPotentialParentQuery request, CancellationToken cancellationToken)
         {
-            GoatsListViewModel model = new GoatsListViewModel
-            {
-                Goats = await _context.Goats
+            var goats = await _context.Goats
                        .Select(GoatDto.Projection)
                        .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                       .Where(g => this.Years(g.BirthDate, DateTime.Now) > 0)
                        .Where(g => g.Gender == (request.IsSire == true ? 'M' : 'F'))
                        .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
-                       .ToListAsync(cancellationToken),
+                       .ToListAsync(cancellationToken);
+
+            goats = goats.Where(g => this.Years(g.BirthDate, DateTime.Now) > 0).ToList();
+
+            GoatsListViewModel model = new GoatsListViewModel
+            {
+                Goats = goats,
 
                 CreateEnabled = true
             };

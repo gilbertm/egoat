@@ -34,7 +34,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container">
-                <a class="navbar-brand width-25" asp-area="" asp-controller="Goat" asp-action="Index"><img width="150" src="~/logo.svg" alt=""></a>
+                <a class="navbar-brand w-25" asp-area="" asp-controller="Goat" asp-action="Index"><img width="150" src="~/logo.svg" alt=""></a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -56,14 +56,21 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" asp-controller="Goat" asp-action="Create">Create</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item disabled" asp-controller="Goat" asp-action="Edit">Edit</a>
+                                    <a class="dropdown-item" asp-controller="Goat" asp-action="Edit">Edit</a>
                                 </div>
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a class="nav-link disabled" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        <li class="nav-item dropdown">
+                                <span class="nav-link dropdown-toggle" id="navbarDropdownAbout" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    About
+                                </span>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownAbout">
+                                    <a class="dropdown-item" href="http://www.hnm-goat-empire.com">HNM Main Website</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                </div>
+                         </li>
                     </ul>
                 </div>
             </div>

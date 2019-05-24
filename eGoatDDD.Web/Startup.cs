@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Security.Claims;
+using Microsoft.Extensions.Hosting;
+
 
 namespace eGoatDDD.Web
 {
@@ -94,16 +96,18 @@ namespace eGoatDDD.Web
             services.AddTransient<ImageWriter.Interface.IImageWriter,
                                   ImageWriter.Classes.ImageWriter>();
 
-            services.AddMvc()
+            services.AddControllersWithViews()
                 .AddNewtonsoftJson();
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -119,19 +123,23 @@ namespace eGoatDDD.Web
             #endregion
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
-            app.UseRouting(routes =>
-            {
-                routes.MapApplication();
-                routes.MapControllerRoute(
-                    name: "default",
-                    template: "{controller=Goat}/{action=Index}/{id?}");
-            });
+            app.UseRouting();
 
             app.UseCookiePolicy();
-                        
+
             app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Goat}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
         }
     }
 }

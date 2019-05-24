@@ -25,7 +25,9 @@
                                 {
                                     @if (index == 0)
                                     {
-                                        <a class="lg-item" href="/@(resource.Location)/@(resource.Filename)" data-sub-html="@item.Color.Name.ToLower().ToUpper().ToString() @item.Id" data-rel="@item.Id">
+                                        var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Code, item.Color.Name.ToLower().ToLower().ToString()); 
+                                    
+                                        <a class="lg-item" href="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str" data-rel="@item.Code">
                                             <img class="card-img w-100" src="/@(resource.Location)/@(resource.Filename)" />
                                             <div class="card-img-overlay">
                                                 <div class="animal-tag-container mt-1">
@@ -81,8 +83,10 @@
                                     {
                                         @if (index == 0)
                                         {
+                                             var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Code, item.Color.Name.ToLower().ToLower().ToString()); 
+                                    
                                             <div class="col-md-12">
-                                                <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)" data-sub-html="@item.Color.Name.ToLower().ToUpper().ToString() @item.Id"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                                <div class="lg-item" data-rel="@item.Code" data-src="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
                                             </div>
                                         }}
                                 </div>
