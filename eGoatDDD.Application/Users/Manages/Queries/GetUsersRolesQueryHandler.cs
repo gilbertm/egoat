@@ -36,15 +36,11 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                                       Username = user.UserName,
                                       user.Email,
                                       user.EmailConfirmed,
-                                      RoleNames = (from aa in _context.Roles
-                                                   join bb in _context.UserRoles.Where(u => u.UserId.Equals(user.Id))
-                                                   on aa.Id equals bb.RoleId into newgroup
+                                      RoleNames = (from aa in _context.UserRoles
+                                                   join bb in _context.Roles
+                                                   on aa.RoleId equals bb.Id into newgroup
                                                    from cc in newgroup.DefaultIfEmpty()
-                                                   select new 
-                                                   {
-                                                       Label = aa.Name,
-                                                       Value = (cc.UserId == null ? false : true)
-                                                   }).ToList()
+                                                   select cc).ToList()
                                   }).ToListAsync();
 
             var userRolesListViewModel = userList.Select(p => new UserRolesViewModel
@@ -52,15 +48,12 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                 UserId = p.UserId,
                 UserName = p.Username,
                 Email = p.Email,
-                EmailConfirmed = p.EmailConfirmed.ToString(),
-
+                EmailConfirmed = p.EmailConfirmed,
                 Roles = new SelectOptionList
                 {
                     SelectOptionViewModels = _mapper.Map<IList<SelectOptionViewModel>>(p.RoleNames)
                 }               
             });
-
-            //  _mapper.Map<IEnumerable<UserRoleViewModel>>(userRoles);
 
             return userRolesListViewModel;
         }

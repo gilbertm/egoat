@@ -68,11 +68,14 @@ namespace eGoatDDD.Application.Goats.Queries
                 ParentsListViewModel parents = await _mediator.Send(new GetParentsQuery(item.Id));
 
 
-                long maternalId, sireId;
-                maternalId = sireId = 0;
+                long maternalId, sireId, goatId;
+                maternalId = sireId = goatId = 0;
+
+                goatId = item.Id;
 
                 foreach (var parent in item.Parents)
                 {
+                    
                     if (parent.Goat.Gender == 'M')
                     {
                         sireId = parent.ParentId;
@@ -92,7 +95,7 @@ namespace eGoatDDD.Application.Goats.Queries
                                                               ResourceId = gr.Resource.ResourceId
                                                           }).ToList();
 
-                GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId));
+                GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
 
                 goatFullInfo.Add(new GoatNonDtoViewModel
                 {

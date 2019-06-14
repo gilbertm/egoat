@@ -16,7 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Security.Claims;
 using Microsoft.Extensions.Hosting;
-
+using Microsoft.AspNetCore.Identity.UI.Services;
+using eGoatDDD.Web.Infrastructure;
+using Microsoft.AspNetCore.Identity.UI;
 
 namespace eGoatDDD.Web
 {
@@ -73,13 +75,30 @@ namespace eGoatDDD.Web
             // Customizing Identity
             // Reference: https://blogs.msdn.microsoft.com/webdev/2018/03/02/aspnetcore-2-1-identity-ui
             #region ++g++ allows identity overrides
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Stores.MaxLengthForKeys = 128)
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Stores.MaxLengthForKeys = 128;
+                options.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<eGoatDDDDbContext>()
-                .AddDefaultUI()
+                .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddDefaultTokenProviders();
             #endregion
-            
+
+            #region ++g++ smtp
+            services.AddTransient<IEmailSender, EmailSender>(i =>
+               new EmailSender(
+                   Configuration["EmailSender:Host"],
+                   Configuration.GetValue<int>("EmailSender:Port"),
+                   Configuration.GetValue<bool>("EmailSender:EnableSSL"),
+                   Configuration["EmailSender:UserName"],
+                   Configuration["EmailSender:Password"],
+                   Configuration["EmailSender:UserEmail"]
+               )
+           );
+            #endregion
+
             #region ++g++ configure all Claims Policies
             services.AddAuthorization(options =>
             {

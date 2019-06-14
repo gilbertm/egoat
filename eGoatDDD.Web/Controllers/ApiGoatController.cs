@@ -49,9 +49,9 @@ namespace eGoatDDD.Web.Controllers
 
         [Route("api/goat/siblings")]
         [HttpPost]
-        public async Task<JsonResult> Siblings(long maternalId, long sireId)
+        public async Task<JsonResult> Siblings(long maternalId, long sireId, long goatId)
         {
-            GoatsListViewModel response = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId));
+            GoatsListViewModel response = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
 
             if (response.Goats.Count() > 0)
             {

@@ -18,13 +18,13 @@ namespace eGoatDDD.Application.Goats.Models
 
         public char Gender { get; set; }
 
-        public ICollection<GoatResource> GoatResources { get; set; }
+        public virtual ICollection<GoatResource> GoatResources { get; set; }
 
         public DateTime? BirthDate { get; set; }
 
         public string Description { get; set; }
 
-        public ICollection<Parent> Parents { get; set; }
+        public virtual ICollection<Parent> Parents { get; set; }
 
         public Color Color { get; private set; }
 

@@ -24,36 +24,38 @@ namespace eGoatDDD.Application.Users.Manages.Queries
 
         public async Task<IEnumerable<UserRolesViewModel>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
-            var userList = await (from user in _context.ApplicationUsers
-                                  select new
-                                  {
-                                      UserId = user.Id,
-                                      Username = user.UserName,
-                                      user.Email,
-                                      user.EmailConfirmed,
-                                      RoleNames = (from aa in _context.Roles
-                                                   join bb in _context.UserRoles.Where(u => u.UserId.Equals(user.Id))
-                                                   on aa.Id equals bb.RoleId into newgroup
-                                                   from cc in newgroup.DefaultIfEmpty()
-                                                   select new
-                                                   {
-                                                       Label = aa.Name,
-                                                       Value = (cc.UserId == null ? false : true)
-                                                   }).ToList()
-                                  }).ToListAsync();
+           
+            var userRolesListViewModel = new List<UserRolesViewModel>();
 
-            var userRolesListViewModel = userList.Select(p => new UserRolesViewModel
+            foreach (var item in _context.ApplicationUsers)
             {
-                UserId = p.UserId,
-                UserName = p.Username,
-                Email = p.Email,
-                EmailConfirmed = p.EmailConfirmed.ToString(),
+                var userRoles = from uroles in _context.UserRoles.Where(u => u.UserId.Equals (item.Id))
+                                 select uroles;
 
-                Roles = new SelectOptionList
-                {
-                    SelectOptionViewModels = _mapper.Map<IList<SelectOptionViewModel>>(p.RoleNames)
-                }
-            });
+                var userRolesTransformToNames = await (from aa in _context.Roles
+                                 join bb in userRoles
+                                 on aa.Id equals bb.RoleId into newgroup
+                                 from cc in newgroup.DefaultIfEmpty()
+                                 select new
+                                 {
+                                     Label = aa.Name,
+                                     Value = (cc.UserId == item.Id ? true : false)
+                                 }).ToListAsync();
+
+                userRolesListViewModel.Add(
+                    new UserRolesViewModel
+                    {
+                        UserId = item.Id,
+                        UserName = item.UserName,
+                        Email = item.Email,
+                        EmailConfirmed = item.EmailConfirmed,
+                        Roles = new SelectOptionList
+                        {
+                            SelectOptionViewModels = _mapper.Map<IList<SelectOptionViewModel>>(userRolesTransformToNames)
+                        }
+                    }
+                );
+            }
 
             return userRolesListViewModel;
 

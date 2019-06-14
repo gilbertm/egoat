@@ -61,10 +61,11 @@ namespace eGoatDDD.Application.Goats.Commands
                     if (request.MaternalId.HasValue)
                         if (request.MaternalId.Value > 0)
                         {
-                            Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.MaternalId.Value)).SingleOrDefault();
+                            // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.MaternalId.Value)).SingleOrDefault();
+                            IEnumerable<Parent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
 
-                            if (parent != null)
-                                _context.Parents.Remove(parent);
+                            if (parents != null)
+                                _context.Parents.RemoveRange(parents);
 
                             _context.Parents.Add(new Parent
                             {
@@ -76,10 +77,12 @@ namespace eGoatDDD.Application.Goats.Commands
                     if (request.SireId.HasValue)
                         if (request.SireId.Value > 0)
                         {
-                            Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.SireId.Value)).SingleOrDefault();
+                            // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.SireId.Value)).SingleOrDefault();
 
-                            if (parent != null)
-                                _context.Parents.Remove(parent);
+                            IEnumerable<Parent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
+
+                            if (parents != null)
+                                _context.Parents.RemoveRange(parents);
 
 
                             _context.Parents.Add(new Parent
@@ -104,19 +107,19 @@ namespace eGoatDDD.Application.Goats.Commands
                         });
                     }
 
-                    List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
-
-                    _context.GoatResources.RemoveRange(goatResources);
-
-                    foreach (var item in goatResources)
-                    {
-                        _context.Resources.Remove(item.Resource);
-                    }
-
-                    await _context.SaveChangesAsync(cancellationToken);
-
                     if (request.Files != null)
                     {
+                        List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
+
+                        _context.GoatResources.RemoveRange(goatResources);
+
+                        foreach (var item in goatResources)
+                        {
+                            _context.Resources.Remove(item.Resource);
+                        }
+
+                        await _context.SaveChangesAsync(cancellationToken);
+
                         foreach (IFormFile file in request.Files)
                         {
                             if (file == null || file.Length == 0)
@@ -180,7 +183,6 @@ namespace eGoatDDD.Application.Goats.Commands
 
                             }
                         }
-
                     }
 
 
