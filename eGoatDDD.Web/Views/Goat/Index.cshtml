@@ -104,7 +104,7 @@
                                     <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
 
 
-                                    <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="ui-button delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="btn btn-danger delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
@@ -122,16 +122,17 @@
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="col col-6">
-                                                            <label class="small d-block">Dispose Type</label>
-                                                            <select required class="DisposalType" name="DisposalType">
-                                                                <option value="0">Disposal Type</option>
-                                                                <option value="1">Slaughter</option>
-                                                                <option value="2">Sold Whole - Local</option>
-                                                                <option value="3">Sold Whole - Online</option>
-                                                                <option value="99">Other</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col col-6">
+                                                            <div class="form-group">
+                                                                <label class="small d-block">Dispose Type</label>
+                                                                <select required class="DisposalType w-100" name="DisposalType">
+                                                                    <option value="0">Disposal Type</option>
+                                                                    <option value="1">Slaughter</option>
+                                                                    <option value="2">Sold Whole - Local</option>
+                                                                    <option value="3">Sold Whole - Online</option>
+                                                                    <option value="4">Death</option>
+                                                                    <option value="99">Other</option>
+                                                                </select>
+                                                            </div>
                                                             <div class="form-group">
                                                                 <label class="small d-block">Dispose Date</label>
                                                                 <div class='input-group'>
@@ -140,6 +141,12 @@
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col col-6">
+                                                            <div class="form-group">
+                                                                <label class="small d-block">Reason</label>
+                                                                <textarea rows="15" required class="w-100 h-100 d-inline-block" name="DisposalReason"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -152,7 +159,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary dispose delete submit">Dispose</button>
+                                                    <button type="button" class="btn btn-danger dispose delete submit">Dispose</button>
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
@@ -599,16 +606,21 @@
                         url: $thisData.find(".ApiURL").val(),
                         data: { DisposalGoatId: $thisData.find(".DisposalGoatId").val(), DisposalType: $thisData.find(".DisposalType").val(), DisposalReason: $thisData.find(".DisposalReason").val(), DisposedOn: $thisData.find(".DisposedOn").val() },
                     }).done(function (result) {
-                        console.log(result);
                         if (result.error == 0) {
                             if (result.message != null) {
                                 $this.find(".modal-body").html(result.message);
                             } else {
                                 $this.find(".modal-body").html("Something went wrong.");
                             }
+
+                            $('#modalGoatDisposal').modal('hide');
+
+                            window.location.reload();
+
                         } else {
                             $this.find(".modal-body").html(result.response);
                         }
+
                     });
                 });
 

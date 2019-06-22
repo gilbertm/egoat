@@ -8,6 +8,7 @@ namespace eGoatDDD.Domain.Entities
         Slaughter = 1,
         SoldWholeLocal = 2,
         SoldWholeOnline = 3,
+        Death = 4,
         Other = 99
     }
 

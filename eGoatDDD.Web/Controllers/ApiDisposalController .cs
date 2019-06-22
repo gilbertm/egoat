@@ -6,11 +6,13 @@ using eGoatDDD.Application.Services.Models;
 using eGoatDDD.Application.Services.Queries;
 using System;
 using eGoatDDD.Application.Goats.Commands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eGoatDDD.Web.Controllers
 {
     public class ApiDisposalController : BaseController
     {
+        [Authorize(Policy = "CanEdits")]
         [Route("api/disposal/goat")]
         public async Task<JsonResult> Put(long DisposalGoatId, int DisposalType, string DisposalReason, DateTime DisposedOn)
         {
