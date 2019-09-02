@@ -17,8 +17,10 @@
             <div class="row">
                 @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
                 {
-                    <div class="col col-4 col-md-3 col-sm-4 mb-3">
+                    <div class="col col-4 col-md-3 col-sm-4 mb-3">                         
                         <div class="card bg-dark text-white">
+                            <span class="small position-absolute" style="background:#000000;padding:3px 8px;opacity: 0.6;border-radius: 100%;">@(ctr + 1)</span>
+
                             @if (item.Resources != null)
                             {
                                 @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
@@ -32,6 +34,7 @@
                                             <div class="card-img-overlay">
                                                 <div class="animal-tag-container mt-1">
                                                     <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                    
                                                 </div>
                                             </div>
                                         </a>
@@ -76,6 +79,8 @@
                     <div class="row mb-1 mb-lg-3 mb-md-2 small">
                         <div class="col col-md-5 col-sm-6 text-align-center">
 
+                             <span class="small position-absolute" style="bottom:1.5em;z-index:1;">(@(ctr + 1))</span>
+                          
                             @if (item.Resources != null)
                             {
                                 <div class="row">
