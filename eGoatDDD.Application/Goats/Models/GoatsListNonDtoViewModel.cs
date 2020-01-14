@@ -4,7 +4,7 @@ namespace eGoatDDD.Application.Goats.Models
 {
     public class GoatsListNonDtoViewModel
     {
-        public IPagedList<GoatNonDtoViewModel> Goats { get; set; }
+        public IPagedList<GoatViewModel> Goats { get; set; }
 
         public int TotalPages { get; set; }
 

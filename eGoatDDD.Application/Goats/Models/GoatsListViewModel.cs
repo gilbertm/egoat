@@ -6,6 +6,8 @@ namespace eGoatDDD.Application.Goats.Models
     {
         public IEnumerable<GoatDto> Goats { get; set; }
 
+        public int TotalPages { get; set; }
+
         public bool CreateEnabled { get; set; }
     }
 }

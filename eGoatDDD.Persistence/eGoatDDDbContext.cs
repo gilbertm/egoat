@@ -34,6 +34,8 @@ namespace eGoatDDD.Persistence
 
         public DbSet<Disposal> Disposals { get; set; }
 
+        public DbSet<History> Histories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

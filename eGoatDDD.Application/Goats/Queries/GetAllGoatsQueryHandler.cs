@@ -29,105 +29,73 @@ namespace eGoatDDD.Application.Goats.Queries
         public async Task<GoatsListNonDtoViewModel> Handle(GetAllGoatsQuery request, CancellationToken cancellationToken)
         {
 
-            IList<Goat> goats = await _context.Goats
+            var goatsDto = await _context.Goats
                 .Include(c => c.Color)
                 .Include(gb => gb.GoatBreeds)
                 .ThenInclude(b => b.Breed)
                 .Include(p => p.Parents)
                 .Include(gr => gr.GoatResources)
                 .ThenInclude(r => r.Resource)
-                .Where(g => g.DisposalId == null || g.DisposalId < 0)
-                .ToListAsync(cancellationToken);
+                .Select(
+                    goat => GoatDto.Create(goat)
+                ).ToListAsync(cancellationToken);
 
-            IList<GoatNonDtoViewModel> goatFullInfo = new List<GoatNonDtoViewModel>();
-            foreach (var item in goats)
+            request.Filter = "All";
+
+            if (request.Filter == "Alive")
             {
-                Color color = new Color
-                {
-                    Id = item.Color.Id,
-                    Name = item.Color.Name,
-                    Description = item.Color.Description
-                };
+                goatsDto = await goatsDto.Where(g => g.DisposalId == null || g.DisposalId < 0).ToListAsync(cancellationToken);
 
-                List<GoatBreedViewModel> breeds = null;
-                if (item.GoatBreeds.Count() > 0)
-                {
-                    breeds = new List<GoatBreedViewModel>();
-
-                    foreach (var itemBreeds in item.GoatBreeds)
-                    {
-                        breeds.Add(new GoatBreedViewModel
-                        {
-                            Id = itemBreeds.Breed.Id,
-                            Name = itemBreeds.Breed.Name,
-                            Percentage = itemBreeds.Percentage
-                        });
-                    }
-                }
-
-                ParentsListViewModel parents = await _mediator.Send(new GetParentsQuery(item.Id));
-
-
-                long maternalId, sireId, goatId;
-                maternalId = sireId = goatId = 0;
-
-                goatId = item.Id;
-
-                foreach (var parent in item.Parents)
-                {
-                    
-                    if (parent.Goat.Gender == 'M')
-                    {
-                        sireId = parent.ParentId;
-                    }
-                    if (parent.Goat.Gender == 'F')
-                    {
-                        maternalId = parent.ParentId;
-                    }
-                }
-
-                IList<GoatResourceViewModel> resources = (from gr in item.GoatResources
-                                                          where (gr.GoatId == item.Id)
-                                                          select new GoatResourceViewModel
-                                                          {
-                                                              Filename = gr.Resource.Filename,
-                                                              Location = gr.Resource.Location,
-                                                              ResourceId = gr.Resource.ResourceId
-                                                          }).ToList();
-
-                GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
-
-                goatFullInfo.Add(new GoatNonDtoViewModel
-                {
-                    Id = item.Id,
-                    ColorId = item.ColorId,
-                    Code = item.Code,
-                    BirthDate = item.BirthDate,
-                    Gender = item.Gender,
-                    Description = item.Description,
-                    Color = color,
-                    Breeds = breeds,
-                    Resources = resources,
-                    Parents = parents,
-                    Siblings = siblings,
-
-                    EditEnabled = true,
-                    DeleteEnabled = true,
-                });
+            } else if (request.Filter == "Deleted")
+            {
+                goatsDto = await goatsDto.Where(g => g.DisposalId is { } || g.DisposalId > 0).ToListAsync(cancellationToken);
             }
 
-            IPagedList<GoatNonDtoViewModel> goatFullInfos = null;
+            ICollection<GoatViewModel> goatsViewModel = new List<GoatViewModel>(); 
 
-            if (request.PageNumber == 0 && request.PageSize == 0)
-                goatFullInfos = goatFullInfo.ToPagedList();
+            foreach (var goat in goatsDto)
+            {
+            
+                long maternalId, sireId, goatId;
+                
+                maternalId = sireId = goatId = 0;
 
-            else
-                goatFullInfos = goatFullInfo.ToPagedList(request.PageNumber, request.PageSize);
+                goatId = goat.Id;
+
+                if (goat.Parents is { })
+                {
+                    foreach (var parent in goat.Parents)
+                    {
+
+                        if (parent.Gender == 'M')
+                        {
+                            sireId = parent.GoatId;
+                        }
+                        if (parent.Gender == 'F')
+                        {
+                            maternalId = parent.GoatId;
+                        }
+                    }
+
+
+                    goat.Siblings = null;
+                    // await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
+                }
+               
+
+                goatsViewModel.Add(new GoatViewModel
+                {
+                     Goat = goat,
+                     EditEnabled = true,
+                     DeleteEnabled = true,
+                });
+
+            }
 
             return new GoatsListNonDtoViewModel
             {
-                Goats = goatFullInfos,
-                TotalPages = goatFullInfo.Count(),
+                Goats = (request.PageNumber == 0 && request.PageSize == 0) ? goatsViewModel.ToPagedList() : goatsViewModel.ToPagedList(request.PageNumber, request.PageSize),
+                TotalPages = goatsViewModel.Count(),
                 CreateEnabled = false
             };
         }

@@ -1,4 +1,5 @@
-﻿using eGoatDDD.Domain.Entities;
+﻿using eGoatDDD.Application.Breeds.Models;
+using eGoatDDD.Domain.Entities;
 using System;
 using System.Linq.Expressions;
 
@@ -12,9 +13,7 @@ namespace eGoatDDD.Application.GoatBreeds.Models
 
         public float Percentage { get; set; }
 
-        public virtual Goat Goat { get; set; }
-
-        public virtual Breed Breed { get; set; }
+        public BreedDto Breed { get; set; }
 
         public static Expression<Func<GoatBreed, GoatBreedDto>> Projection
         {
@@ -25,7 +24,8 @@ namespace eGoatDDD.Application.GoatBreeds.Models
                 {
                     GoatId = p.GoatId,
                     BreedId = p.BreedId,
-                    Percentage = p.Percentage
+                    Percentage = p.Percentage,
+                    Breed = BreedDto.Create(p.Breed)
                 };
             }
         }

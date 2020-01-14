@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Linq;
+using eGoatDDD.Application.Parents.Models;
+using eGoatDDD.Application.GoatBreeds.Models;
+using eGoatDDD.Application.Colors.Models;
 
 namespace eGoatDDD.Application.Goats.Models
 {
@@ -18,23 +21,25 @@ namespace eGoatDDD.Application.Goats.Models
 
         public char Gender { get; set; }
 
-        public virtual ICollection<GoatResource> GoatResources { get; set; }
+        public ICollection<GoatResourceDto> GoatResources { get; set; }
 
         public DateTime? BirthDate { get; set; }
 
         public string Description { get; set; }
 
-        public virtual ICollection<Parent> Parents { get; set; }
+        public ICollection<ParentDto> Parents { get; set; }
 
-        public Color Color { get; private set; }
+        public ColorDto Color { get; private set; }
 
-        public virtual ICollection<GoatBreed> GoatBreeds { get; set; }
+        public ICollection<GoatBreedDto> GoatBreeds { get; set; }
+
+        public GoatsListViewModel Siblings { get; set; }
 
         public static Expression<Func<Goat, GoatDto>> Projection
         {
             get
             {
-               
+
                 return p => new GoatDto
                 {
                     Id = p.Id,
@@ -44,10 +49,10 @@ namespace eGoatDDD.Application.Goats.Models
                     Code = p.Code,
                     BirthDate = p.BirthDate,
                     Description = p.Description,
-                    Parents = p.Parents,
-                    GoatResources = p.GoatResources,
-                    Color = p.Color,
-                    GoatBreeds = p.GoatBreeds
+                    Parents = p.Parents.Select(parent => ParentDto.Create(parent)).ToList(),
+                    GoatResources = p.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList(),
+                    Color = ColorDto.Create(p.Color),
+                    GoatBreeds = p.GoatBreeds.Select(breed => GoatBreedDto.Create(breed)).ToList(),
                 };
             }
         }

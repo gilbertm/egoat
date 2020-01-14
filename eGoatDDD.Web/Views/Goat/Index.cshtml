@@ -21,19 +21,19 @@
                         <div class="card bg-dark text-white">
                             <span class="small position-absolute" style="background:#000000;padding:3px 8px;opacity: 0.6;border-radius: 100%;">@(ctr + 1)</span>
 
-                            @if (item.Resources != null)
+                            @if (item.Goat.GoatResources != null)
                             {
-                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                @foreach (var (resource, index) in item.Goat.GoatResources.Select((v, i) => (v, i)))
                                 {
                                     @if (index == 0)
                                     {
-                                        var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Code, item.Color.Name.ToLower().ToLower().ToString());
+                                        var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Goat.Code, item.Goat.Color.Name.ToLower().ToLower().ToString());
 
-                                        <a class="lg-item" href="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str" data-rel="@item.Code">
+                                        <a class="lg-item" href="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str" data-rel="@item.Goat.Code">
                                             <img class="card-img w-100" src="/@(resource.Location)/@(resource.Filename)" />
                                             <div class="card-img-overlay">
                                                 <div class="animal-tag-container mt-1">
-                                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                    <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                                     
                                                 </div>
                                             </div>
@@ -44,10 +44,10 @@
                             else
                             {
                                 <div class="card-body">
-                                    <h5 class="card-title">@item.Code</h5>
+                                    <h5 class="card-title">@item.Goat.Code</h5>
                                     <div class="card-text">
                                         <div class="animal-tag-container mt-1">
-                                            <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                            <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,17 +81,17 @@
 
                              <span class="small position-absolute" style="bottom:1.5em;z-index:1;">(@(ctr + 1))</span>
                           
-                            @if (item.Resources != null)
+                            @if (item.Goat.GoatResources != null)
                             {
                                 <div class="row">
-                                    @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                    @foreach (var (resource, index) in item.Goat.GoatResources.Select((v, i) => (v, i)))
                                     {
                                         @if (index == 0)
                                         {
-                                            var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Code, item.Color.Name.ToLower().ToLower().ToString());
+                                            var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Goat.Code, item.Goat.Color.Name.ToLower().ToLower().ToString());
 
                                             <div class="col-md-12">
-                                                <div class="lg-item" data-rel="@item.Code" data-src="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
+                                                <div class="lg-item" data-rel="@item.Goat.Code" data-src="/@(resource.Location)/@(resource.Filename)" data-sub-html="@str"><img class="w-100" src="/@(resource.Location)/@(resource.Filename)" /></div>
                                             </div>
                                         }}
                                 </div>
@@ -104,12 +104,12 @@
                             {
 
 
-                                <div class="modalGoatDisposal modalGoatDisposal@(item.Id)">
-                                    <input type="hidden" class="DisposalGoatId" value="@(item.Id)" />
+                                <div class="modalGoatDisposal modalGoatDisposal@(item.Goat.Id)">
+                                    <input type="hidden" class="DisposalGoatId" value="@(item.Goat.Id)" />
                                     <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
 
 
-                                    <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="btn btn-danger delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="btn btn-danger delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Goat.Id" data-toggle="modal" data-target="#modalGoatDisposal"><i class="fas fa-times-circle"><!--empty--></i></span></span>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="modalGoatDisposal" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
@@ -121,7 +121,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     <div class="animal-tag-container mt-1">
-                                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                        <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-body">
@@ -177,16 +177,16 @@
 
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                             {
-                                <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Id)">
+                                <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Goat.Id)">
                                     <div class="animal-tag-container">
-                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code <i class="fas fa-edit"><!-- empty --></i></div>
+                                        <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code <i class="fas fa-edit"><!-- empty --></i></div>
                                     </div>
                                 </a>
                             }
                             else
                             {
                                 <div class="animal-tag-container">
-                                    <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                    <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                 </div>
                             }
 
@@ -196,7 +196,7 @@
                             <div class="row mb-1">
                                 <div class="col col-12">
                                     @{
-                                        var birthdate = item.BirthDate.HasValue ? item.BirthDate.Value : DateTime.Now;
+                                        var birthdate = item.Goat.BirthDate.HasValue ? item.Goat.BirthDate.Value : DateTime.Now;
 
                                         DateTime date1 = birthdate;
                                         DateTime date2 = DateTime.Now;
@@ -242,12 +242,12 @@
                                 </div>
 
                                 <div class="col col-12">
-                                    Birthdate: @item.BirthDate?.ToString("dd MMM yyyy")
+                                    Birthdate: @item.Goat.BirthDate?.ToString("dd MMM yyyy")
                                 </div>
                             </div>
                             <div class="row mb-1">
                                 <div class="col col-12">
-                                    Gender: @(item.Gender == 'M' ? "Male" : "Female")
+                                    Gender: @(item.Goat.Gender == 'M' ? "Male" : "Female")
                                 </div>
 
                             </div>
@@ -256,9 +256,9 @@
                                     <strong>Breeds</strong>
                                 </div>
                             </div>
-                            @if (item.Breeds != null)
+                            @if (item.Goat.GoatBreeds != null)
                             {
-                                foreach (var breed in item.Breeds)
+                                foreach (var breed in item.Goat.GoatBreeds)
                                 {
                                     <div class="row">
 
@@ -266,7 +266,7 @@
                                             @breed.Percentage<em>%</em>
                                         </div>
                                         <div class="col col-8 col-xs-12">
-                                            @breed.Name
+                                            @breed.Breed.Name
                                         </div>
                                     </div>
                                 }
@@ -315,7 +315,7 @@
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                                 {
                                     <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
-                                    <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
+                                    <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Goat.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
                                     <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
 
                                     @*<button class="add service">Add service</button>
@@ -331,7 +331,7 @@
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                     <div class="animal-tag-container mt-1">
-                                                        <div class="animal-tag animal-tag-@item.Color.Name.ToLower().ToString()">@item.Code</div>
+                                                        <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-body">
@@ -372,7 +372,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <input name="goat" type="hidden" value="@item.Id" />
+                                                            <input name="goat" type="hidden" value="@item.Goat.Id" />
                                                             <button class="btn btn-primary btn-sm small" type="submit">Update</button>
                                                         </form>
                                                     </div>
@@ -424,25 +424,25 @@
                                             </div>
                                         </div>
 
-                                        <input name="goat" type="hidden" value="@item.Id" />
+                                        <input name="goat" type="hidden" value="@item.Goat.Id" />
                                         <button class="btn btn-primary btn-sm small" type="submit">Add</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <div class="col col-12 col-md-3 col-sm-3">
-                            @if (item.Parents.Goats != null)
+                            @if (item.Goat.Parents != null)
                             {
                                 <strong>Parents</strong>
 
-                                foreach (var parent in item.Parents.Goats)
+                                foreach (var parent in item.Goat.Parents)
                                 {
                                     <div class="row">
-                                        @if (parent.Resource != null)
+                                        @if (parent.GoatResources != null)
                                         {
                                             <div class="goat col col-6 col-xs-6">
-                                                <a class="lg-item" href="~/@(parent.Resource.Location)/@(parent.Resource.Filename)" data-sub-html="Parent - @parent.ColorName @parent.Code" data-rel="@parent.Code">
-                                                    <img height="50" src="~/@(parent.Resource.Location)/@(parent.Resource.Filename)" />
+                                                <a class="lg-item" href="~/@(parent.GoatResources.First().Location)/@(parent.GoatResources.First().Filename)" data-sub-html="Parent - @parent.ColorName@parent.Code" data-rel="@parent.Code">
+                                                    <img height="50" src="~/@(parent.GoatResources.First().Filename)/@(parent.GoatResources.First().Filename)" />
                                                 </a>
                                             </div>
                                         }
@@ -454,13 +454,13 @@
                             }
                         </div>
                     </div>
-                    @if (item.Resources != null)
+                    @if (item.Goat.GoatResources != null)
                     {
 
                         <div class="row pt-3">
-                            @if (item.Resources.Count() > 1)
+                            @if (item.Goat.GoatResources.Count() > 1)
                             {
-                                @foreach (var (resource, index) in item.Resources.Select((v, i) => (v, i)))
+                                @foreach (var (resource, index) in item.Goat.GoatResources.Select((v, i) => (v, i)))
                                 {
                                     if (index == 0)
                                     {
@@ -468,7 +468,7 @@
                                     }
 
                                     <div class="col col-4">
-                                        <div class="lg-item" data-rel="@item.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
+                                        <div class="lg-item" data-rel="@item.Goat.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
                                     </div>
                                 }
                             }

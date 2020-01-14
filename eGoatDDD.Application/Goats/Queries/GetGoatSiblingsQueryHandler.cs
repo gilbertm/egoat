@@ -31,7 +31,7 @@ namespace eGoatDDD.Application.Goats.Queries
                            .ThenInclude(r => r.Resource)
                            .Select(GoatDto.Projection)
                            .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                           .Where(g => (g.Parents.Where(p => p.ParentId == request.MaternalId).Count() > 0) && (g.Parents.Where(p => p.ParentId == request.SireId).Count() > 0))
+                           .Where(g => (g.Parents.Where(p => p.GoatId == request.MaternalId).Count() > 0) && (g.Parents.Where(p => p.GoatId == request.SireId).Count() > 0))
                            .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
                            .ToListAsync(cancellationToken),
 
@@ -47,7 +47,7 @@ namespace eGoatDDD.Application.Goats.Queries
                            .ThenInclude(r => r.Resource)
                            .Select(GoatDto.Projection)
                            .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                           .Where(g => (g.Parents.Where(p => p.ParentId == request.MaternalId).Count() > 0) || (g.Parents.Where(p => p.ParentId == request.SireId).Count() > 0))
+                           .Where(g => (g.Parents.Where(p => p.GoatId == request.MaternalId).Count() > 0) || (g.Parents.Where(p => p.GoatId == request.SireId).Count() > 0))
                            .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
                            .ToListAsync(cancellationToken),
 
