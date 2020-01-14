@@ -17,7 +17,7 @@ namespace eGoatDDD.Web.Controllers
     {
         [Route("")]
         [Route("Index")]
-        [Route("/Goat/Index/{page?}")]
+        [Route("/Goat/{page?}")]
         public async Task<IActionResult> Index(int? page)
         {
             int pageSize = 25;
@@ -29,16 +29,53 @@ namespace eGoatDDD.Web.Controllers
                 // pageNumber = 0;
             }
 
-            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery(pageNumber, pageSize));
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery
+            {
+                PageNumber = pageNumber,
+                Filter = "alive",
+                PageSize = pageSize
+            });
 
             var doubleTotal = (double)(goatsLisNonDtotViewModel.TotalPages);
             var doublePageSize = (double)(pageSize);
 
             ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
             ViewData["CurrentPage"] = pageNumber;
+            ViewData["Listing"] = "alive";
 
             return View(goatsLisNonDtotViewModel);
         }
+
+
+        [Route("/Goat/Filtered/{filter}/{page?}")]
+        [Authorize(Policy = "CanEdits")]
+        public async Task<IActionResult> Filter(string filter, int? page)
+        {
+            int pageSize = 25;
+            int pageNumber = page ?? 1;
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                pageSize = 50;
+                // pageNumber = 0;
+            }
+
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery {
+             PageNumber = pageNumber,
+              Filter = filter,
+              PageSize = pageSize
+            });
+
+            var doubleTotal = (double)(goatsLisNonDtotViewModel.TotalPages);
+            var doublePageSize = (double)(pageSize);
+
+            ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
+            ViewData["CurrentPage"] = pageNumber;
+            ViewData["Listing"] = filter;
+
+            return View("Index", goatsLisNonDtotViewModel);
+        }
+
 
         [Authorize(Policy = "CanEdits")]
         public async Task<IActionResult> Create()

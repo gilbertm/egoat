@@ -40,15 +40,16 @@ namespace eGoatDDD.Application.Goats.Queries
                     goat => GoatDto.Create(goat)
                 ).ToListAsync(cancellationToken);
 
-            request.Filter = "All";
-
-            if (request.Filter == "Alive")
+            if (request.Filter.Equals("alive"))
             {
                 goatsDto = await goatsDto.Where(g => g.DisposalId == null || g.DisposalId < 0).ToListAsync(cancellationToken);
 
-            } else if (request.Filter == "Deleted")
+            } else if (request.Filter.Equals("disposed"))
             {
                 goatsDto = await goatsDto.Where(g => g.DisposalId is { } || g.DisposalId > 0).ToListAsync(cancellationToken);
+            } else
+            {
+                request.Filter = "all";
             }
 
             ICollection<GoatViewModel> goatsViewModel = new List<GoatViewModel>(); 
