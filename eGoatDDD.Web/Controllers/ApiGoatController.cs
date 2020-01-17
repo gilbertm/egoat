@@ -17,11 +17,11 @@ namespace eGoatDDD.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> Goat(long Id)
         {
-            GoatNonDtoViewModel goat = await _mediator.Send(new GetGoatQuery(Id));
+            GoatViewModel goat = await _mediator.Send(new GetGoatQuery(Id));
 
             if (goat != null)
             {
-                if (goat.Id > 0)
+                if (goat.Goat.Id > 0)
                 {
                     return Json(new { error = 0, response = goat });
                 }
@@ -65,17 +65,17 @@ namespace eGoatDDD.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> ParentBreeds(long maternalId, long sireId)
         {
-            GoatNonDtoViewModel goatMaternal = await _mediator.Send(new GetGoatQuery(maternalId));
+            GoatViewModel goatMaternal = await _mediator.Send(new GetGoatQuery(maternalId));
 
-            GoatNonDtoViewModel goatSire = await _mediator.Send(new GetGoatQuery(sireId));
+            GoatViewModel goatSire = await _mediator.Send(new GetGoatQuery(sireId));
 
             IList<GoatBreedViewModel> unionBloodBreeds = null;
 
             if (goatMaternal != null && goatSire != null)
             {
-                if (goatMaternal.Breeds != null && goatSire.Breeds != null)
+                if (goatMaternal.Goat.GoatBreeds != null && goatSire.Goat.GoatBreeds != null)
                 {
-                    var union = goatMaternal.Breeds.Union(goatSire.Breeds).GroupBy(b => new { b.Id, b.Name }).ToList();
+                    var union = goatMaternal.Goat.GoatBreeds.Union(goatSire.Goat.GoatBreeds).GroupBy(b => new { b.Breed.Id, b.Breed.Name }).ToList();
 
                     unionBloodBreeds = (from g in union
                                         select new GoatBreedViewModel
@@ -91,17 +91,17 @@ namespace eGoatDDD.Web.Controllers
 
             if (goatMaternal != null)
             {
-                if (goatMaternal.Breeds != null)
+                if (goatMaternal.Goat.GoatBreeds != null)
                 {
-                    return Json(new { error = 0, breeds = goatMaternal.Breeds.ToList() });
+                    return Json(new { error = 0, breeds = goatMaternal.Goat.GoatBreeds.ToList() });
                 }
             }
 
             if (goatSire != null)
             {
-                if (goatSire.Breeds != null)
+                if (goatSire.Goat.GoatBreeds != null)
                 {
-                    return Json(new { error = 0, breeds = goatSire.Breeds.ToList() });
+                    return Json(new { error = 0, breeds = goatSire.Goat.GoatBreeds.ToList() });
                 }
             }
 

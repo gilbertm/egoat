@@ -22,7 +22,7 @@ namespace eGoatDDD.Persistence
 
         public DbSet<Birth> Births { get; set; }
 
-        public DbSet<Parent> Parents { get; set; }
+        public DbSet<GoatParent> Parents { get; set; }
 
         public DbSet<Resource> Resources { get; set; }
 

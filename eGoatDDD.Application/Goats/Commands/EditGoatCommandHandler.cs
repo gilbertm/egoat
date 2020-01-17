@@ -62,12 +62,12 @@ namespace eGoatDDD.Application.Goats.Commands
                         if (request.MaternalId.Value > 0)
                         {
                             // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.MaternalId.Value)).SingleOrDefault();
-                            IEnumerable<Parent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
+                            IEnumerable<GoatParent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
 
                             if (parents != null)
                                 _context.Parents.RemoveRange(parents);
 
-                            _context.Parents.Add(new Parent
+                            _context.Parents.Add(new GoatParent
                             {
                                 ParentId = request.MaternalId.Value,
                                 GoatId = goat.Id
@@ -79,13 +79,13 @@ namespace eGoatDDD.Application.Goats.Commands
                         {
                             // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.SireId.Value)).SingleOrDefault();
 
-                            IEnumerable<Parent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
+                            IEnumerable<GoatParent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
 
                             if (parents != null)
                                 _context.Parents.RemoveRange(parents);
 
 
-                            _context.Parents.Add(new Parent
+                            _context.Parents.Add(new GoatParent
                             {
                                 ParentId = request.SireId.Value,
                                 GoatId = goat.Id

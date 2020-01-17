@@ -17,7 +17,7 @@ using eGoatDDD.Application.GoatResources.Models;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
-    public class GetGoatQueryHandler : MediatR.IRequestHandler<GetGoatQuery, GoatNonDtoViewModel>
+    public class GetGoatQueryHandler : MediatR.IRequestHandler<GetGoatQuery, GoatViewModel>
     {
         private readonly eGoatDDDDbContext _context;
         private readonly IMediator _mediator;
@@ -28,98 +28,36 @@ namespace eGoatDDD.Application.Goats.Queries
             _mediator = mediator;
         }
 
-        public async Task<GoatNonDtoViewModel> Handle(GetGoatQuery request, CancellationToken cancellationToken)
+        public async Task<GoatViewModel> Handle(GetGoatQuery request, CancellationToken cancellationToken)
         {
             if (request.Id > 0)
             {
-                var goat = await _context.Goats
-                    .Where(g => g.Id == request.Id)
-                    .Include(c => c.Color)
-                    .Include(gb => gb.GoatBreeds)
-                        .ThenInclude(b => b.Breed)
-                    .Include(p => p.Parents)
-                    .Include(gr => gr.GoatResources)
-                        .ThenInclude(r => r.Resource)
-                    .SingleOrDefaultAsync(cancellationToken);
+                var goatDto = await _context.Goats
+                     .Where(g => g.Id == request.Id)
+                .Include(c => c.Color)
+                .Include(gb => gb.GoatBreeds)
+                .ThenInclude(b => b.Breed)
+                .Include(p => p.Parents)
+                .Include(gr => gr.GoatResources)
+                .ThenInclude(r => r.Resource)
+                .Select(
+                    goat => GoatDto.Create(goat)
+                ).SingleOrDefaultAsync(cancellationToken);
 
-                Color color = new Color
+                if (goatDto is { } && goatDto.Parents is { })
                 {
-                    Id = goat.Color.Id,
-                    Name = goat.Color.Name,
-                    Description = goat.Color.Description
+                    foreach (var parent in goatDto.Parents)
+                    {
+                        parent.Parent = _context.Goats.Where(goat => goat.Id == parent.ParentId).Select(GoatDto.Projection).SingleOrDefault();
+                    }
+                }
+
+                return new GoatViewModel
+                {
+                    Goat = goatDto,
+                    DeleteEnabled = false,
+                    EditEnabled = false
                 };
-
-                List<GoatBreedViewModel> breeds = null;
-                if (goat.GoatBreeds.Count() > 0)
-                {
-                    breeds = new List<GoatBreedViewModel>();
-
-                    foreach (var item in goat.GoatBreeds)
-                    {
-                        breeds.Add(new GoatBreedViewModel
-                        {
-                            Id = item.Breed.Id,
-                            Name = item.Breed.Name,
-                            Percentage = item.Percentage
-                        });
-                    }
-                }
-
-
-                ParentsListViewModel parents = await _mediator.Send(new GetParentsQuery(goat.Id));
-
-                long maternalId, sireId, goatId;
-                maternalId = sireId = goatId = 0;
-
-                goatId = goat.Id;
-
-                foreach (var parent in goat.Parents)
-                {
-                    if (parent.Goat.Gender == 'M')
-                    {
-                        sireId = parent.ParentId;
-                    }
-                    if (parent.Goat.Gender == 'F')
-                    {
-                        maternalId = parent.ParentId;
-                    }
-                }
-
-                GoatsListViewModel siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
-
-
-                if (goat == null)
-                {
-                    throw new NotFoundException(nameof(Goat), request.Id);
-                }
-
-                IList<GoatResourceViewModel> resources = (from gr in goat.GoatResources
-                                                          where (gr.GoatId == goat.Id)
-                                                          select new GoatResourceViewModel
-                                                          {
-                                                              Filename = gr.Resource.Filename,
-                                                              Location = gr.Resource.Location,
-                                                              ResourceId = gr.Resource.ResourceId
-                                                          }).ToList();
-
-                // TODO: Set view model state based on user permissions.
-                var model = new GoatNonDtoViewModel
-                {
-                    Id = goat.Id,
-                    BirthDate = goat.BirthDate,
-                    Code = goat.Code,
-                    ColorId = goat.ColorId,
-                    Gender = goat.Gender,
-                    Color = color,
-                    Breeds = breeds,
-                    Parents = parents,
-                    Siblings = siblings,
-                    Resources = resources,
-                    EditEnabled = true,
-                    DeleteEnabled = false
-                };
-
-                return model;
             }
 
             return null;

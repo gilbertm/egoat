@@ -1,4 +1,4 @@
-﻿@model eGoatDDD.Application.Goats.Models.GoatNonDtoViewModel
+﻿@model eGoatDDD.Application.Goats.Models.GoatViewModel
 @using eGoatDDD.Application.Breeds.Models
 @using eGoatDDD.Application.Colors.Models
 @using eGoatDDD.Application.Goats.Models
@@ -12,12 +12,23 @@
 
 @if (Model != null)
 {
+    @if (Model.Goat.DisposalId is { })
+    {
+        <div class="row">
+            <div class="col col-12">
+                <div class="alert alert-danger display-4 text-center small">
+                    Disposed
+                </div>
+            </div>
+        </div>
+    }
+
     <form asp-action="Edit" class="edit" enctype="multipart/form-data">
         <div class="row">
             <div asp-validation-summary="All" class="text-danger"></div>
         </div>
         <div class="row">
-            <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="col col-12 col-md-6">
                 <h4 class="text-muted display-4">Details</h4>
                 <div class="row">
                     <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
@@ -29,10 +40,10 @@
                                     Tag color
                                 </option>
                                 @foreach (ColorDto item in (List
-                              <ColorDto>
-                                  )ViewData["Colors"])
+                             <ColorDto>
+                                 )ViewData["Colors"])
                                 {
-                                    if (Model.ColorId == item.Id)
+                                    if (Model.Goat.Color.Id == item.Id)
                                     {
                                         <option value="@item.Id" selected="selected"> @item.Name</option>
                                     }
@@ -48,42 +59,42 @@
                     </div>
                     <div class="col col-6">
                         <div class="form-group">
-                            <label class="small" asp-for="Code">Code</label>
-                            <input asp-for="Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Code)" />
-                            <span asp-validation-for="Code" class="text-danger"></span>
+                            <label class="small">Code</label>
+                            <input name="Code" asp-for="Goat.Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Goat.Code)" />
+                            <span asp-validation-for="Goat.Code" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col col-6">
                         <div class="form-group">
-                            <label class="small d-block" asp-for="Gender">Gender</label>
+                            <label class="small d-block" asp-for="Goat.Gender">Gender</label>
 
-                            @if (Model.Gender == 'M')
+                            @if (Model.Goat.Gender == 'M')
                             {
                                 <label>
-                                    <input asp-for="Gender" type="radio" value="M" checked="checked" /> Male
+                                    <input asp-for="Goat.Gender" type="radio" value="M" checked="checked" /> Male
                                 </label>
                             }
 
                             else
                             {
                                 <label>
-                                    <input asp-for="Gender" type="radio" value="M" /> Male
+                                    <input asp-for="Goat.Gender" type="radio" value="M" /> Male
                                 </label>
                             }
 
-                            @if (Model.Gender == 'F')
+                            @if (Model.Goat.Gender == 'F')
                             {
                                 <label>
-                                    <input asp-for="Gender" type="radio" value="F" checked="checked" /> Female
+                                    <input asp-for="Goat.Gender" type="radio" value="F" checked="checked" /> Female
                                 </label>
                             }
 
                             else
                             {
                                 <label>
-                                    <input asp-for="Gender" type="radio" value="F" /> Female
+                                    <input asp-for="Goat.Gender" type="radio" value="F" /> Female
                                 </label>
                             }
 
@@ -91,10 +102,10 @@
                     </div>
                     <div class="col col-6">
                         <div class="form-group">
-                            <label class="small" asp-for="BirthDate">Birth Date</label>
+                            <label class="small" asp-for="Goat.BirthDate">Birth Date</label>
                             <div class='input-group'>
-                                <input required asp-for="BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" value="@Model.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
-                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                <input required asp-for="Goat.BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" value="@Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                <span asp-validation-for="Goat.BirthDate" class="text-danger"></span>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -103,32 +114,32 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="small" asp-for="Description">Description</label>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <label class="small" asp-for="Goat.Description">Description</label>
+                    <span asp-validation-for="Goat.Description" class="text-danger"></span>
                     <textarea class="form-control"
-                              asp-for="Description"
+                              asp-for="Goat.Description"
                               rows="3"
-                              cols="20">@(Model.Description)</textarea>
+                              cols="20">@(Model.Goat.Description)</textarea>
                 </div>
 
 
             </div>
-            <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="col col-12 col-md-6">
                 @{
 
                     long sireId = 0;
                     long maternalId = 0;
 
-                    var parents = Model.Parents.Goats;
+                    var parents = Model.Goat.Parents;
 
                     if (parents != null)
                     {
-                        var sire = parents.Where(g => g.Gender == 'M').SingleOrDefault();
+                        var sire = parents.Where(g => g.Parent.Gender == 'M').SingleOrDefault();
                         if (sire != null)
                         {
                             sireId = sire.ParentId;
                         }
-                        var maternal = parents.Where(g => g.Gender == 'F').SingleOrDefault();
+                        var maternal = parents.Where(g => g.Parent.Gender == 'F').SingleOrDefault();
                         if (maternal != null)
                         {
                             maternalId = maternal.ParentId;
@@ -147,8 +158,8 @@
                                                 Sire
                                             </option>
                                             @foreach (GoatDto item in (List
-                                         <GoatDto>
-                                             )ViewData["Sires"])
+                                        <GoatDto>
+                                            )ViewData["Sires"])
                                             {
                                                 if (sireId > 0)
                                                 {
@@ -180,8 +191,8 @@
                                                 Maternal
                                             </option>
                                             @foreach (GoatDto item in (List
-                                         <GoatDto>
-                                             )ViewData["Maternals"])
+                                        <GoatDto>
+                                            )ViewData["Maternals"])
                                             {
 
                                                 if (maternalId > 0)
@@ -220,9 +231,9 @@
                             <h4 class="text-muted display-4">Breeds</h4>
                             <button type="button" id="add_breed" class="add-breed"><i class="fas fa-plus-circle"><!--empty--></i></button>
 
-                            @if (Model.Breeds.Count() > 0)
+                            @if (Model.Goat.GoatBreeds.Count() > 0)
                             {
-                                @foreach (var itemBreed in Model.Breeds)
+                                @foreach (var itemBreed in Model.Goat.GoatBreeds)
                                 {
                                     <div class="row breed-wrapper">
 
@@ -233,10 +244,10 @@
                                                         Breed Type
                                                     </option>
                                                     @foreach (BreedDto itemOptionBreeds in (List
-                                                 <BreedDto>
-                                                     )ViewData["Breeds"])
+                                                <BreedDto>
+                                                    )ViewData["Breeds"])
                                                     {
-                                                        if (itemBreed.Id == itemOptionBreeds.Id)
+                                                        if (itemBreed.Breed.Id == itemOptionBreeds.Id)
                                                         {
                                                             <option value="@itemOptionBreeds.Id" selected="selected">@itemOptionBreeds.Name</option>
                                                         }
@@ -275,8 +286,8 @@
                                                     Breed Type
                                                 </option>
                                                 @foreach (BreedDto itemOptionBreeds in (List
-                                             <BreedDto>
-                                                 )ViewData["Breeds"])
+                                            <BreedDto>
+                                                )ViewData["Breeds"])
                                                 {
                                                     <option value="@itemOptionBreeds.Id">@itemOptionBreeds.Name</option>
 
@@ -301,7 +312,7 @@
                     </div>
                 }
             </div>
-            <div class="col col-lg-4 col-md-4 col-sm-6 col-12 ">
+            <div class="col col-12 col-md-6">
                 <div class="row">
                     <div class="col col-12 goatImagesWrapper">
                         <h4 class="text-muted display-4">Resources</h4>
@@ -311,16 +322,16 @@
                             <label class="small d-block">Images</label>
 
                             <span class="thumbs images">
-                                @if (Model.Resources != null)
+                                @if (Model.Goat.GoatResources != null)
                                 {
-                                    foreach (var resource in Model.Resources)
+                                    foreach (var resource in Model.Goat.GoatResources)
                                     {
                                         <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
                                     }
                                 }
 
                             </span>
-                            @if (Model.Resources != null)
+                            @if (Model.Goat.GoatResources != null)
                             {
                                 <div class="goatImages custom-file invisible">
                                     <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
@@ -354,7 +365,7 @@
         <div class="row">
             <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
-                    <input asp-for="Id" type="hidden" required id="Id" value="@(Model.Id)" />
+                    <input asp-for="Goat.Id" type="hidden" required id="Id" value="@(Model.Goat.Id)" />
                     <input type="submit" value="Save" name="Save" class="btn btn-default mr-3" id="Submit" />
                     <a href="/Goat/Index" class="btn btn-danger">Cancel</a>
                 </div>
@@ -388,16 +399,17 @@
                     data: { Id: $this.val() },
                 }).done(function (result) {
 
+                    console.log(result);
+
                     if (result.error == 0) {
 
-
-                        if (result.response.resources != null) {
+                        if (result.response.goat.goatResources != null) {
                             var table = $('<table  class="small" />');
                             var row = "";
 
                             row = $('<tr/>');
-                            row.append('<td class="w-25 text-align-center"><img width="100%" src="/' + result.response.resources[0]["location"] + '/' + result.response.resources[0]["filename"] + '"/><br class="d-none" /><span class="red d-none">' + result.response.id + '</span></td>');
-                            row.append('<td><strong>' + result.response.color.name + ' ' + result.response.code + '</strong></td>');
+                            row.append('<td class="w-25 text-align-center"><img width="100%" src="/' + result.response.goat.goatResources[0]["location"] + '/' + result.response.goat.goatResources[0]["filename"] + '"/><br class="d-none" /><span class="red d-none">' + result.response.goat.id + '</span></td>');
+                            row.append('<td><strong>' + result.response.goat.color.name + ' ' + result.response.goat.code + '</strong></td>');
 
                             table.append(row);
 
@@ -405,16 +417,18 @@
                         }
 
                         var table = $('<table  class="small w-100" />');
-                        $(result.response.breeds).each(function () {
+                        $(result.response.goat.goatBreeds).each(function () {
                             row = $('<tr/>');
-                            row.append('<td class="w-25">' + this.name + ' : ' + this.percentage + '</td>');
+                            row.append('<td class="w-25">' + this.breed.name + ' : ' + this.percentage + '</td>');
                             table.append(row);
                         });
 
                         $(parent_container).find(".table-breeds").html(table);
 
                         $(parent_container).find(".close").removeClass("d-none");
+
                         $this.hide();
+
                     } else {
                         $this.show();
                         $(parent_container).find(".close").addClass("d-none");
@@ -538,7 +552,7 @@
 
                 parent();
 
-                sibling();
+                // sibling();
 
                 $('#ColorId, #Code').on('change', function (event) {
                     $.ajax({

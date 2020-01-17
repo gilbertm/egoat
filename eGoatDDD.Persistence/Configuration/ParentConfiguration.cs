@@ -4,9 +4,9 @@ using eGoatDDD.Domain.Entities;
 
 namespace eGoatDDD.Persistence.Configuration
 {
-    public class ParentConfiguration : IEntityTypeConfiguration<Parent>
+    public class ParentConfiguration : IEntityTypeConfiguration<GoatParent>
     {
-        public void Configure(EntityTypeBuilder<Parent> builder)
+        public void Configure(EntityTypeBuilder<GoatParent> builder)
         {
             builder.HasKey(e => new { e.GoatId, e.ParentId });
 

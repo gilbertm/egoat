@@ -21,17 +21,21 @@ namespace eGoatDDD.Application.Goats.Queries
         public async Task<GoatsListViewModel> Handle(GetAllGoatsPotentialParentQuery request, CancellationToken cancellationToken)
         {
             var goats = await _context.Goats
-                       .Select(GoatDto.Projection)
-                       .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                       .Where(g => g.Gender == (request.IsSire == true ? 'M' : 'F'))
-                       .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
-                       .ToListAsync(cancellationToken);
-
-            goats = goats.Where(g => this.Years(g.BirthDate, DateTime.Now) > 0).ToList();
+                .Include(c => c.Color)
+                .Include(gb => gb.GoatBreeds)
+                .ThenInclude(b => b.Breed)
+                .Include(p => p.Parents)
+                .Include(gr => gr.GoatResources)
+                .ThenInclude(r => r.Resource)
+                .Select(resource => GoatDto.Create(resource)).ToListAsync(cancellationToken);
 
             GoatsListViewModel model = new GoatsListViewModel
             {
-                Goats = goats,
+                Goats = goats.Where(g => g.DisposalId == null || g.DisposalId <= 0)
+                .Where(g => g.Gender == (request.IsSire == true ? 'M' : 'F'))
+                .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
+                .Where(g => this.Years(g.BirthDate, DateTime.Now) > 0)
+                .ToList(),
 
                 CreateEnabled = true
             };

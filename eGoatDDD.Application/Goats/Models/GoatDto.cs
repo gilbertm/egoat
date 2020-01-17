@@ -49,8 +49,8 @@ namespace eGoatDDD.Application.Goats.Models
                     Code = p.Code,
                     BirthDate = p.BirthDate,
                     Description = p.Description,
-                    Parents = p.Parents.Select(parent => ParentDto.Create(parent)).ToList(),
-                    GoatResources = p.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList(),
+                    Parents = p.Parents.Count() > 0 ? p.Parents.Select(parent => ParentDto.Create(parent)).ToList() : null,
+                    GoatResources = p.GoatResources.Count() > 0 ? p.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList() : null,
                     Color = ColorDto.Create(p.Color),
                     GoatBreeds = p.GoatBreeds.Select(breed => GoatBreedDto.Create(breed)).ToList(),
                 };

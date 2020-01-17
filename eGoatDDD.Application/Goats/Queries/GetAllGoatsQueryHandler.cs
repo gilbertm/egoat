@@ -67,17 +67,17 @@ namespace eGoatDDD.Application.Goats.Queries
                 {
                     foreach (var parent in goat.Parents)
                     {
+                        parent.Parent = _context.Goats.Where(goat => goat.Id == parent.ParentId).Select(GoatDto.Projection).SingleOrDefault();
 
-                        if (parent.Gender == 'M')
+                        if (parent.Parent.Gender == 'M')
                         {
-                            sireId = parent.GoatId;
+                            sireId = parent.ParentId;
                         }
-                        if (parent.Gender == 'F')
+                        if (parent.Parent.Gender == 'F')
                         {
-                            maternalId = parent.GoatId;
+                            maternalId = parent.ParentId;
                         }
                     }
-
 
                     goat.Siblings = null;
                     // await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));

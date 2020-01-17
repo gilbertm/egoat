@@ -61,7 +61,7 @@ namespace eGoatDDD.Application.Goats.Commands
                     if (request.MaternalId.HasValue)
                         if (request.MaternalId.Value > 0)
                         {
-                            _context.Parents.Add(new Parent
+                            _context.Parents.Add(new GoatParent
                             {
                                 ParentId = request.MaternalId.Value,
                                 GoatId = goat.Id
@@ -71,7 +71,7 @@ namespace eGoatDDD.Application.Goats.Commands
                     if (request.SireId.HasValue)
                         if (request.SireId.Value > 0)
                         {
-                            _context.Parents.Add(new Parent
+                            _context.Parents.Add(new GoatParent
                             {
                                 ParentId = request.SireId.Value,
                                 GoatId = goat.Id

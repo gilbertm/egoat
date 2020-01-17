@@ -3,7 +3,7 @@ using eGoatDDD.Application.Goats.Models;
 
 namespace eGoatDDD.Application.Goats.Queries
 {
-    public class GetGoatQuery : IRequest<GoatNonDtoViewModel>
+    public class GetGoatQuery : IRequest<GoatViewModel>
     {
         public GetGoatQuery()
         {

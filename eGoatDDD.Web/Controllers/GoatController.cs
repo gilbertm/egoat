@@ -26,12 +26,11 @@ namespace eGoatDDD.Web.Controllers
             if (!User.Identity.IsAuthenticated)
             {
                 pageSize = 50;
-                // pageNumber = 0;
             }
 
             GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery
             {
-                PageNumber = pageNumber,
+                PageNumber = pageNumber <= 0 ? 1 : pageNumber,
                 Filter = "alive",
                 PageSize = pageSize
             });
@@ -57,13 +56,12 @@ namespace eGoatDDD.Web.Controllers
             if (!User.Identity.IsAuthenticated)
             {
                 pageSize = 50;
-                // pageNumber = 0;
             }
 
             GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery {
-             PageNumber = pageNumber,
-              Filter = filter,
-              PageSize = pageSize
+                PageNumber = pageNumber <= 0 ? 1 : pageNumber,
+                Filter = filter,
+                PageSize = pageSize
             });
 
             var doubleTotal = (double)(goatsLisNonDtotViewModel.TotalPages);
@@ -142,7 +140,7 @@ namespace eGoatDDD.Web.Controllers
 
             ViewData["Breeds"] = breedsListViewModel.Breeds;
 
-            GoatNonDtoViewModel goat = await _mediator.Send(new GetGoatQuery(goatId.Value));
+            GoatViewModel goat = await _mediator.Send(new GetGoatQuery(goatId.Value));
 
             return View(goat);
         }

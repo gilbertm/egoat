@@ -11,40 +11,26 @@ namespace eGoatDDD.Application.Parents.Models
     public class ParentDto
     {
         public long GoatId { get; set; }
+        public long ParentId { get; set; }
+        public virtual GoatDto Goat { get; set; }
+        public virtual GoatDto Parent { get; set; }
 
-        public string ColorName { get; set; }
-
-        public string Code { get; set; }
-
-        public string Picture { get; set; }
-
-        public char Gender { get; set; }
-
-        public GoatDto Goat { get; set; }
-
-        public ICollection<GoatResourceDto> GoatResources { get; set; }
-
-        public static Expression<Func<Parent, ParentDto>> Projection
+        public static Expression<Func<GoatParent, ParentDto>> Projection
         {
             get
             {
 
                 return p => new ParentDto
                 {
-                    GoatId = p.ParentId,
-                    Code = p.Goat.Code,
-                    ColorName = p.Goat.Color.Name,
-                    Gender = p.Goat.Gender,
-                    // GoatResources = p.Goat.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList(),
-                    Goat = new GoatDto
-                    { 
-                         GoatResources = p.Goat.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList(),
-                    }
+                    GoatId = p.GoatId,
+                    ParentId = p.ParentId,
+                    Parent = null,
+                    Goat = null
                 };
             }
         }
 
-        public static ParentDto Create(Parent parent)
+        public static ParentDto Create(GoatParent parent)
         {
             return Projection.Compile().Invoke(parent);
         }

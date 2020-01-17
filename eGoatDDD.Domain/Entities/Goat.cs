@@ -7,7 +7,7 @@ namespace eGoatDDD.Domain.Entities
     {
         public Goat()
         {
-            Parents = new HashSet<Parent>();
+            Parents = new HashSet<GoatParent>();
             Births = new HashSet<Birth>();
             Services = new HashSet<GoatService>();
 
@@ -31,7 +31,7 @@ namespace eGoatDDD.Domain.Entities
         public virtual Color Color { get; set; }
 
         // one-to-many
-        public virtual ICollection<Parent> Parents { get; set; }
+        public virtual ICollection<GoatParent> Parents { get; set; }
 
         // one-to-many
         public virtual ICollection<Birth> Births { get; set; }
