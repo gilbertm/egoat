@@ -46,10 +46,28 @@ namespace eGoatDDD.Application.Goats.Queries
 
                 if (goatDto is { } && goatDto.Parents is { })
                 {
+                    long maternalId, sireId, goatId;
+
+                    maternalId = sireId = goatId = 0;
+
+                    goatId = goatDto.Id;
+
                     foreach (var parent in goatDto.Parents)
                     {
                         parent.Parent = _context.Goats.Where(goat => goat.Id == parent.ParentId).Select(GoatDto.Projection).SingleOrDefault();
+
+                        if (parent.Parent.Gender == 'M')
+                        {
+                            sireId = parent.ParentId;
+                        }
+                        if (parent.Parent.Gender == 'F')
+                        {
+                            maternalId = parent.ParentId;
+                        }
                     }
+
+                    goatDto.Siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
+
                 }
 
                 return new GoatViewModel

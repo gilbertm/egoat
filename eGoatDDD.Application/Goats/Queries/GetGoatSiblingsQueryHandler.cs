@@ -20,42 +20,26 @@ namespace eGoatDDD.Application.Goats.Queries
 
         public async Task<GoatsListViewModel> Handle(GetGoatSiblingsQuery request, CancellationToken cancellationToken)
         {
-            GoatsListViewModel model = null;
-
-            if (request.MaternalId > 0 && request.SireId > 0)
+            var goatsDto= await _context.Goats
+                           .Include(c => c.Color)
+                .Include(gb => gb.GoatBreeds)
+                .ThenInclude(b => b.Breed)
+                .Include(p => p.Parents)
+                .Include(gr => gr.GoatResources)
+                .ThenInclude(r => r.Resource)
+                .Where(g => g.Id != request.GoatId)
+                .Where(g => g.Parents != null && ((g.Parents.Where(p => p.ParentId == request.MaternalId).Count() > 0) || (g.Parents.Where(p => p.ParentId == request.SireId).Count() > 0)))
+                .Select(GoatDto.Projection)
+                .Where(g => g.DisposalId == null || g.DisposalId <= 0)
+                .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
+                .ToListAsync(cancellationToken);
+            
+            return new GoatsListViewModel
             {
-                model = new GoatsListViewModel
-                {
-                    Goats = await _context.Goats
-                           .Include(gr => gr.GoatResources)
-                           .ThenInclude(r => r.Resource)
-                           .Select(GoatDto.Projection)
-                           .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                           .Where(g => (g.Parents.Where(p => p.GoatId == request.MaternalId).Count() > 0) && (g.Parents.Where(p => p.GoatId == request.SireId).Count() > 0))
-                           .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
-                           .ToListAsync(cancellationToken),
 
-                    CreateEnabled = true
-                };
-            }
-            else
-            {
-                model = new GoatsListViewModel
-                {
-                    Goats = await _context.Goats
-                           .Include(gr => gr.GoatResources)
-                           .ThenInclude(r => r.Resource)
-                           .Select(GoatDto.Projection)
-                           .Where(g => g.DisposalId == null || g.DisposalId <= 0)
-                           .Where(g => (g.Parents.Where(p => p.GoatId == request.MaternalId).Count() > 0) || (g.Parents.Where(p => p.GoatId == request.SireId).Count() > 0))
-                           .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
-                           .ToListAsync(cancellationToken),
-
-                    CreateEnabled = true
-                };
-            }
-
-            return model;
+                Goats = goatsDto,
+                CreateEnabled = true
+            };
         }
     }
 }

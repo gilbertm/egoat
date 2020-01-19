@@ -77,10 +77,10 @@ namespace eGoatDDD.Application.Goats.Queries
                         {
                             maternalId = parent.ParentId;
                         }
+
                     }
 
-                    goat.Siblings = null;
-                    // await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
+                    goat.Siblings = await _mediator.Send(new GetGoatSiblingsQuery(maternalId, sireId, goatId));
                 }
                
 
