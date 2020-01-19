@@ -82,7 +82,7 @@ namespace eGoatDDD.Web
             })
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<eGoatDDDDbContext>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
             #endregion
 
@@ -151,6 +151,7 @@ namespace eGoatDDD.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

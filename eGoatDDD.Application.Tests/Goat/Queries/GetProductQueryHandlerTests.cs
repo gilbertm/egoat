@@ -20,7 +20,7 @@ namespace eGoatDDD.Application.Goat.Queries.Tests
             _context = fixture.Context;
         }
 
-        [Fact]
+        /* [Fact]
         public async Task GetGoattDetailTest()
         {
             var sut = new GetGoatQueryHandler(_context);
@@ -29,6 +29,6 @@ namespace eGoatDDD.Application.Goat.Queries.Tests
 
             result.ShouldBeOfType<GoatViewModel>();
             result.Goat.Id.ShouldBe(1);
-        }
+        } */
     }
 }
