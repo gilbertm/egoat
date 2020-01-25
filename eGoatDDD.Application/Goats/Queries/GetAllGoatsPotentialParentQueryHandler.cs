@@ -22,6 +22,7 @@ namespace eGoatDDD.Application.Goats.Queries
         {
             var goats = await _context.Goats
                 .Include(c => c.Color)
+                .Include(d => d.Disposal)
                 .Include(gb => gb.GoatBreeds)
                 .ThenInclude(b => b.Breed)
                 .Include(p => p.Parents)

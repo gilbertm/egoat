@@ -89,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -165,7 +165,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -242,7 +242,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -311,7 +311,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -355,6 +355,18 @@
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
               "version": "[3.1.1, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[1.0.0-beta0007, )"
+            },
+            "SixLabors.ImageSharp.Web": {
+              "target": "Package",
+              "version": "[1.0.0-beta0009, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[4.7.0, )"
             }
           },
           "imports": [
@@ -372,7 +384,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\PROGRAM FILES\\DOTNET\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

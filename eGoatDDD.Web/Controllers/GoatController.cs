@@ -20,15 +20,15 @@ namespace eGoatDDD.Web.Controllers
         [Route("/Goat/{page?}")]
         public async Task<IActionResult> Index(int? page)
         {
-            int pageSize = 25;
+            int pageSize = 30;
             int pageNumber = page ?? 1;
 
             if (!User.Identity.IsAuthenticated)
             {
-                pageSize = 50;
+                pageSize = 40;
             }
 
-            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery
             {
                 PageNumber = pageNumber <= 0 ? 1 : pageNumber,
                 Filter = "alive",
@@ -50,15 +50,15 @@ namespace eGoatDDD.Web.Controllers
         [Authorize(Policy = "CanEdits")]
         public async Task<IActionResult> Filter(string filter, int? page)
         {
-            int pageSize = 25;
+            int pageSize = 30;
             int pageNumber = page ?? 1;
 
             if (!User.Identity.IsAuthenticated)
             {
-                pageSize = 50;
+                pageSize = 40;
             }
 
-            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery {
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery {
                 PageNumber = pageNumber <= 0 ? 1 : pageNumber,
                 Filter = filter,
                 PageSize = pageSize
@@ -113,6 +113,18 @@ namespace eGoatDDD.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("/Goat/Get/{goatId?}")]
+        public async Task<IActionResult> Get(long? goatId)
+        {
+            if (goatId == null)
+            {
+                return RedirectToAction("Index", "Goat");
+            }
+
+            GoatViewModel goat = await _mediator.Send(new GetGoatQuery(goatId.Value));
+
+            return View("View",goat);
+        }
 
         [Authorize(Policy = "CanEdits")]
         public async Task<IActionResult> Edit(long? goatId)
@@ -149,14 +161,29 @@ namespace eGoatDDD.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit([FromForm]EditGoatCommand command)
         {
-            bool response = false;
 
             if (ModelState.IsValid)
             {
-                response = await _mediator.Send(command);
+                await _mediator.Send(command);
             }
 
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Policy = "CanEdits")]
+        [Route("goat/restore/{id}")]
+        public async Task<IActionResult> Restore(long Id)
+        {
+            RestoreGoatCommand restoreGoatCommand = new RestoreGoatCommand
+            {
+                Id = Id,
+            };
+
+            var response = await _mediator.Send(restoreGoatCommand);
+
+
+            return RedirectToAction("Index");
+
         }
     }
 }

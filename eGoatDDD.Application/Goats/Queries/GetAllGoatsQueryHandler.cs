@@ -31,6 +31,7 @@ namespace eGoatDDD.Application.Goats.Queries
 
             var goatsDto = await _context.Goats
                 .Include(c => c.Color)
+                .Include(d => d.Disposal)
                 .Include(gb => gb.GoatBreeds)
                 .ThenInclude(b => b.Breed)
                 .Include(p => p.Parents)

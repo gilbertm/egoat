@@ -10,12 +10,28 @@
     box-shadow: none;
     border: none;
     padding: 3px;
-    font-size:x-small;
+    font-size: x-small;
     margin-bottom: 5px;
     cursor: pointer;
 }
 
+.create .add-breed {
+    border-radius:5px;
+    outline:0;
+    &:hover {
+        background:#aaa;
+        color:#fff;
+    }
+}
 .create .remove-breed {
     margin-top: 5px;
     margin-bottom: auto;
+    position: absolute;
+    right: -5px;
+    top:0;
+    border-radius:100%;
+     &:hover {
+        background:#aaa;
+        color:#fff;
+    }
 }

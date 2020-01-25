@@ -40,8 +40,8 @@
                                     Tag color
                                 </option>
                                 @foreach (ColorDto item in (List
-                             <ColorDto>
-                                 )ViewData["Colors"])
+                       <ColorDto>
+                           )ViewData["Colors"])
                                 {
                                     if (Model.Goat.Color.Id == item.Id)
                                     {
@@ -60,7 +60,7 @@
                     <div class="col col-6">
                         <div class="form-group">
                             <label class="small">Code</label>
-                            <input name="Code" asp-for="Goat.Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Goat.Code)" />
+                            <input name="Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Goat.Code)" />
                             <span asp-validation-for="Goat.Code" class="text-danger"></span>
                         </div>
                     </div>
@@ -73,28 +73,28 @@
                             @if (Model.Goat.Gender == 'M')
                             {
                                 <label>
-                                    <input asp-for="Goat.Gender" type="radio" value="M" checked="checked" /> Male
+                                    <input name="Gender" type="radio" value="M" checked="checked" /> Male
                                 </label>
                             }
 
                             else
                             {
                                 <label>
-                                    <input asp-for="Goat.Gender" type="radio" value="M" /> Male
+                                    <input name="Gender" type="radio" value="M" /> Male
                                 </label>
                             }
 
                             @if (Model.Goat.Gender == 'F')
                             {
                                 <label>
-                                    <input asp-for="Goat.Gender" type="radio" value="F" checked="checked" /> Female
+                                    <input name="Gender" type="radio" value="F" checked="checked" /> Female
                                 </label>
                             }
 
                             else
                             {
                                 <label>
-                                    <input asp-for="Goat.Gender" type="radio" value="F" /> Female
+                                    <input name="Gender" type="radio" value="F" /> Female
                                 </label>
                             }
 
@@ -102,9 +102,9 @@
                     </div>
                     <div class="col col-6">
                         <div class="form-group">
-                            <label class="small" asp-for="Goat.BirthDate">Birth Date</label>
+                            <label class="small" name="BirthDate">Birth Date</label>
                             <div class='input-group'>
-                                <input required asp-for="Goat.BirthDate" id='birthdate' asp-format="{0:dd/MM/yyyy}" value="@Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                <input required name="BirthDate" id="birthdate" value="@Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
                                 <span asp-validation-for="Goat.BirthDate" class="text-danger"></span>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
@@ -117,7 +117,7 @@
                     <label class="small" asp-for="Goat.Description">Description</label>
                     <span asp-validation-for="Goat.Description" class="text-danger"></span>
                     <textarea class="form-control"
-                              asp-for="Goat.Description"
+                              name="Description"
                               rows="3"
                               cols="20">@(Model.Goat.Description)</textarea>
                 </div>
@@ -158,25 +158,44 @@
                                                 Sire
                                             </option>
                                             @foreach (GoatDto item in (List
-                                        <GoatDto>
-                                            )ViewData["Sires"])
+                                  <GoatDto>
+                                      )ViewData["Sires"])
                                             {
+                                                var Breeds = "";
+                                                @foreach (var breed in item.GoatBreeds)
+                                                {
+                                                    Breeds += breed.Breed.Name;
+                                                }
+
                                                 if (sireId > 0)
                                                 {
-                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code </option>
+                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
                                                 else
                                                 {
-                                                    <option value="@item.Id">@item.Color.Name - @item.Code </option>
+
+
+                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
                                             }
 
                                         </select>
 
-                                        <div class="goat-info-wrapper">
-                                            <span class="close d-none">close</span>
-                                            <div class="table-info"></div>
-                                            <div class="table-breeds"></div>
+                                        <div class="parent-goat-info">
+                                            <div class="card d-none bg-transparent">
+                                                <div class="card-img"></div>
+                                                <div class="card-img-overlay p-0">
+                                                    <div class="close"><i class="fa fa-times-circle text-danger"></i></div>
+                                                </div>
+                                                <div class="card-footer bg-transparent small text-center text-light p-1">
+                                                    <div class="goat-info">
+
+                                                    </div>
+                                                    <div class="goat-breeds">
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
 
                                     </div>
@@ -191,25 +210,43 @@
                                                 Maternal
                                             </option>
                                             @foreach (GoatDto item in (List
-                                        <GoatDto>
-                                            )ViewData["Maternals"])
+                                  <GoatDto>
+                                      )ViewData["Maternals"])
                                             {
+                                                var Breeds = "";
+                                                @foreach (var breed in item.GoatBreeds)
+                                                {
+                                                    Breeds += breed.Breed.Name;
+                                                }
 
                                                 if (maternalId > 0)
                                                 {
-                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code </option>
+                                                    <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
                                                 else
                                                 {
-                                                    <option value="@item.Id">@item.Color.Name - @item.Code </option>
+
+
+                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
                                             }
 
                                         </select>
-                                        <div class="goat-info-wrapper">
-                                            <span class="close d-none">close</span>
-                                            <div class="table-info"></div>
-                                            <div class="table-breeds"></div>
+                                        <div class="parent-goat-info">
+                                            <div class="card d-none bg-transparent">
+                                                <div class="card-img"></div>
+                                                <div class="card-img-overlay p-0">
+                                                    <div class="close"><i class="fa fa-times-circle text-danger"></i></div>
+                                                </div>
+                                                <div class="card-footer bg-transparent small text-center text-light p-1">
+                                                    <div class="goat-info">
+
+                                                    </div>
+                                                    <div class="goat-breeds">
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
 
                                     </div>
@@ -224,20 +261,24 @@
                                 <div class="list">
                                     <span class="info font-italic small">None</span>
                                     <div class="siblings-table">
-                                        @foreach (var sibling in Model.Goat.Siblings.Goats)
+                                        @if (Model.Goat.Siblings is { })
                                         {
-                                            <div class="row small">
+                                            foreach (var sibling in Model.Goat.Siblings.Goats)
+                                            {
+                                                <div class="row small">
 
-                                                @if (sibling.GoatResources is { })
-                                                {
-                                                    <div class="col col-4 col-xs-6 text-align-center">
-                                                        <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
-                                                        <br />Tag Code: <strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
+                                                    @if (sibling.GoatResources is { })
+                                                    {
+                                                        <div class="col col-4 col-xs-6 text-align-center">
+                                                            <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
+                                                            <br />Tag Code: <strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
 
-                                                    </div>
-                                                }
-                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
                                         }
+
                                     </div>
 
                                 </div>
@@ -249,19 +290,20 @@
 
                             @if (Model.Goat.GoatBreeds.Count() > 0)
                             {
+                                var ctr = 0;
                                 @foreach (var itemBreed in Model.Goat.GoatBreeds)
                                 {
-                                    <div class="row breed-wrapper">
+                                    <div class="row breed-wrapper @(ctr > 0 ? "added" : "")">
 
                                         <div class="col col-6 breed-type">
                                             <div class="form-group">
                                                 <select required class="form-control breedid" name="BreedId[]" data-ctr="0">
-                                                    <option value="">
+                                                    <option value="0">
                                                         Breed Type
                                                     </option>
                                                     @foreach (BreedDto itemOptionBreeds in (List
-                                                <BreedDto>
-                                                    )ViewData["Breeds"])
+                                          <BreedDto>
+                                              )ViewData["Breeds"])
                                                     {
                                                         if (itemBreed.Breed.Id == itemOptionBreeds.Id)
                                                         {
@@ -274,18 +316,19 @@
 
                                                     }
                                                 </select>
-                                                <div class="table">
-                                                </div>
+
                                             </div>
                                         </div>
 
                                         <div class="col col-6">
                                             <div class="form-group">
-                                                <input requied type="number" class="breedpercent" data-ctr="0" name="BreedPercent[]" value="@itemBreed.Percentage" step="0.01" /> <button type="button" class="d-none remove_breed remove-breed"><i class="fas fa-minus-circle"><!--empty--></i></button>
+                                                <input requied type="number" class="breedpercent form-control" data-ctr="0" name="BreedPercent[]" value="@itemBreed.Percentage" step="0.01" /> <button type="button" class="d-none remove_breed remove-breed"><i class="fas fa-minus-circle"><!--empty--></i></button>
                                             </div>
 
                                         </div>
                                     </div>
+
+                                    ctr++;
                                 }
 
 
@@ -302,8 +345,8 @@
                                                     Breed Type
                                                 </option>
                                                 @foreach (BreedDto itemOptionBreeds in (List
-                                            <BreedDto>
-                                                )ViewData["Breeds"])
+                                      <BreedDto>
+                                          )ViewData["Breeds"])
                                                 {
                                                     <option value="@itemOptionBreeds.Id">@itemOptionBreeds.Name</option>
 
@@ -381,7 +424,7 @@
         <div class="row">
             <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
-                    <input asp-for="Goat.Id" type="hidden" required id="Id" value="@(Model.Goat.Id)" />
+                    <input name="Id" type="hidden" required id="Id" value="@(Model.Goat.Id)" />
                     <input type="submit" value="Save" name="Save" class="btn btn-default mr-3" id="Submit" />
                     <a href="/Goat/Index" class="btn btn-danger">Cancel</a>
                 </div>
@@ -415,21 +458,32 @@
                     data: { Id: $this.val() },
                 }).done(function (result) {
 
-                    console.log(result);
-
                     if (result.error == 0) {
 
-                        if (result.response.goat.goatResources != null) {
-                            var table = $('<table  class="small" />');
-                            var row = "";
+                        if (result.response.goat != null) {
 
-                            row = $('<tr/>');
-                            row.append('<td class="w-25 text-align-center"><img width="100%" src="/' + result.response.goat.goatResources[0]["location"] + '/' + result.response.goat.goatResources[0]["filename"] + '"/><br class="d-none" /><span class="red d-none">' + result.response.goat.id + '</span></td>');
-                            row.append('<td><strong>' + result.response.goat.color.name + ' ' + result.response.goat.code + '</strong></td>');
+                            var parent_card = parent_container.find(".parent-goat-info .card");
 
-                            table.append(row);
+                            parent_card.removeClass("d-none");
 
-                            $(parent_container).find(".table-info").html(table);
+                            if (result.response.goat.goatResources != null) {
+                                parent_card.find(".card-img").html("<img class='w-100' src='/" + result.response.goat.goatResources[0].location + "/" + result.response.goat.goatResources[0].filename + "'/>");
+                            }
+
+                            parent_card.find(".card-footer .goat-info").html("<span class='text-primary'>" + result.response.goat.color.name + " " + result.response.goat.code + "</span>");
+
+                            var table = $('<table  class="small w-100" />');
+
+                            console.log(result.response.goat);
+
+                            $(result.response.goat.goatBreeds).each(function (k, b) {
+                                row = $('<tr class="bg-warning mt-2" />');
+                                row.append('<td class="small text-light p-1">' + b.breed.name + '</td><td class="small text-light p-1">' + b.percentage + '</td>');
+                                table.append(row);
+                            });
+
+                            parent_card.find(".card-footer .goat-breeds").html(table);
+
                         }
 
                         var table = $('<table  class="small w-100" />');
@@ -455,7 +509,7 @@
                 });
             }
 
-            function parent() {
+            /* function parent() {
                 // suggestion
                 // get the breeds from parents
                 $.ajax({
@@ -480,7 +534,7 @@
                         }
                     }
                 });
-            }
+            } */
 
             function sibling() {
                 // siblings
@@ -533,23 +587,24 @@
 
                     if (parent_breeds.breeds != null) {
                         if (parent_breeds.breeds.length == 1) {
-                            $("#breeds .breedid").val(parent_breeds.breeds[0].id);
-                            $("#breeds .breedpercent").val(parent_breeds.breeds[0].percentage);
+                            $("#breeds .breedid").eq(0).val(parent_breeds.breeds[0].breed.id);
+                            $("#breeds .breedpercent").eq(0).val(parent_breeds.breeds[0].percentage);
                         } else {
                             $(parent_breeds.breeds).each(function (i) {
-
-                                if ((i > 0) && (i < ($(parent_breeds.breeds).length - 1))) {
+                                if (i < ($(parent_breeds.breeds).length - 1)) {
                                     $('#add_breed').trigger("click");
                                 }
 
                                 $("#breeds .breedid").eq(i).val(parent_breeds.breeds[i].id);
                                 $("#breeds .breedpercent").eq(i).val(parent_breeds.breeds[i].percentage);
 
+
+
                             });
                         }
                     } else {
                         if (!firstLoad) {
-                            $("#breeds .breedid").val("");
+                            $("#breeds .breedid").val("0");
                             $("#breeds .breedpercent").val("0");
                         }
                     }
@@ -589,7 +644,7 @@
                 $('#MaternalId, #SireId').on('change', function (event) {
                     detail($(this));
 
-                    parent();
+                    // parent();
 
                     sibling();
 
@@ -597,13 +652,21 @@
                 });
 
                 // parents container
-                $(".close").on("click", function () {
+                $(".close:not(.images)").on("click", function () {
                     var parent_container = $(this).parents(".parent-container");
                     $(parent_container).find("select").val("");
                     $(parent_container).find("select").show();
-                    $(parent_container).find(".close").addClass("d-none");
-                    $(parent_container).find(".table-breeds").empty();
-                    $(parent_container).find(".table-info").empty();
+
+                    var breeds_added = $(".breed-wrapper.added");
+                    breeds_added.remove();
+                    $("#breeds .breedid").eq(0).val(0);
+                    $("#breeds .breedpercent").eq(0).val(0);
+
+                    var parent_card = $(parent_container).find(".parent-goat-info .card");
+                    parent_card.addClass("d-none");
+                    parent_card.find(".card-img").empty();
+                    parent_card.find(".card-footer .goat-info").empty();
+                    parent_card.find(".card-footer .goat-breeds").empty();
 
                     sibling();
 

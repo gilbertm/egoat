@@ -1,17 +1,10 @@
-﻿using System;
+﻿using eGoatDDD.Domain.Constants;
+using System;
 using System.Collections.Generic;
 
 namespace eGoatDDD.Domain.Entities
 {
-    public enum DisposeType
-    {
-        Slaughter = 1,
-        SoldWholeLocal = 2,
-        SoldWholeOnline = 3,
-        Death = 4,
-        Other = 99
-    }
-
+    
     public class Disposal
     {
         public long Id { get; set; }

@@ -15,21 +15,25 @@ namespace eGoatDDD.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview5.19227.1")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -46,14 +50,18 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -66,14 +74,18 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -85,15 +97,19 @@ namespace eGoatDDD.Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -104,9 +120,11 @@ namespace eGoatDDD.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -117,15 +135,19 @@ namespace eGoatDDD.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(128)")
                         .HasMaxLength(128);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -134,70 +156,95 @@ namespace eGoatDDD.Persistence.Migrations
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("HomeAddress")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("HomeCity")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("HomeCountryCode")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("HomePhone")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("HomeRegion")
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("IsActivated");
+                    b.Property<int>("IsActivated")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("Joined");
+                    b.Property<DateTime>("Joined")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
                     b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("SecurityStamp");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -217,21 +264,29 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Alive");
+                    b.Property<int>("Alive")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Delivery");
+                    b.Property<DateTime>("Delivery")
+                        .HasColumnType("datetime2");
 
-                    b.Property<long>("GoatId");
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Modified");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Total");
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("UniqeId");
+                    b.Property<Guid>("UniqeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -244,13 +299,17 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Picture");
+                    b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -261,11 +320,14 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -276,17 +338,23 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DisposedOn");
+                    b.Property<DateTime>("DisposedOn")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Modified");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Reason");
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -297,33 +365,40 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("BirthDate");
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Code");
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("ColorId");
+                    b.Property<int>("ColorId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("DisposalId");
+                    b.Property<long?>("DisposalId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 1)));
+                        .HasColumnType("nvarchar(1)");
 
-                    b.Property<DateTime>("Modified");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UniqeId");
+                    b.Property<Guid>("UniqeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DisposalId")
-                        .IsUnique()
-                        .HasFilter("[DisposalId] IS NOT NULL");
+                    b.HasIndex("DisposalId");
 
                     b.HasIndex("ColorId", "Code")
                         .IsUnique()
@@ -334,11 +409,14 @@ namespace eGoatDDD.Persistence.Migrations
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBreed", b =>
                 {
-                    b.Property<long>("GoatId");
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("BreedId");
+                    b.Property<int>("BreedId")
+                        .HasColumnType("int");
 
-                    b.Property<float>("Percentage");
+                    b.Property<float>("Percentage")
+                        .HasColumnType("real");
 
                     b.HasKey("GoatId", "BreedId");
 
@@ -347,15 +425,34 @@ namespace eGoatDDD.Persistence.Migrations
                     b.ToTable("GoatBreeds");
                 });
 
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatParent", b =>
+                {
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("GoatId", "ParentId");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Parents");
+                });
+
             modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatResource", b =>
                 {
-                    b.Property<long>("GoatId");
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<Guid>("ResourceId");
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Created");
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Modified");
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("GoatId", "ResourceId");
 
@@ -368,19 +465,26 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.Property<long>("ServiceId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Category");
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("End");
+                    b.Property<DateTime>("End")
+                        .HasColumnType("datetime2");
 
-                    b.Property<long>("GoatId");
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Start");
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ServiceId");
 
@@ -400,7 +504,8 @@ namespace eGoatDDD.Persistence.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("date");
 
-                    b.Property<long>("GoatId");
+                    b.Property<long>("GoatId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Modified")
                         .HasColumnType("date");
@@ -408,34 +513,30 @@ namespace eGoatDDD.Persistence.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("ntext");
 
-                    b.Property<Guid>("UniqeId");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UniqeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GoatId");
 
-                    b.ToTable("History");
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
-                {
-                    b.Property<long>("GoatId");
-
-                    b.Property<long>("ParentId");
-
-                    b.HasKey("GoatId", "ParentId");
-
-                    b.ToTable("Parents");
+                    b.ToTable("Histories");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.Resource", b =>
                 {
                     b.Property<Guid>("ResourceId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Filename");
+                    b.Property<string>("Filename")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location");
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ResourceId");
 
@@ -511,8 +612,8 @@ namespace eGoatDDD.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("eGoatDDD.Domain.Entities.Disposal", "Disposal")
-                        .WithOne()
-                        .HasForeignKey("eGoatDDD.Domain.Entities.Goat", "DisposalId");
+                        .WithMany()
+                        .HasForeignKey("DisposalId");
                 });
 
             modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatBreed", b =>
@@ -526,6 +627,21 @@ namespace eGoatDDD.Persistence.Migrations
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
                         .WithMany("GoatBreeds")
                         .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("eGoatDDD.Domain.Entities.GoatParent", b =>
+                {
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
+                        .WithMany("Parents")
+                        .HasForeignKey("GoatId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -558,15 +674,6 @@ namespace eGoatDDD.Persistence.Migrations
                 {
                     b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
                         .WithMany()
-                        .HasForeignKey("GoatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("eGoatDDD.Domain.Entities.Parent", b =>
-                {
-                    b.HasOne("eGoatDDD.Domain.Entities.Goat", "Goat")
-                        .WithMany("Parents")
                         .HasForeignKey("GoatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -56,6 +56,7 @@ namespace eGoatDDD.Application.Goats.Commands
                         goat.Gender = request.Gender;
                         goat.BirthDate = request.BirthDate;
                         goat.Description = request.Description;
+                        goat.Modified = DateTime.Now;
                     };
 
                     if (request.MaternalId.HasValue)
@@ -107,18 +108,25 @@ namespace eGoatDDD.Application.Goats.Commands
                         });
                     }
 
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
+
+                    _context.GoatResources.RemoveRange(goatResources);
+
+                     await _context.SaveChangesAsync(cancellationToken);
+
+                    foreach (var item in goatResources)
+                    {
+                        _context.Resources.Remove(item.Resource);
+
+                    }
+
+                    await _context.SaveChangesAsync(cancellationToken);
+
                     if (request.Files != null)
                     {
-                        List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
-
-                        _context.GoatResources.RemoveRange(goatResources);
-
-                        foreach (var item in goatResources)
-                        {
-                            _context.Resources.Remove(item.Resource);
-                        }
-
-                        await _context.SaveChangesAsync(cancellationToken);
+                                            
 
                         foreach (IFormFile file in request.Files)
                         {
@@ -143,8 +151,8 @@ namespace eGoatDDD.Application.Goats.Commands
 
                                 File.Move(oldFilePathAndName, newFilePathAndName);
 
-                                int width = 128;
-                                int height = 128;
+                                int width = 384;
+                                int height = 384;
 
                                 var image = Image.FromFile(newFilePathAndName);
                                 var ratioX = (double)width / image.Width;
@@ -180,6 +188,7 @@ namespace eGoatDDD.Application.Goats.Commands
                                     GoatId = goat.Id,
                                     ResourceId = resource.ResourceId,
                                 });
+                                
 
                             }
                         }

@@ -1,5 +1,6 @@
 ﻿using eGoatDDD.Application.Goats.Models;
 using eGoatDDD.Application.Goats.Queries;
+using eGoatDDD.Domain.Constants;
 using eGoatDDD.Domain.Entities;
 using eGoatDDD.Persistence;
 using eGoatDDD.Persistence.Repository;
@@ -44,7 +45,7 @@ namespace eGoatDDD.Application.Goats.Commands
                         {
                             Disposal disposal = new Disposal
                             {
-                                DisposedOn = DateTime.Now,
+                                DisposedOn = DateTime.Parse(request.DisposedOn.ToString()),
                                 Reason = request.Reason,
                                 Type = (DisposeType)Enum.Parse(typeof(DisposeType), request.Type.ToString(), true),
                                 Modified = DateTime.Now,

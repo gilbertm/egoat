@@ -6,6 +6,7 @@ using System.Linq;
 using eGoatDDD.Application.Parents.Models;
 using eGoatDDD.Application.GoatBreeds.Models;
 using eGoatDDD.Application.Colors.Models;
+using eGoatDDD.Application.Disposals.Models;
 
 namespace eGoatDDD.Application.Goats.Models
 {
@@ -31,6 +32,8 @@ namespace eGoatDDD.Application.Goats.Models
 
         public ColorDto Color { get; private set; }
 
+        public DisposalDto Disposal { get; private set; }
+
         public ICollection<GoatBreedDto> GoatBreeds { get; set; }
 
         public GoatsListViewModel Siblings { get; set; }
@@ -52,6 +55,7 @@ namespace eGoatDDD.Application.Goats.Models
                     Parents = p.Parents.Count() > 0 ? p.Parents.Select(parent => ParentDto.Create(parent)).ToList() : null,
                     GoatResources = p.GoatResources.Count() > 0 ? p.GoatResources.Select(resource => GoatResourceDto.Create(resource)).ToList() : null,
                     Color = ColorDto.Create(p.Color),
+                    Disposal = p.DisposalId.HasValue == true ? (p.DisposalId.Value > 0 ? DisposalDto.Create(p.Disposal) : null) : null,
                     GoatBreeds = p.GoatBreeds.Select(breed => GoatBreedDto.Create(breed)).ToList(),
                 };
             }

@@ -50,6 +50,7 @@ C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Test
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.ObjectPool.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.WebEncoders.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll
@@ -66,6 +67,9 @@ C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Test
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\Shouldly.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\SixLabors.Core.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\SixLabors.ImageSharp.dll
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\SixLabors.ImageSharp.Web.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\bin\Debug\netcoreapp3.1\System.IO.Pipelines.dll

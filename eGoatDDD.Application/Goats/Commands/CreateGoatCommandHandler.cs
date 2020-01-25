@@ -52,6 +52,8 @@ namespace eGoatDDD.Application.Goats.Commands
                         Gender = request.Gender,
                         BirthDate = request.BirthDate,
                         Description = request.Description,
+                        Created = DateTime.Now,
+                        Modified = DateTime.Now
                     };
 
                     _context.Goats.Add(goat);
@@ -116,8 +118,8 @@ namespace eGoatDDD.Application.Goats.Commands
 
                                 File.Move(oldFilePathAndName, newFilePathAndName);
 
-                                int width = 128;
-                                int height = 128;
+                                int width = 384;
+                                int height = 384;
 
                                 var image = Image.FromFile(newFilePathAndName);
                                 var ratioX = (double)width / image.Width;

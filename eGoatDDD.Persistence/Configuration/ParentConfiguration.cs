@@ -12,10 +12,7 @@ namespace eGoatDDD.Persistence.Configuration
 
             builder.HasOne(g => g.Goat)
                 .WithMany(gb => gb.Parents)
-                .HasForeignKey(g => g.GoatId);
-
-            builder.Property(p => p.ParentId)
-                .ValueGeneratedNever();
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

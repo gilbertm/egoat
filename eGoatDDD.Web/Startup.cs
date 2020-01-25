@@ -19,14 +19,23 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using eGoatDDD.Web.Infrastructure;
 using Microsoft.AspNetCore.Identity.UI;
+using SixLabors.ImageSharp.Web.DependencyInjection;
+using DinkToPdf;
+using DinkToPdf.Contracts;
+using System;
+using System.IO;
 
 namespace eGoatDDD.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            _webHostEnvironment = webHostEnvironment;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -40,6 +49,16 @@ namespace eGoatDDD.Web
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            // Add the default service and options.
+            services.AddImageSharp();
+
+            // https://medium.com/volosoft/convert-html-and-export-to-pdf-using-dinktopdf-on-asp-net-boilerplate-e2354676b357
+           var architectureFolder = (IntPtr.Size == 8) ? "64 bit" : "32 bit";
+            var wkHtmlToPdfPath = Path.Combine(_webHostEnvironment.ContentRootPath, $"wkhtmltox\\v0.12.4\\{architectureFolder}\\libwkhtmltox");
+            CustomAssemblyLoadContext context = new CustomAssemblyLoadContext();
+            context.LoadUnmanagedLibrary(wkHtmlToPdfPath);
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             // services.AddTransient<IEmailSender, EmailSender>();
 
@@ -117,8 +136,8 @@ namespace eGoatDDD.Web
 
             services.AddControllersWithViews()
                 .AddNewtonsoftJson();
-            services.AddRazorPages();
-                // .AddRazorRuntimeCompilation();
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,210 @@
+﻿@model eGoatDDD.Application.Goats.Models.GoatViewModel
+
+
+@{
+    ViewData["Title"] = "Goat";
+}
+
+<h2>Edit</h2>
+
+@if (Model != null)
+{
+    @if (Model.Goat.DisposalId is { })
+    {
+        <div class="row">
+            <div class="col col-12">
+                <div class="alert alert-danger display-4 text-center small">
+                    Disposed
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+    <div class="row">
+        <div class="col col-12 col-md-6">
+            <h4 class="text-muted display-4">Details</h4>
+            <div class="row">
+                <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small">Color</label> <strong>@Model.Goat.Color.Name</strong>
+                    </div>
+                </div>
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small">Code</label> <strong>@Model.Goat.Code</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-6">
+                    <div class="form-group">
+                        <label class="small d-block">Gender</label>
+
+                        @if (Model.Goat.Gender == 'M')
+                        {
+                            <strong>
+                                Male
+                            </strong>
+                        }
+
+                        @if (Model.Goat.Gender == 'F')
+                        {
+                            <strong>
+                                Female
+                            </strong>
+                        }
+
+                    </div>
+                </div>
+                <div class="col col-6">
+                    <label class="small">Birth Date</label>
+                    <div class="form-group">
+                        @Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="small" asp-for="Goat.Description">Description</label>
+                @Model.Goat.Description
+            </div>
+
+
+        </div>
+        <div class="col col-12 col-md-6">
+            @{
+
+                long sireId = 0;
+                long maternalId = 0;
+
+                var parents = Model.Goat.Parents;
+
+                if (parents != null)
+                {
+                    var sire = parents.Where(g => g.Parent.Gender == 'M').SingleOrDefault();
+                    if (sire != null)
+                    {
+                        sireId = sire.ParentId;
+                    }
+                    var maternal = parents.Where(g => g.Parent.Gender == 'F').SingleOrDefault();
+                    if (maternal != null)
+                    {
+                        maternalId = maternal.ParentId;
+                    }
+
+                }
+                <h4 class="text-muted display-4">Parents <span class="small">(if applicable)</span></h4>
+                <div class="row">
+                    <div class="col col-12">
+                        <div class="row">
+                            <div class="col col-6">
+                                <div class="form-group parent-container">
+                                    <label class="small">Sire</label>
+
+                                    @if (sireId > 0)
+                                    {
+                                        @sireId
+                                    }
+                                </div>
+
+                            </div>
+
+                            <div class="col col-6">
+                                <div class="form-group parent-container">
+                                    <label class="small">Maternal</label>
+
+                                    @if (maternalId > 0)
+                                    {
+                                        @maternalId
+                                    }
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group siblings">
+                            <h4 class="text-muted display-4">Siblings</h4>
+                            <div class="list">
+                                <div class="siblings-table">
+                                    @if (Model.Goat.Siblings is { })
+                                    {
+                                        foreach (var sibling in Model.Goat.Siblings.Goats)
+                                        {
+                                            <div class="row small">
+
+                                                @if (sibling.GoatResources is { })
+                                                {
+                                                    <div class="col col-4 col-xs-6 text-align-center">
+                                                        <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
+                                                        <br />Tag Code: <strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
+
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-12" id="breeds">
+                        <h4 class="text-muted display-4">Breeds</h4>
+
+                        @if (Model.Goat.GoatBreeds.Count() > 0)
+                        {
+                            <table class="table table-bordered small">
+                                @foreach (var itemBreed in Model.Goat.GoatBreeds)
+                                {
+                                    <tr>
+                                        <td>@itemBreed.Breed.Name</td><td>@itemBreed.Percentage<text>%</text></td>
+                                    </tr>
+
+                                }
+                            </table>
+
+                        }
+
+
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col col-12 col-md-6">
+            <div class="row">
+                <div class="col col-12 goatImagesWrapper">
+                    <h4 class="text-muted display-4">Resources</h4>
+
+
+                    <div class="form-group position-relative">
+                        <label class="small d-block">Images</label>
+
+                        <span class="thumbs images">
+                            @if (Model.Goat.GoatResources != null)
+                            {
+                                foreach (var resource in Model.Goat.GoatResources)
+                                {
+                                    <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                }
+                            }
+
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
