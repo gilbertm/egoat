@@ -2,7 +2,7 @@
 @using eGoatDDD.Application.Breeds.Models
 @using eGoatDDD.Application.Colors.Models
 @using eGoatDDD.Application.Goats.Models
-
+@using eGoatDDD.Domain.Constants
 
 @{
     ViewData["Title"] = "Edit";
@@ -18,6 +18,20 @@
             <div class="col col-12">
                 <div class="alert alert-danger display-4 text-center small">
                     Disposed
+                </div>
+            </div>
+            <div class="col col-12">
+                <div class="alert alert-danger display-4 text-center small">
+                    <div class="disposal-container">
+                        <table class="table table-bordered small">
+                            <tr>
+                                <td class="small">Type</td>
+                                <td class="small">@Enum.GetName(typeof(DisposeType), Model.Goat.Disposal.Type)</td>
+                            </tr>
+                            <tr><td class="small">Reason</td><td class="small">@Model.Goat.Disposal.Reason</td></tr>
+                            <tr><td class="small">Disposed on</td><td class="small">@Model.Goat.Disposal.DisposedOn.ToString("MM-dd-yyyy")</td></tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -167,7 +181,7 @@
                                                     Breeds += breed.Breed.Name;
                                                 }
 
-                                                if (sireId > 0)
+                                                if (sireId > 0 && item.Id == sireId)
                                                 {
                                                     <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
@@ -175,7 +189,7 @@
                                                 {
 
 
-                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
+                                                   <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
                                                 }
                                             }
 
@@ -219,7 +233,7 @@
                                                     Breeds += breed.Breed.Name;
                                                 }
 
-                                                if (maternalId > 0)
+                                                if (maternalId > 0 && item.Id == maternalId)
                                                 {
                                                     <option value="@item.Id" selected="selected">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
                                                 }
@@ -227,7 +241,7 @@
                                                 {
 
 
-                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
+                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
                                                 }
                                             }
 
@@ -376,9 +390,8 @@
                     <div class="col col-12 goatImagesWrapper">
                         <h4 class="text-muted display-4">Resources</h4>
 
-
                         <div class="form-group position-relative">
-                            <label class="small d-block">Images</label>
+                            <label class="small d-block"><i class="fa fa-camera"></i></label>
 
                             <span class="thumbs images">
                                 @if (Model.Goat.GoatResources != null)
@@ -426,7 +439,7 @@
                 <div class="form-group">
                     <input name="Id" type="hidden" required id="Id" value="@(Model.Goat.Id)" />
                     <input type="submit" value="Save" name="Save" class="btn btn-default mr-3" id="Submit" />
-                    <a href="/Goat/Index" class="btn btn-danger">Cancel</a>
+                    <a href="~/Goat/Get/@(Model.Goat.Id)" class="btn btn-danger">Cancel</a>
                 </div>
             </div>
         </div>

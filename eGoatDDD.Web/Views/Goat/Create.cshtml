@@ -102,7 +102,7 @@
                                             Breeds += breed.Breed.Name;
                                         }
 
-                                        <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
+                                        <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
                                     }
                                 </select>
 
@@ -143,7 +143,7 @@
                                             Breeds += breed.Breed.Name;
                                         }
 
-                                        <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds</option>
+                                        <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
                                     }
                                 </select>
                                 <div class="parent-goat-info">
@@ -219,8 +219,8 @@
                     <h4 class="text-muted display-4">Resources</h4>
 
                     <div class="form-group position-relative">
-                        <label class="small d-block">Images</label>
-                        <div class="goatImages custom-file">
+                        <label class="small d-block"><i class="fa fa-camera"></i></label>
+<div class="goatImages custom-file">
                             <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
                             <label class="custom-file-label" for="customFile">Choose files</label>
                         </div>

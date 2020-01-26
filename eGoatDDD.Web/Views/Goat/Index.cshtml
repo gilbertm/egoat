@@ -23,17 +23,22 @@
 }
 @if (Model != null)
 {
+    var calculatedCtr = ((int)ViewData["CurrentPage"] - 1) * (int)ViewData["PageSize"];
+    var totalPages = (int)ViewData["TotalPages"];
+    var currentPage = (int)ViewData["CurrentPage"];
 
 
     @if (!(await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
     {
+
         <div class="anon goat">
             <div class="row">
                 @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
                 {
+
                     <div class="col col-4 col-md-3 mb-3">
                         <div class="card bg-dark text-white">
-                            <span class="small position-absolute" style="background:#000000;padding:3px 8px;opacity: 0.6;border-radius: 100%;">@(ctr + 1)</span>
+                            <span class="small position-absolute" style="background:#000000;padding:3px 8px;opacity: 0.6;border-radius: 100%;">@(calculatedCtr + ctr + 1)</span>
 
                             @if (item.Goat.GoatResources != null)
                             {
@@ -84,12 +89,47 @@
                 }
             </div>
         </div>
+        @if (totalPages > 1)
+        {
+            var href = "/Goat";
+
+            <div class="mt-3 mb-3 pt-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+
+
+                            if ((i == 1) && (currentPage != 1))
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@href/1" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                            }
+                            <li class="page-item"><a class="page-link" href="@href/@i">@i</a></li>
+
+                            if ((i == totalPages) && (currentPage != totalPages))
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@href/@totalPages" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </nav>
+            </div>
+
+        }
 
     }
     else
     {
-        var totalPages = (int)ViewData["TotalPages"];
-        var currentPage = (int)ViewData["CurrentPage"];
         <div class="row">
             @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
             {
@@ -105,10 +145,11 @@
 
                  */
 
+
                 <div class="goat col-12 col-md-4 mb-3">
                     <div class="card">
 
-                        <span class="small position-absolute text-light" style="background:#000000;padding:3px 8px;opacity:0.6;border-radius:100%;right:0;">@(ctr + 1)</span>
+                        <span class="small position-absolute text-light" style="background:#000000;padding:3px 8px;opacity:0.6;border-radius:100%;right:0;">@(calculatedCtr + ctr + 1)</span>
 
                         @if (item.Goat.GoatResources != null)
                         {
@@ -143,9 +184,9 @@
                                 {
                                     <div class="disposal-container">
                                         <table class="table table-bordered small">
-                                             <tr>
+                                            <tr>
                                                 <td class="small">Type</td>
-                                                <td class="small">@Enum.GetName(typeof (DisposeType), item.Goat.Disposal.Type)</td>
+                                                <td class="small">@Enum.GetName(typeof(DisposeType), item.Goat.Disposal.Type)</td>
                                             </tr>
                                             <tr><td class="small">Reason</td><td class="small">@item.Goat.Disposal.Reason</td></tr>
                                             <tr><td class="small">Disposed on</td><td class="small">@item.Goat.Disposal.DisposedOn.ToString("MM-dd-yyyy")</td></tr>
@@ -518,27 +559,50 @@
 
         @if (totalPages > 1)
         {
+            var href = "/Goat/Index";
+
             <div class="mt-3 mb-3 pt-3">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
 
+                        @if (ViewBag.Listing != "")
+                        {
+
+                            switch (@ViewBag.Listing)
+                            {
+                                case "all":
+                                    href = "/Goat/Filtered/all";
+                                    break;
+                                case "alive":
+                                    href = "/Goat/Filtered/alive";
+                                    break;
+                                case "disposed":
+                                    href = "/Goat/Filtered/disposed";
+                                    break;
+                                default:
+                                    href = "/Goat/Index";
+                                    break;
+                            }
+                        }
                         @for (int i = 1; i <= totalPages; i++)
                         {
+
+
                             if ((i == 1) && (currentPage != 1))
                             {
                                 <li class="page-item">
-                                    <a class="page-link" href="/Goat/1" aria-label="Previous">
+                                    <a class="page-link" href="@href/1" aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Previous</span>
                                     </a>
                                 </li>
                             }
-                            <li class="page-item"><a class="page-link" href="/Goat/@i">@i</a></li>
+                            <li class="page-item"><a class="page-link" href="@href/@i">@i</a></li>
 
                             if ((i == totalPages) && (currentPage != totalPages))
                             {
                                 <li class="page-item">
-                                    <a class="page-link" href="/Goat/Index/@totalPages" aria-label="Next">
+                                    <a class="page-link" href="@href/@totalPages" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Next</span>
                                     </a>

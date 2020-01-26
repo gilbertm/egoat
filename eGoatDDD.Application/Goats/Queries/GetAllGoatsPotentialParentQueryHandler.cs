@@ -32,7 +32,8 @@ namespace eGoatDDD.Application.Goats.Queries
 
             GoatsListViewModel model = new GoatsListViewModel
             {
-                Goats = goats.Where(g => g.DisposalId == null || g.DisposalId <= 0)
+                Goats = goats
+                // .Where(g => g.DisposalId == null || g.DisposalId <= 0)
                 .Where(g => g.Gender == (request.IsSire == true ? 'M' : 'F'))
                 .OrderBy(p => p.ColorId).ThenBy(g => g.Code).ThenBy(g => g.BirthDate)
                 .Where(g => this.Years(g.BirthDate, DateTime.Now) > 0)

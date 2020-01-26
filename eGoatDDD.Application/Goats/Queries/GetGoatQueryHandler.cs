@@ -55,7 +55,15 @@ namespace eGoatDDD.Application.Goats.Queries
 
                     foreach (var parent in goatDto.Parents)
                     {
-                        parent.Parent = _context.Goats.Where(goat => goat.Id == parent.ParentId).Select(GoatDto.Projection).SingleOrDefault();
+                        parent.Parent = _context.Goats
+                            .Include(d => d.Disposal)
+                .Include(c => c.Color)
+                .Include(gb => gb.GoatBreeds)
+                .ThenInclude(b => b.Breed)
+                .Include(p => p.Parents)
+                .Include(gr => gr.GoatResources)
+                .ThenInclude(r => r.Resource)
+                .Where(goat => goat.Id == parent.ParentId).Select(GoatDto.Projection).SingleOrDefault();
 
                         if (parent.Parent.Gender == 'M')
                         {

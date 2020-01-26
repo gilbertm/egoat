@@ -60,38 +60,84 @@ namespace eGoatDDD.Application.Goats.Commands
                     };
 
                     if (request.MaternalId.HasValue)
+                    {
                         if (request.MaternalId.Value > 0)
                         {
-                            // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.MaternalId.Value)).SingleOrDefault();
-                            IEnumerable<GoatParent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
+                            var current_maternal_parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.Parent.Gender == 'F')).SingleOrDefault();
 
-                            if (parents != null)
-                                _context.Parents.RemoveRange(parents);
-
-                            _context.Parents.Add(new GoatParent
+                            if (current_maternal_parent != null)
                             {
-                                ParentId = request.MaternalId.Value,
-                                GoatId = goat.Id
-                            });
+                                if (current_maternal_parent.ParentId != request.MaternalId.Value)
+                                {
+                                    _context.Parents.Remove(current_maternal_parent);
+
+                                    _context.Parents.Add(new GoatParent
+                                    {
+                                        ParentId = request.MaternalId.Value,
+                                        GoatId = goat.Id
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                _context.Parents.Add(new GoatParent
+                                {
+                                    ParentId = request.MaternalId.Value,
+                                    GoatId = goat.Id
+                                });
+                            }
+
                         }
+                    }
+                    else
+                    {
+                        var current_maternal_parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.Parent.Gender == 'F')).SingleOrDefault();
+
+                        if (current_maternal_parent != null)
+                        {
+                            _context.Parents.Remove(current_maternal_parent);
+                        }
+                    }
 
                     if (request.SireId.HasValue)
+                    {
                         if (request.SireId.Value > 0)
                         {
-                            // Parent parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.ParentId == request.SireId.Value)).SingleOrDefault();
+                            var current_sire_parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.Parent.Gender == 'M')).SingleOrDefault();
 
-                            IEnumerable<GoatParent> parents = _context.Parents.Where(p => p.GoatId == request.Id).ToList();
-
-                            if (parents != null)
-                                _context.Parents.RemoveRange(parents);
-
-
-                            _context.Parents.Add(new GoatParent
+                            if (current_sire_parent != null)
                             {
-                                ParentId = request.SireId.Value,
-                                GoatId = goat.Id
-                            });
+                                if (current_sire_parent.ParentId != request.SireId.Value)
+                                {
+                                    _context.Parents.Remove(current_sire_parent);
+
+                                    _context.Parents.Add(new GoatParent
+                                    {
+                                        ParentId = request.SireId.Value,
+                                        GoatId = goat.Id
+                                    });
+                                }
+                            }
+                            else
+                            {
+                                _context.Parents.Add(new GoatParent
+                                {
+                                    ParentId = request.SireId.Value,
+                                    GoatId = goat.Id
+                                });
+                            }
                         }
+                    }
+                    else
+                    {
+                        var current_sire_parent = _context.Parents.Where(p => (p.GoatId == request.Id) && (p.Parent.Gender == 'M')).SingleOrDefault();
+
+                        if (current_sire_parent != null)
+                        {
+                            _context.Parents.Remove(current_sire_parent);
+
+                        }
+                    }
 
                     List<GoatBreed> goatBreeds = _context.GoatBreeds.Where(breed => (breed.GoatId == request.Id)).ToList();
 
@@ -99,34 +145,37 @@ namespace eGoatDDD.Application.Goats.Commands
 
                     for (int i = 0; i < request.BreedId.Count(); i++)
                     {
-
-                        _context.GoatBreeds.Add(new GoatBreed
+                        if ((int)request.BreedId.ElementAt(i) > 0)
                         {
-                            GoatId = goat.Id,
-                            BreedId = (int)request.BreedId.ElementAt(i),
-                            Percentage = (float)request.BreedPercent.ElementAt(i)
-                        });
+                            _context.GoatBreeds.Add(new GoatBreed
+                            {
+                                GoatId = goat.Id,
+                                BreedId = (int)request.BreedId.ElementAt(i),
+                                Percentage = (float)request.BreedPercent.ElementAt(i)
+                            });
+                        }
                     }
 
                     await _context.SaveChangesAsync(cancellationToken);
 
-                    List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
-
-                    _context.GoatResources.RemoveRange(goatResources);
-
-                     await _context.SaveChangesAsync(cancellationToken);
-
-                    foreach (var item in goatResources)
-                    {
-                        _context.Resources.Remove(item.Resource);
-
-                    }
-
-                    await _context.SaveChangesAsync(cancellationToken);
 
                     if (request.Files != null)
                     {
-                                            
+
+                        List<GoatResource> goatResources = _context.GoatResources.Include(r => r.Resource).Where(gr => gr.GoatId == request.Id).ToList();
+
+                        _context.GoatResources.RemoveRange(goatResources);
+
+                        await _context.SaveChangesAsync(cancellationToken);
+
+                        foreach (var item in goatResources)
+                        {
+                            _context.Resources.Remove(item.Resource);
+
+                        }
+
+                        await _context.SaveChangesAsync(cancellationToken);
+
 
                         foreach (IFormFile file in request.Files)
                         {
@@ -188,7 +237,7 @@ namespace eGoatDDD.Application.Goats.Commands
                                     GoatId = goat.Id,
                                     ResourceId = resource.ResourceId,
                                 });
-                                
+
 
                             }
                         }

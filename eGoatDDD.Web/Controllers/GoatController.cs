@@ -40,6 +40,7 @@ namespace eGoatDDD.Web.Controllers
 
             ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
             ViewData["CurrentPage"] = pageNumber;
+            ViewData["PageSize"] = pageSize;
             ViewData["Listing"] = "alive";
 
             return View(goatsLisNonDtotViewModel);
@@ -69,6 +70,7 @@ namespace eGoatDDD.Web.Controllers
 
             ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
             ViewData["CurrentPage"] = pageNumber;
+            ViewData["PageSize"] = pageSize;
             ViewData["Listing"] = filter;
 
             return View("Index", goatsLisNonDtotViewModel);
@@ -167,7 +169,7 @@ namespace eGoatDDD.Web.Controllers
                 await _mediator.Send(command);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Get", new { goatId = command.Id });
         }
 
         [Authorize(Policy = "CanEdits")]

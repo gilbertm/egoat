@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using eGoatDDD.Application.Goats.Models;
 using eGoatDDD.Application.Goats.Queries;
+using eGoatDDD.Domain.Constants;
 using eGoatDDD.Web.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +66,8 @@ namespace eGoatDDD.Web.Controllers
                 worksheet.Cells[1, 7].Style.Font.Bold = true;
                 worksheet.Cells[1, 8].Value = "Breed";
                 worksheet.Cells[1, 8].Style.Font.Bold = true;
+                worksheet.Cells[1, 9].Value = "Parents";
+                worksheet.Cells[1, 9].Style.Font.Bold = true;
 
 
                 if (goatsLisNonDtotViewModel.Goats.Count() > 0)
@@ -89,7 +92,7 @@ namespace eGoatDDD.Web.Controllers
                             range.StyleName = StyleName;
                         }
 
-                        worksheet.Cells[ictr + 1, 2].Value = goat.Goat.DisposalId.HasValue ? (goat.Goat.DisposalId > 0 ? $"Disposed: {goat.Goat.DisposalId}" : "Alive") : "Alive";
+                        worksheet.Cells[ictr + 1, 2].Value = goat.Goat.DisposalId.HasValue ? (goat.Goat.DisposalId > 0 ? $"{Enum.GetName(typeof(DisposeType), goat.Goat.Disposal.Type)}" : "Alive") : "Alive";
 
                         worksheet.Cells[ictr + 1, 3].Value = goat.Goat.Color.Name;
 
@@ -151,6 +154,18 @@ namespace eGoatDDD.Web.Controllers
                         }
 
                         worksheet.Cells[ictr + 1, 8].Value = breeds;
+
+                        var parents = string.Empty;
+
+                        if (goat.Goat.Parents != null)
+                        {
+                            foreach (var parent in goat.Goat.Parents)
+                            {
+                                parents += string.Concat(parent.Parent.Color.Name, " ", parent.Parent.Code, ";");
+                            }
+                        }
+
+                        worksheet.Cells[ictr + 1, 9].Value = parents;
 
                         ictr++;
                     }
