@@ -43,100 +43,148 @@
         </div>
         <div class="row">
             <div class="col col-12 col-md-6">
-                <h4 class="text-muted display-4">Details</h4>
-                <div class="row">
-                    <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
-                    <div class="col col-6">
-                        <div class="form-group">
-                            <label class="small">Color</label>
-                            <select class="form-control" required data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
-                                <option value="" selected="selected">
-                                    Tag color
-                                </option>
-                                @foreach (ColorDto item in (List
-                       <ColorDto>
-                           )ViewData["Colors"])
-                                {
-                                    if (Model.Goat.Color.Id == item.Id)
+                <div class="w-100 goat-details-wrapper">
+                    <h4 class="text-muted display-4">Details</h4>
+                    <div class="row">
+                        <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label class="small">Color</label>
+                                <select class="form-control" required data-val-required="The field is required." data-val="true" name="ColorId" id="ColorId">
+                                    <option value="" selected="selected">
+                                        Tag color
+                                    </option>
+                                    @foreach (ColorDto item in (List
+                     <ColorDto>
+                         )ViewData["Colors"])
                                     {
-                                        <option value="@item.Id" selected="selected"> @item.Name</option>
+                                        if (Model.Goat.Color.Id == item.Id)
+                                        {
+                                            <option value="@item.Id" selected="selected"> @item.Name</option>
+                                        }
+
+                                        else
+                                        {
+                                            <option value="@item.Id"> @item.Name</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label class="small">Code</label>
+                                <input name="Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Goat.Code)" />
+                                <span asp-validation-for="Goat.Code" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label class="small d-block" asp-for="Goat.Gender">Gender</label>
+
+                                @if (Model.Goat.Gender == 'M')
+                                {
+                                    <label>
+                                        <input name="Gender" type="radio" value="M" checked="checked" /> Male
+                                    </label>
+                                }
+
+                                else
+                                {
+                                    <label>
+                                        <input name="Gender" type="radio" value="M" /> Male
+                                    </label>
+                                }
+
+                                @if (Model.Goat.Gender == 'F')
+                                {
+                                    <label>
+                                        <input name="Gender" type="radio" value="F" checked="checked" /> Female
+                                    </label>
+                                }
+
+                                else
+                                {
+                                    <label>
+                                        <input name="Gender" type="radio" value="F" /> Female
+                                    </label>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col col-6">
+                            <div class="form-group">
+                                <label class="small" name="BirthDate">Birth Date</label>
+                                <div class='input-group'>
+                                    <input required name="BirthDate" id="birthdate" value="@Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
+                                    <span asp-validation-for="Goat.BirthDate" class="text-danger"></span>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="small" asp-for="Goat.Description">Description</label>
+                        <span asp-validation-for="Goat.Description" class="text-danger"></span>
+                        <textarea class="form-control"
+                                  name="Description"
+                                  rows="3"
+                                  cols="20">@(Model.Goat.Description)</textarea>
+                    </div>
+
+                </div>
+                <div class="w-100 goat-resources-wrapper">
+                    <div class="row">
+                        <div class="col col-12 goatImagesWrapper">
+                            <h4 class="text-muted display-4"><i class="fa fa-camera"></i> Resources</h4>
+
+                            <div class="form-group position-relative">
+
+                                <span class="thumbs images">
+                                    @if (Model.Goat.GoatResources != null)
+                                    {
+                                        foreach (var resource in Model.Goat.GoatResources)
+                                        {
+                                            <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                        }
                                     }
 
-                                    else
-                                    {
-                                        <option value="@item.Id"> @item.Name</option>
-                                    }
+                                </span>
+                                @if (Model.Goat.GoatResources != null)
+                                {
+                                    <div class="goatImages custom-file invisible">
+                                        <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
+                                        <label class="custom-file-label" for="customFile">Choose files</label>
+                                    </div>
+                                    <span class="images close"><i class="far fa-trash-alt"><!-- empty --></i></span>
+
 
                                 }
-                            </select>
+                                else
+                                {
+                                    <div class="goatImages custom-file">
+                                        <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
+                                        <label class="custom-file-label" for="customFile">Choose files</label>
+                                    </div>
+                                    <span class="images close invisible"><i class="far fa-trash-alt"><!-- empty --></i></span>
+
+                                }
+                            </div>
                         </div>
                     </div>
-                    <div class="col col-6">
-                        <div class="form-group">
-                            <label class="small">Code</label>
-                            <input name="Code" required class="form-control" placeholder="Code" id="Code" value="@(Model.Goat.Code)" />
-                            <span asp-validation-for="Goat.Code" class="text-danger"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-6">
-                        <div class="form-group">
-                            <label class="small d-block" asp-for="Goat.Gender">Gender</label>
-
-                            @if (Model.Goat.Gender == 'M')
-                            {
-                                <label>
-                                    <input name="Gender" type="radio" value="M" checked="checked" /> Male
-                                </label>
-                            }
-
-                            else
-                            {
-                                <label>
-                                    <input name="Gender" type="radio" value="M" /> Male
-                                </label>
-                            }
-
-                            @if (Model.Goat.Gender == 'F')
-                            {
-                                <label>
-                                    <input name="Gender" type="radio" value="F" checked="checked" /> Female
-                                </label>
-                            }
-
-                            else
-                            {
-                                <label>
-                                    <input name="Gender" type="radio" value="F" /> Female
-                                </label>
-                            }
-
-                        </div>
-                    </div>
-                    <div class="col col-6">
-                        <div class="form-group">
-                            <label class="small" name="BirthDate">Birth Date</label>
-                            <div class='input-group'>
-                                <input required name="BirthDate" id="birthdate" value="@Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")" type="date" class="form-control" />
-                                <span asp-validation-for="Goat.BirthDate" class="text-danger"></span>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                    <div class="row lineage d-none">
+                        <div class="col col-12 goatImageWrapper">
+                            <div class="form-group">
+                                TODO:// Lineage org graph
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="small" asp-for="Goat.Description">Description</label>
-                    <span asp-validation-for="Goat.Description" class="text-danger"></span>
-                    <textarea class="form-control"
-                              name="Description"
-                              rows="3"
-                              cols="20">@(Model.Goat.Description)</textarea>
-                </div>
-
-
             </div>
             <div class="col col-12 col-md-6">
                 @{
@@ -172,8 +220,8 @@
                                                 Sire
                                             </option>
                                             @foreach (GoatDto item in (List
-                                  <GoatDto>
-                                      )ViewData["Sires"])
+                             <GoatDto>
+                                 )ViewData["Sires"])
                                             {
                                                 var Breeds = "";
                                                 @foreach (var breed in item.GoatBreeds)
@@ -189,7 +237,13 @@
                                                 {
 
 
-                                                   <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
+                                                    <option value="@item.Id">
+                                                        @item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue)
+                                                        {
+                                                            if (item.DisposalId.Value > 0)
+                                                            {<text> | Disposed</text>}
+                                                    }
+                                                    </option>
                                                 }
                                             }
 
@@ -224,8 +278,8 @@
                                                 Maternal
                                             </option>
                                             @foreach (GoatDto item in (List
-                                  <GoatDto>
-                                      )ViewData["Maternals"])
+                             <GoatDto>
+                                 )ViewData["Maternals"])
                                             {
                                                 var Breeds = "";
                                                 @foreach (var breed in item.GoatBreeds)
@@ -241,7 +295,13 @@
                                                 {
 
 
-                                                    <option value="@item.Id">@item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue) { if (item.DisposalId.Value > 0) { <text> | Disposed</text> } }</option>
+                                                    <option value="@item.Id">
+                                                        @item.Color.Name - @item.Code <text>|</text> @Breeds @if (item.DisposalId.HasValue)
+                                                        {
+                                                            if (item.DisposalId.Value > 0)
+                                                            {<text> | Disposed</text>}
+                                                    }
+                                                    </option>
                                                 }
                                             }
 
@@ -273,24 +333,30 @@
                             <div class="form-group siblings">
                                 <h4 class="text-muted display-4">Siblings</h4>
                                 <div class="list">
-                                    <span class="info font-italic small">None</span>
                                     <div class="siblings-table">
                                         @if (Model.Goat.Siblings is { })
                                         {
-                                            foreach (var sibling in Model.Goat.Siblings.Goats)
-                                            {
-                                                <div class="row small">
+                                            <div class="row small">
+
+                                                @foreach (var sibling in Model.Goat.Siblings.Goats)
+                                                {
 
                                                     @if (sibling.GoatResources is { })
                                                     {
-                                                        <div class="col col-4 col-xs-6 text-align-center">
-                                                            <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
-                                                            <br />Tag Code: <strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
+                                                        <div class="col col-4 col-md-3 mb-2 mb-md-3 text-align-center">
+                                                            <a href="~/Goat/Get/@sibling.Id">
+                                                                <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
+                                                                <br /><strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
+                                                            </a>
 
                                                         </div>
                                                     }
-                                                </div>
-                                            }
+                                                }
+
+                                            </div>
+                                        } else
+                                        {
+                                            <span class="info font-italic small">None</span>
                                         }
 
                                     </div>
@@ -316,8 +382,8 @@
                                                         Breed Type
                                                     </option>
                                                     @foreach (BreedDto itemOptionBreeds in (List
-                                          <BreedDto>
-                                              )ViewData["Breeds"])
+                                     <BreedDto>
+                                         )ViewData["Breeds"])
                                                     {
                                                         if (itemBreed.Breed.Id == itemOptionBreeds.Id)
                                                         {
@@ -359,8 +425,8 @@
                                                     Breed Type
                                                 </option>
                                                 @foreach (BreedDto itemOptionBreeds in (List
-                                      <BreedDto>
-                                          )ViewData["Breeds"])
+                                 <BreedDto>
+                                     )ViewData["Breeds"])
                                                 {
                                                     <option value="@itemOptionBreeds.Id">@itemOptionBreeds.Name</option>
 
@@ -385,54 +451,7 @@
                     </div>
                 }
             </div>
-            <div class="col col-12 col-md-6">
-                <div class="row">
-                    <div class="col col-12 goatImagesWrapper">
-                        <h4 class="text-muted display-4">Resources</h4>
 
-                        <div class="form-group position-relative">
-                            <label class="small d-block"><i class="fa fa-camera"></i></label>
-
-                            <span class="thumbs images">
-                                @if (Model.Goat.GoatResources != null)
-                                {
-                                    foreach (var resource in Model.Goat.GoatResources)
-                                    {
-                                        <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
-                                    }
-                                }
-
-                            </span>
-                            @if (Model.Goat.GoatResources != null)
-                            {
-                                <div class="goatImages custom-file invisible">
-                                    <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
-                                    <label class="custom-file-label" for="customFile">Choose files</label>
-                                </div>
-                                <span class="images close"><i class="far fa-trash-alt"><!-- empty --></i></span>
-
-
-                            }
-                            else
-                            {
-                                <div class="goatImages custom-file">
-                                    <input name="Files" type="file" class="custom-file-input" id="goatImages" multiple>
-                                    <label class="custom-file-label" for="customFile">Choose files</label>
-                                </div>
-                                <span class="images close invisible"><i class="far fa-trash-alt"><!-- empty --></i></span>
-
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="row lineage d-none">
-                    <div class="col col-12 goatImageWrapper">
-                        <div class="form-group">
-                            TODO:// Lineage org graph
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col col-lg-4 col-md-4 col-sm-6 col-12">
@@ -480,14 +499,12 @@
                             parent_card.removeClass("d-none");
 
                             if (result.response.goat.goatResources != null) {
-                                parent_card.find(".card-img").html("<img class='w-100' src='/" + result.response.goat.goatResources[0].location + "/" + result.response.goat.goatResources[0].filename + "'/>");
+                                parent_card.find(".card-img").html("<a href='/Goat/Get/" + result.response.goat.id + "'><img class='w-100' src='/" + result.response.goat.goatResources[0].location + "/" + result.response.goat.goatResources[0].filename + "'/></a>");
                             }
 
-                            parent_card.find(".card-footer .goat-info").html("<span class='text-primary'>" + result.response.goat.color.name + " " + result.response.goat.code + "</span>");
+                            parent_card.find(".card-footer .goat-info").html("<a href='/Goat/Get/" + result.response.goat.id + "'><span class='text-primary'>" + result.response.goat.color.name + " " + result.response.goat.code + "</span></a>");
 
                             var table = $('<table  class="small w-100" />');
-
-                            console.log(result.response.goat);
 
                             $(result.response.goat.goatBreeds).each(function (k, b) {
                                 row = $('<tr class="bg-warning mt-2" />');
@@ -563,14 +580,13 @@
                         var div = $('<div class="row small"/>');
                         $(response.goats).each(function () {
 
-                            var inner_div = $('<div class="col col-4 col-xs-6 text-align-center" />');
+                            var inner_div = $('<div class="col col-4 col-md-3 mb-2 mb-md-3 text-align-center" />');
                             if (this.goatResources.length > 0) {
-                                console.log(this.goatResources[0]);
-                                inner_div.append('<img width="auto" height="50px" src="/' + this.goatResources[0].resource.location + '/' + this.goatResources[0].resource.filename + '"/>');
+                                inner_div.append('<a href="/Goat/Get/"' + this.id + '"><img width="auto" height="50px" src="/' + this.goatResources[0].location + '/' + this.goatResources[0].filename + '"/></a>');
                                 inner_div.append('<br /> ');
                             }
-                            inner_div.append('Goat Id: ' + this.id);
-                            inner_div.append('<br />Tag Code: <strong>' + this.color.name + ' ' + this.code + '</strong>');
+                            inner_div.append('Goat Id: <a href="/Goat/Get/' + this.id + '">' + this.id + '</a>');
+                            inner_div.append('<br /><strong>' + this.color.name + ' ' + this.code + '</strong>');
 
                             div.append(inner_div);
                         });

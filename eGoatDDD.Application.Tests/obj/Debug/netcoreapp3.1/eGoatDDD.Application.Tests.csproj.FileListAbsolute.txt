@@ -174,3 +174,5 @@ C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Test
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\obj\Debug\netcoreapp3.1\eGoatDDD.Application.Tests.csproj.CopyComplete
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\obj\Debug\netcoreapp3.1\eGoatDDD.Application.Tests.dll
 C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\obj\Debug\netcoreapp3.1\eGoatDDD.Application.Tests.pdb
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\obj\Debug\netcoreapp3.1\eGoatDDD.Application.Tests.csproj.CoreCompileInputs.cache
+C:\Users\gilbert.DESKTOP-6VG6UIQ\source\repos\eGoatDDD\eGoatDDD.Application.Tests\obj\Debug\netcoreapp3.1\eGoatDDD.Application.Tests.genruntimeconfig.cache

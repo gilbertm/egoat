@@ -11,7 +11,7 @@
     {
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hi @UserManager.GetUserAsync(User).Result.FirstName!<br />
+                Hi @UserManager.GetUserAsync(User).Result?.FirstName!<br />
                 <span class="small d-none text-light">@User.Identity.Name!</span>
             </a>
         </li>

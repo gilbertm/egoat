@@ -5,7 +5,7 @@
 
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Listing";
 }
 
 @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
@@ -36,6 +36,7 @@
             <div class="row">
                 @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
                 {
+
 
                     <div class="col col-4 col-md-3 mb-3">
                         <div class="card bg-dark text-white">
@@ -131,142 +132,49 @@
     }
     else
     {
-        <div class="row">
-            @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
-            {
-
-                /* var colColor = "bg-light";
-
-                    if (ctr % 2 == 0)
-                {
-                    colColor = "";
-                }
-
-                 @(colColor)
-
-                 */
-
-
-                <div class="goat col-12 col-md-4 mb-3">
-                    <div class="card">
-
-                        <span class="small position-absolute text-light" style="background:#000000;padding:3px 8px;opacity:0.6;border-radius:100%;right:0;">@(calculatedCtr + ctr + 1)</span>
-
-                        @if (item.Goat.GoatResources != null)
-                        {
-                            var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Goat.Code, item.Goat.Color.Name.ToLower().ToLower().ToString());
-
-                            <div class="w-100 mb-3">
-                                <div class="lg-item" data-rel="@item.Goat.Code" data-src="/@(item.Goat.GoatResources.First().Location)/@(item.Goat.GoatResources.First().Filename)" data-sub-html="@str"><img class="w-100" src="/@(item.Goat.GoatResources.First().Location)/resized/@(item.Goat.GoatResources.First().Filename)" /></div>
-                            </div>
-                        }
+        @foreach (var (item, ctr) in Model.Goats.Select((v, i) => (v, i)))
+        {
+            <div class="row bg-white mb-3">
+                <div class="col-1">
+                    <div class="card h-100 border-0">
                         <div class="card-footer bg-transparent border-0 position-relative">
-
-
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
                             {
                                 <a asp-controller="Goat" asp-action="Edit" asp-route-goatId="@(item.Goat.Id)">
-                                    <div class="animal-tag-container">
+                                    <div class="animal-tag-container position-relative">
                                         <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code <i class="fas fa-edit"><!-- empty --></i></div>
                                     </div>
                                 </a>
                             }
                             else
                             {
-                                <div class="animal-tag-container">
+                                <div class="animal-tag-container position-relative">
                                     <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
                                 </div>
                             }
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "CanDisposes")).Succeeded)
-                            {
-                                @if (item.Goat.DisposalId != null)
-                                {
-                                    <div class="disposal-container">
-                                        <table class="table table-bordered small">
-                                            <tr>
-                                                <td class="small">Type</td>
-                                                <td class="small">@Enum.GetName(typeof(DisposeType), item.Goat.Disposal.Type)</td>
-                                            </tr>
-                                            <tr><td class="small">Reason</td><td class="small">@item.Goat.Disposal.Reason</td></tr>
-                                            <tr><td class="small">Disposed on</td><td class="small">@item.Goat.Disposal.DisposedOn.ToString("MM-dd-yyyy")</td></tr>
-                                        </table>
-                                    </div>
-
-                                    <div class="modalGoatDisposal modalGoatDisposal@(item.Goat.Id)">
-                                        <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><a href="/goat/restore/@(item.Goat.Id)" class="btn btn-success restore dispose"><i class="fas fa-trash-restore"><!--empty--></i></a></span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="modalGoatDisposal modalGoatDisposal@(item.Goat.Id)">
-
-                                        <span data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="btn btn-danger delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Goat.Id" data-toggle="modal" data-target="#modalGoatDisposal@(item.Goat.Id)"><i class="fas fa-times-circle"><!--empty--></i></span></span>
-
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="modalGoatDisposal@(item.Goat.Id)" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
-
-                                            <input type="hidden" class="DisposalGoatId" value="@(item.Goat.Id)" />
-                                            <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
-
-                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        <div class="animal-tag-container mt-1">
-                                                            <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col col-6">
-                                                                <div class="form-group">
-                                                                    <label class="small d-block">Dispose Type</label>
-                                                                    <select required class="form-control DisposalType w-100" name="DisposalType">
-                                                                        <option value="0">Disposal Type</option>
-                                                                        <option value="1">Slaughter</option>
-                                                                        <option value="2">Sold Whole - Local</option>
-                                                                        <option value="3">Sold Whole - Online</option>
-                                                                        <option value="4">Death</option>
-                                                                        <option value="99">Other</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label class="small d-block">Dispose Date</label>
-                                                                    <div class='input-group'>
-                                                                        <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
-                                                                        <span class="input-group-addon">
-                                                                            <span class="glyphicon glyphicon-calendar"></span>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col col-6">
-                                                                <div class="form-group">
-                                                                    <label class="small d-block">Reason</label>
-                                                                    <textarea rows="8" required class="form-control DisposalReason w-100 h-100 d-inline-block" name="DisposalReason"></textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger dispose delete submit">Dispose</button>
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-
-
-
-                            }
+                        <div class="w-100">
+                            <span class="small text-light bg-secondary p-1 border-circle">@(calculatedCtr + ctr + 1)</span>
                         </div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="card">
+                        @if (item.Goat.GoatResources != null)
+                        {
+                            var str = string.Format("<div class='animal-tag-container mt-1'><div class='animal-tag animal-tag-{1}'>{0}</div></div>", item.Goat.Code, item.Goat.Color.Name.ToLower().ToLower().ToString());
+
+                            <div class="card-img">
+                                <div class="w-100">
+                                    <div class="lg-item" data-rel="@item.Goat.Code" data-src="/@(item.Goat.GoatResources.First().Location)/@(item.Goat.GoatResources.First().Filename)" data-sub-html="@str"><img class="w-100" src="/@(item.Goat.GoatResources.First().Location)/resized/@(item.Goat.GoatResources.First().Filename)" /></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="goat col col-4">
+                    <div class="card border-0">
                         <div class="card-footer bg-transparent border-0 small">
                             <div class="row mb-1">
                                 <div class="col col-12">
@@ -326,237 +234,99 @@
                                 </div>
 
                             </div>
-                            <div class="row">
-                                <div class="col col-12">
-                                    <strong>Breeds</strong>
-                                </div>
-                            </div>
-                            @if (item.Goat.GoatBreeds != null)
-                            {
-                                foreach (var breed in item.Goat.GoatBreeds)
-                                {
-                                    <div class="row">
-
-                                        <div class="col col-2 col-xs-12 text-nowrap">
-                                            @breed.Percentage<em>%</em>
-                                        </div>
-                                        <div class="col col-8 col-xs-12">
-                                            @breed.Breed.Name
-                                        </div>
-                                    </div>
-                                }
-                            }
                         </div>
-                        <div class="card-footer">
-                            <a class="btn btn-primary" href="~/Goat/Get/@item.Goat.Id">View <i class="fa fa-long-arrow-right"></i></a>
-                        </div>
-                    </div>
-
-
-                    <div class="col col-12 col-md-7 col-sm-6 small d-none">
-                        <div class="row">
-                            <div class="col col-12 col-md-4 col-sm-4">
-                                <div class="service-wrapper">
-
-                                    <div class="carousel-item template d-none">
-                                        <div class="latest">
-                                            <div class="row small">
-                                                <div class="col col-6">
-                                                    <div class="service-type"></div>
-                                                </div>
-                                                <div class="col col-6">
-                                                    <div class="service-category"></div>
-                                                </div>
-                                                <div class="col col-6">
-                                                    <div class="service-start"></div>
-                                                </div>
-                                                <div class="col col-6">
-                                                    <div class="service-end"></div>
-                                                </div>
-                                                <div class="col col-12 mt-1">
-                                                    <div class="service-description"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col col-12">
-                                            <div id="carouselGoatServices" class="carousel slide mb-3" data-ride="carousel">
-                                                <div class="carousel-inner">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if ((await AuthorizationService.AuthorizeAsync(User, "CanEdits")).Succeeded)
-                                    {
-                                        <span class="ui-button add service" data-toggle="tooltip" data-placement="bottom" title="Add service"><i class="fas fa-plus-circle"><!--empty--></i></span>
-                                        <span data-toggle="tooltip" data-placement="bottom" title="View history"><span class="ui-button view service" data-remote="true" data-link="/api/service" data-id="@item.Goat.Id" data-toggle="modal" data-target="#modalGoatServices"><i class="fas fa-history"><!--empty--></i></span></span>
-                                        <span class="ui-button close service d-none"><i class="fas fa-window-close"><!--empty--></i></span>
-
-                                        @*<button class="add service">Add service</button>
-                                            <button class="view service" data-remote="true" data-link="/api/goat/services" data-id="@item.Id" data-toggle="modal" data-target="#modalGoatServices">History</button>
-                                        *@
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="modalGoatServices" tabindex="-1" role="dialog" aria-labelledby="modalGoatServicesCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalGoatServicesLongTitle">Services</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        <div class="animal-tag-container mt-1">
-                                                            <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="edit form-wrapper d-none">
-                                                            <form class="frm-edit-service">
-                                                                <input type="hidden" name="service" value="0" />
-                                                                <div class="form-row mb-1">
-                                                                    <div class="col col-6 col-xs-12">
-                                                                        <label for="serviceType">Type</label>
-                                                                        <select id="serviceType" name="type" required class="browser-default custom-select">
-                                                                            <option value="Medical">Medical</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col col-6 col-xs-12">
-                                                                        <label for="serviceCategory">Category</label>
-                                                                        <select id="serviceCategory" name="category" required class="browser-default custom-select">
-                                                                            <option value="Vaccine">Vaccine</option>
-                                                                            <option value="Deworm">Deworm</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-row mb-1">
-                                                                    <div class="col col-12">
-                                                                        <label for="startDate">Start</label>
-                                                                        <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                                    </div>
-                                                                    <div class="col col-12">
-                                                                        <label for="startEnd">End</label>
-                                                                        <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-row mb-1">
-                                                                    <div class="col col-12">
-                                                                        <div class="form-group">
-                                                                            <label for="description">Description</label>
-                                                                            <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <input name="goat" type="hidden" value="@item.Goat.Id" />
-                                                                <button class="btn btn-primary btn-sm small" type="submit">Update</button>
-                                                            </form>
-                                                        </div>
-                                                        <div class="services">
-                                                            ...
-                                                        </div>
-                                                    </div>
-                                                    @*<div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        </div> *@
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                    <div class="fields d-none service">
-
-                                        <form class="frm-add-service">
-                                            <div class="form-row mb-1">
-                                                <div class="col col-6 col-xs-12">
-                                                    <label for="serviceType">Type</label>
-                                                    <select id="serviceType" name="type" required class="browser-default custom-select">
-                                                        <option value="Medical">Medical</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col col-6 col-xs-12">
-                                                    <label for="serviceCategory">Category</label>
-                                                    <select id="serviceCategory" name="category" required class="browser-default custom-select">
-                                                        <option value="Vaccine">Vaccine</option>
-                                                        <option value="Deworm">Deworm</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-row mb-1">
-                                                <div class="col col-12">
-                                                    <label for="startDate">Start</label>
-                                                    <input name="start" type="date" class="form-control" id="startDate" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                </div>
-                                                <div class="col col-12">
-                                                    <label for="startEnd">End</label>
-                                                    <input name="end" type="date" class="form-control" id="startEnd" required value="@DateTime.Now.ToString("mm-dd-yyyy")">
-                                                </div>
-                                            </div>
-                                            <div class="form-row mb-1">
-                                                <div class="col col-12">
-                                                    <div class="form-group">
-                                                        <label for="description">Description</label>
-                                                        <textarea class="form-control rounded-0" name="description" id="description" rows="3" required placeholder="short description."></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <input name="goat" type="hidden" value="@item.Goat.Id" />
-                                            <button class="btn btn-primary btn-sm small" type="submit">Add</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col col-12 col-md-3 col-sm-3">
-                                @if (item.Goat.Parents is { })
-                                {
-                                    <strong>Parents</strong>
-
-                                    foreach (var parent in item.Goat.Parents)
-                                    {
-                                        <div class="row">
-                                            @if (parent.Parent.GoatResources.Count() > 0)
-                                            {
-                                                <div class="goat col col-6 col-xs-6">
-                                                    <a class="lg-item" href="~/@(parent.Parent.GoatResources.First().Location)/@(parent.Parent.GoatResources.First().Filename)" data-sub-html="Parent - @parent.Parent.Color.Name@parent.Parent.Code" data-rel="@parent.Parent.Code">
-                                                        <img height="50" src="~/@(parent.Parent.GoatResources.First().Location)/@(parent.Parent.GoatResources.First().Filename)" />
-                                                    </a>
-                                                </div>
-                                            }
-                                            <div class="col col-6 col-xs-6">
-                                                <span class="small flex-nowrap">@parent.Parent.Color.Name @parent.Parent.Code</span>
-                                            </div>
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        </div>
-                        @if (item.Goat.GoatResources is { })
-                        {
-
-                            <div class="row pt-3">
-                                @if (item.Goat.GoatResources.Count() > 1)
-                                {
-                                    @foreach (var (resource, index) in item.Goat.GoatResources.Select((v, i) => (v, i)))
-                                    {
-                                        if (index == 0)
-                                        {
-                                            continue;
-                                        }
-
-                                        <div class="col col-4">
-                                            <div class="lg-item" data-rel="@item.Goat.Id" data-src="/@(resource.Location)/@(resource.Filename)"><img height="75" src="~/@(resource.Location)/resized/@(resource.Filename)" /></div>
-                                        </div>
-                                    }
-                                }
-
-                            </div>
-                        }
                     </div>
                 </div>
-            }
-        </div>
+                <div class="col-2 small">
+                    @if (item.Goat.GoatBreeds != null)
+                    {
+
+                        <strong>Breeds</strong>
+
+                        foreach (var breed in item.Goat.GoatBreeds)
+                        {
+                            <div class="row">
+
+                                <div class="col col-2 col-xs-12 text-nowrap">
+                                    @breed.Percentage<em>%</em>
+                                </div>
+                                <div class="col col-8 col-xs-12">
+                                    @breed.Breed.Name
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="col-2">
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "CanDisposes")).Succeeded)
+                    {
+
+
+                        <p data-toggle="tooltip" data-placement="bottom" title="Dispose"><span class="btn btn-danger delete dispose" data-remote="true" data-link="/api/disposal/goat" data-id="@item.Goat.Id" data-toggle="modal" data-target="#modalGoatDisposal@(item.Goat.Id)"><i class="fas fa-times-circle"><!--empty--></i></span> Dispose</p>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalGoatDisposal@(item.Goat.Id)" tabindex="-1" role="dialog" aria-labelledby="modalGoatDisposalCenterTitle" aria-hidden="true">
+
+                            <input type="hidden" class="DisposalGoatId" value="@(item.Goat.Id)" />
+                            <input type="hidden" class="ApiURL" value="/api/disposal/goat" />
+
+                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalGoatDisposalCenterTitle">Dispose</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <div class="animal-tag-container mt-1">
+                                            <div class="animal-tag animal-tag-@item.Goat.Color.Name.ToLower().ToString()">@item.Goat.Code</div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col col-6">
+                                                <div class="form-group">
+                                                    <label class="small d-block">Dispose Type</label>
+                                                    <select required class="form-control DisposalType w-100" name="DisposalType">
+                                                        <option value="0">Disposal Type</option>
+                                                        <option value="1">Slaughter</option>
+                                                        <option value="2">Sold Whole - Local</option>
+                                                        <option value="3">Sold Whole - Online</option>
+                                                        <option value="4">Death</option>
+                                                        <option value="99">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="small d-block">Dispose Date</label>
+                                                    <div class='input-group'>
+                                                        <input required name="DiposedOn" asp-format="{0:dd/MM/yyyy}" type="date" class="form-control DisposedOn" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col col-6">
+                                                <div class="form-group">
+                                                    <label class="small d-block">Reason</label>
+                                                    <textarea rows="8" required class="form-control DisposalReason w-100 h-100 d-inline-block" name="DisposalReason"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger dispose delete submit">Dispose</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <p><a class="btn btn-primary" href="~/Goat/Get/@item.Goat.Id"><i class="fas fa-eye"><!-- empty--></i></a> View</p>
+                </div>
+
+            </div>
+        }
 
         @if (totalPages > 1)
         {

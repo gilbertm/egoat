@@ -16,14 +16,12 @@ namespace eGoatDDD.Application.Users.Manages.Queries
     public class GetUsersRolesQueryHandler : IRequestHandler<GetUsersRolesQuery, IEnumerable<UserRolesViewModel>>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
         private readonly eGoatDDDDbContext _context;
 
 
-        public GetUsersRolesQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, eGoatDDDDbContext context)
+        public GetUsersRolesQueryHandler(IUnitOfWork unitOfWork, eGoatDDDDbContext context)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
             _context = context;
         }
 
@@ -36,11 +34,14 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                                       Username = user.UserName,
                                       user.Email,
                                       user.EmailConfirmed,
-                                      RoleNames = (from aa in _context.UserRoles
+                                      RoleNames = (from aa in _context.UserRoles.Where(ur => ur.UserId == user.Id)
                                                    join bb in _context.Roles
                                                    on aa.RoleId equals bb.Id into newgroup
                                                    from cc in newgroup.DefaultIfEmpty()
-                                                   select cc).ToList()
+                                                   select new SelectOptionViewModel {
+                                                    Label = cc.Name,
+                                                     Value = true
+                                                   }).ToList()
                                   }).ToListAsync();
 
             var userRolesListViewModel = userList.Select(p => new UserRolesViewModel
@@ -51,7 +52,7 @@ namespace eGoatDDD.Application.Users.Manages.Queries
                 EmailConfirmed = p.EmailConfirmed,
                 Roles = new SelectOptionList
                 {
-                    SelectOptionViewModels = _mapper.Map<IList<SelectOptionViewModel>>(p.RoleNames)
+                    SelectOptionViewModels = p.RoleNames
                 }               
             });
 

@@ -42,54 +42,80 @@
     </div>
     <div class="row">
         <div class="col col-12 col-md-6">
-            <h4 class="text-muted display-4">Details</h4>
-            <div class="row">
-                <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
-                <div class="col col-6">
-                    <div class="form-group">
-                        <label class="small">Color</label> <strong>@Model.Goat.Color.Name</strong>
+            <div class="w-100 goat-detail-wrapper">
+                <h4 class="text-muted display-4">Details</h4>
+                <div class="row">
+                    <div class="col col-12 code"><div class="error small font-italic alert alert-danger d-none text-align-center m-auto"></div></div>
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small">Color</label> <strong>@Model.Goat.Color.Name</strong>
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small">Code</label> <strong>@Model.Goat.Code</strong>
+                        </div>
                     </div>
                 </div>
-                <div class="col col-6">
-                    <div class="form-group">
-                        <label class="small">Code</label> <strong>@Model.Goat.Code</strong>
+                <div class="row">
+                    <div class="col col-6">
+                        <div class="form-group">
+                            <label class="small d-block">Gender</label>
+
+                            @if (Model.Goat.Gender == 'M')
+                            {
+                                <strong>
+                                    Male
+                                </strong>
+                            }
+
+                            @if (Model.Goat.Gender == 'F')
+                            {
+                                <strong>
+                                    Female
+                                </strong>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <label class="small">Birth Date</label>
+                        <div class="form-group">
+                            @Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")
+                        </div>
                     </div>
                 </div>
+                @if (!string.IsNullOrWhiteSpace(Model.Goat.Description))
+                {
+                    <div class="form-group">
+                        <label class="small" asp-for="Goat.Description">Description</label>
+                        @Model.Goat.Description
+                    </div>
+                }
             </div>
-            <div class="row">
-                <div class="col col-6">
-                    <div class="form-group">
-                        <label class="small d-block">Gender</label>
+            @if (Model.Goat.GoatResources != null)
+            {
+                <div class="w-100 goat-resources-wrapper">
 
-                        @if (Model.Goat.Gender == 'M')
-                        {
-                            <strong>
-                                Male
-                            </strong>
-                        }
+                    <div class="row">
+                        <div class="col col-12 goatImagesWrapper">
+                            <h4 class="text-muted display-4"><i class="fa fa-camera"></i> Resources</h4>
 
-                        @if (Model.Goat.Gender == 'F')
-                        {
-                            <strong>
-                                Female
-                            </strong>
-                        }
 
+                            <div class="form-group position-relative">
+                                <span class="thumbs images">
+                                    @foreach (var resource in Model.Goat.GoatResources)
+                                    {
+                                        <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
+                                    }
+                                </span>
+
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col col-6">
-                    <label class="small">Birth Date</label>
-                    <div class="form-group">
-                        @Model.Goat.BirthDate.Value.ToString("yyyy-MM-dd")
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="small" asp-for="Goat.Description">Description</label>
-                @Model.Goat.Description
-            </div>
 
-
+                </div>
+            }
         </div>
         <div class="col col-12 col-md-6">
             @{
@@ -180,20 +206,23 @@
                                 <div class="siblings-table">
                                     @if (Model.Goat.Siblings is { })
                                     {
-                                        foreach (var sibling in Model.Goat.Siblings.Goats)
-                                        {
-                                            <div class="row small">
+                                        <div class="row small">
+
+                                            @foreach (var sibling in Model.Goat.Siblings.Goats)
+                                            {
 
                                                 @if (sibling.GoatResources is { })
                                                 {
-                                                    <div class="col col-4 col-xs-6 text-align-center">
-                                                        <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
-                                                        <br />Tag Code: <strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
-
+                                                    <div class="col col-4 col-md-3 mb-2 mb-md-3 text-align-center">
+                                                        <a href="~/Goat/Get/@sibling.Id">
+                                                            <img height="50" src="@string.Concat("/",sibling.GoatResources.FirstOrDefault().Location,"/", sibling.GoatResources.FirstOrDefault().Filename)" />
+                                                            <br /><strong>@string.Concat(sibling.Color.Name, ' ', sibling.Code)</strong>
+                                                        </a>
                                                     </div>
                                                 }
-                                            </div>
-                                        }
+                                            }
+                                        </div>
+
                                     }
 
                                 </div>
@@ -224,32 +253,7 @@
                 </div>
             }
         </div>
-        @if (Model.Goat.GoatResources != null)
-        {
 
-            <div class="col col-12 col-md-6">
-                <div class="row">
-                    <div class="col col-12 goatImagesWrapper">
-                        <h4 class="text-muted display-4">Resources</h4>
-
-
-                        <div class="form-group position-relative">
-                            <label class="small d-block"><i class="fa fa-camera fa-3x"></i></label>
-
-                            <span class="thumbs images">
-                                @foreach (var resource in Model.Goat.GoatResources)
-                                {
-                                    <img class="w-100" src="/@(resource.Location)/@(resource.Filename)" />
-                                }
-
-                            </span>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        }
     </div>
 
 }
@@ -280,14 +284,12 @@
                             parent_card.removeClass("d-none");
 
                             if (result.response.goat.goatResources != null) {
-                                parent_card.find(".card-img").html("<img class='w-100' src='/" + result.response.goat.goatResources[0].location + "/" + result.response.goat.goatResources[0].filename + "'/>");
+                                parent_card.find(".card-img").html("<a href='/Goat/Get/" + result.response.goat.id + "'><img class='w-100' src='/" + result.response.goat.goatResources[0].location + "/" + result.response.goat.goatResources[0].filename + "'/></a>");
                             }
 
-                            parent_card.find(".card-footer .goat-info").html("<span class='text-primary'>" + result.response.goat.color.name + " " + result.response.goat.code + "</span>");
+                            parent_card.find(".card-footer .goat-info").html("<a href='/Goat/Get/" + result.response.goat.id + "'><span class='text-primary'>" + result.response.goat.color.name + " " + result.response.goat.code + "</span></a>");
 
                             var table = $('<table  class="small w-100" />');
-
-                            console.log(result.response.goat);
 
                             $(result.response.goat.goatBreeds).each(function (k, b) {
                                 row = $('<tr class="bg-warning mt-2" />');

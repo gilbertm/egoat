@@ -46,6 +46,38 @@ namespace eGoatDDD.Web.Controllers
             return View(goatsLisNonDtotViewModel);
         }
 
+        [Route("/Goat/Listing/{type?}/{page?}")]
+        [Authorize(Policy = "CanEdits")]
+        public async Task<IActionResult> Listing(string listingType, int? page)
+        {
+            int pageSize = 75;
+            int pageNumber = page ?? 1;
+
+            string type = string.IsNullOrWhiteSpace(listingType) ? "thumb" : listingType; // thumb - default, 2 row - tabular
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                pageSize = 150;
+            }
+
+            GoatsListNonDtoViewModel goatsLisNonDtotViewModel = await _mediator.Send(new GetAllGoatsQuery
+            {
+                PageNumber = pageNumber <= 0 ? 1 : pageNumber,
+                Filter = "alive",
+                PageSize = pageSize
+            });
+
+            var doubleTotal = (double)(goatsLisNonDtotViewModel.TotalPages);
+            var doublePageSize = (double)(pageSize);
+
+            ViewData["TotalPages"] = (int)Math.Ceiling(doubleTotal / doublePageSize);
+            ViewData["CurrentPage"] = pageNumber;
+            ViewData["PageSize"] = pageSize;
+            ViewData["Listing"] = "alive";
+
+            return View(goatsLisNonDtotViewModel);
+        }
+
 
         [Route("/Goat/Filtered/{filter}/{page?}")]
         [Authorize(Policy = "CanEdits")]
